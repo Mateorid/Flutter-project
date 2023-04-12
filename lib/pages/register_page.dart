@@ -64,7 +64,7 @@ class RegisterPageState extends State<RegisterPage> {
               Text("Already have an accout?"),
               TextButton(
                 onPressed: () {
-                  context.pushNamed("login");
+                  context.pop();
                 },
                 style: TextButton.styleFrom(
                     padding: EdgeInsets.all(2),
