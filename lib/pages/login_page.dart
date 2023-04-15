@@ -46,7 +46,7 @@ class LoginPageState extends State<LoginPage> {
               style: Theme.of(context)
                   .textTheme
                   .headlineMedium
-                  ?.copyWith(fontWeight: FontWeight.bold, color: darkGreen)),
+                  ?.copyWith(fontWeight: FontWeight.bold, color: DARK_GREEN)),
           EmailValidationField(hint: "Your email", controller: _emailController),
           PassWordValidationField(hint: "Password", controller: _passwordController),
           const SizedBox(height: 5),
@@ -72,7 +72,7 @@ class LoginPageState extends State<LoginPage> {
                     alignment: Alignment.centerLeft),
                 child: const Text('Sign up.',
                     style: TextStyle(
-                        color: mainGreen, fontWeight: FontWeight.bold)),
+                        color: MAIN_GREEN, fontWeight: FontWeight.bold)),
               ),
             ],
           )

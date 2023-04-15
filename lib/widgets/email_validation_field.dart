@@ -19,7 +19,7 @@ class EmailValidationField extends StatelessWidget {
             hintText: hint,
             icon: const Icon(
               Icons.person,
-              color: darkGreen,
+              color: DARK_GREEN,
             ),
           ),
           validator: (value) {

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/services/auth_service.dart';
+import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
 
@@ -43,10 +44,10 @@ class RegisterPageState extends State<RegisterPage> {
               style: Theme.of(context)
                   .textTheme
                   .headlineMedium
-                  ?.copyWith(fontWeight: FontWeight.bold, color: darkGreen)),
+                  ?.copyWith(fontWeight: FontWeight.bold, color: DARK_GREEN)),
           const SizedBox(height: 5),
           Text("Create an account. It's free.",
-              style: TextStyle(color: darkGreen)),
+              style: TextStyle(color: DARK_GREEN)),
           _buildFields(),
           const SizedBox(height: 5),
           RoundButton(
@@ -71,7 +72,7 @@ class RegisterPageState extends State<RegisterPage> {
                     alignment: Alignment.centerLeft),
                 child: const Text('Login.',
                     style: TextStyle(
-                        color: mainGreen, fontWeight: FontWeight.bold)),
+                        color: MAIN_GREEN, fontWeight: FontWeight.bold)),
               ),
             ],
           )
@@ -108,11 +109,13 @@ class RegisterPageState extends State<RegisterPage> {
         _loading = true;
       });
       final AuthService authService = get<AuthService>();
+      final UserService userService = get<UserService>();
       try {
-        await authService.createUserWithEmailAndPassword(
+        var id = await authService.createUserWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
         );
+        userService.createNewUser(id, _emailController.text);
         GlobalSnackBar.showAlertSuccess(
             context: context,
             bigText: "Success",
@@ -137,6 +140,6 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _buildProgressIndicator() {
-    return _loading ? CircularProgressIndicator() : Container();
+    return _loading ? const CircularProgressIndicator() : Container();
   }
 }

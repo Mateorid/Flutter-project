@@ -6,7 +6,7 @@ import 'package:pet_sitting/styles.dart';
 class GlobalSnackBar {
 
   static showAlertSuccess({required BuildContext context, String? bigText, String? smallText}){
-    _buildAlert(context: context, bigText: bigText?? "Success", smallText: smallText, alertColor: mainGreen);
+    _buildAlert(context: context, bigText: bigText?? "Success", smallText: smallText, alertColor: MAIN_GREEN);
   }
 
   static showAlertError({required BuildContext context, String? bigText, String? smallText}){

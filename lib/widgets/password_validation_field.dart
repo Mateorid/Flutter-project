@@ -29,14 +29,14 @@ class _PassWordValidationFieldState extends State<PassWordValidationField> {
           obscureText: _obscurePassword,
           decoration: InputDecoration(
             hintText: widget.hint,
-            icon: Icon(
+            icon: const Icon(
               Icons.lock,
-              color: darkGreen,
+              color: DARK_GREEN,
             ),
             suffixIcon: IconButton(
               icon: Icon(
                 _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                color: darkGreen,
+                color: DARK_GREEN,
               ),
               onPressed: () {
                 setState(() {

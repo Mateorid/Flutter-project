@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pet_sitting/pages/edit_user_page.dart';
 import 'package:pet_sitting/pages/home_page.dart';
 import 'package:pet_sitting/pages/login_page.dart';
 import 'package:pet_sitting/pages/register_page.dart';
@@ -14,6 +15,11 @@ class RouterProvider {
       debugLogDiagnostics: true,
       initialLocation: get<AuthService>().currentUser != null ? "/" : "/login",
       routes: [
+        GoRoute(
+          path: "/edit_user",
+          name: "edit_user",
+          builder: (context, state) => EditUserPage(),
+        ),
         GoRoute(
           path: "/login",
           name: "login",
