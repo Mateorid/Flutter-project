@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
+import 'package:pet_sitting/widgets/add_pet_tile.dart';
+import 'package:pet_sitting/widgets/basic_title.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
 import '../ioc_container.dart';
@@ -17,15 +19,10 @@ class HomePage extends StatefulWidget {
   final User? user = get<AuthService>().currentUser;
 
   @override
-  EditProfilePageState createState() => EditProfilePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class EditProfilePageState extends State<HomePage> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _phoneNumberController = TextEditingController();
-  final _locationController = TextEditingController();
+class HomePageState extends State<HomePage> {
   bool _loading = false;
 
   @override
@@ -42,12 +39,12 @@ class EditProfilePageState extends State<HomePage> {
             actions: [
               Transform.scale(
                 scale: 2,
-                child: IconButton(onPressed: () => {_onAccountPressed(context)}, icon: Icon(
-                  shadows: [Shadow(color: Colors.black.withOpacity(0.1), blurRadius: 10.0, offset: Offset(0, 1))],
-                  Icons.account_circle,
-                  color: MAIN_GREEN,
-                )),
-              )
+                  child: IconButton(onPressed: () => {_onAccountPressed(context)}, icon: Icon(
+                    shadows: [Shadow(color: Colors.black.withOpacity(0.2), blurRadius: 3.0)],
+                    Icons.account_circle,
+                    color: MAIN_GREEN,
+                  )),
+                ),
             ],
 
               ),
@@ -55,8 +52,10 @@ class EditProfilePageState extends State<HomePage> {
         body: Container(
             padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
             child: Center(
-              child: Column(
+              child: ListView(
                 children: [
+                  BasicTitle(text: 'My pets'),
+                  AddPetCard(),
                   ElevatedButton(onPressed:() => {_onLogoutPressed(context)}, child: Text('Logout'))
                 ],
               )

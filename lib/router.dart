@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/pages/edit_user_page.dart';
 import 'package:pet_sitting/pages/home_page.dart';
 import 'package:pet_sitting/pages/login_page.dart';
+import 'package:pet_sitting/pages/pet_info_page.dart';
 import 'package:pet_sitting/pages/register_page.dart';
 import 'package:pet_sitting/services/auth_service.dart';
 
@@ -35,6 +36,12 @@ class RouterProvider {
           name: "home",
           builder: (context, state) => HomePage(),
         ),
+        GoRoute(
+          path: "/create_pet",
+          name: "create_pet",
+          builder: (context, state) => PetInfoPage(),
+
+        )
       ],
     );
   }

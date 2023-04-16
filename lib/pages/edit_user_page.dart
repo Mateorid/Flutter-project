@@ -4,12 +4,16 @@ import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
+import 'package:pet_sitting/widgets/basic_title.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
 import '../ioc_container.dart';
 import '../services/auth_service.dart';
+import '../validators/email_validator.dart';
+import '../validators/locationValidator.dart';
+import '../validators/name_validator.dart';
+import '../validators/phoneValidator.dart';
 import '../widgets/global_snack_bar.dart';
-import 'package:email_validator/email_validator.dart';
 
 class EditUserPage extends StatefulWidget {
   EditUserPage({Key? key}) : super(key: key);
@@ -48,11 +52,12 @@ class EditProfilePageState extends State<EditUserPage> {
                 onPressed: () => {context.pop()},
               )),
         ),
-        body: Container(
+        body: _loading
+            ? const CircularProgressIndicator() : Container(
             padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
             child: ListView(
               children: [
-                _buildTitle(),
+                const BasicTitle(text: 'Edit profile'),
                 const SizedBox(height: 15),
                 _buildImage(),
                 const SizedBox(
@@ -64,7 +69,7 @@ class EditProfilePageState extends State<EditUserPage> {
                 ),
                 RoundButton(
                     color: MAIN_GREEN,
-                    text: 'SUBMIT',
+                    text: 'SAVE',
                     onPressed: _onSubmitPressed),
               ],
             )));
@@ -131,41 +136,6 @@ class EditProfilePageState extends State<EditUserPage> {
     );
   }
 
-  String? Function(String?)? emailValidator = (String? value) {
-    if (value!.isEmpty) {
-      return 'Enter your contact email';
-    }
-    if (!EmailValidator.validate(value)) {
-      return 'Please enter a valid email';
-    }
-    return null;
-  };
-
-  String? Function(String?)? locationValidator = (String? value) {
-    if (value!.isEmpty) {
-      return 'Enter your current location';
-    }
-    return null;
-  };
-
-  String? Function(String?)? phoneValidator = (String? value) {
-    String pattern = r'^(\+[1-9]\d{0,2}|0)\s?\d{3,}(?:\s?\d{2,}){1,3}$';
-    RegExp regExp = RegExp(pattern);
-    if (value!.isEmpty) {
-      return 'Enter your contact phone number';
-    } else if (!regExp.hasMatch(value)) {
-      return 'Please enter valid mobile number';
-    }
-    return null;
-  };
-
-  String? Function(String?)? nameValidator = (String? value) {
-    if (value!.isEmpty) {
-      return 'Enter your name';
-    }
-    return null;
-  };
-
   Widget _buildImage() {
     return Center(
       child: Stack(
@@ -218,14 +188,6 @@ class EditProfilePageState extends State<EditUserPage> {
     );
   }
 
-  Widget _buildTitle() {
-    return Text("Edit profile",
-        style: Theme
-            .of(context)
-            .textTheme
-            .headlineMedium
-            ?.copyWith(fontWeight: FontWeight.bold, color: DARK_GREEN));
-  }
 
   Future<void> _saveChanges() async {
     final id = get<AuthService>().currentUserId;

@@ -1,0 +1,3 @@
+- prerobit async operacie v register/login na pouzivanie handleAsyncOperation()
+- lepsie nacitavanie stranky?
+- automapper + prerobenie user service na mapovanie model -> json

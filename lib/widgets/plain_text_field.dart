@@ -6,13 +6,15 @@ class PlainTextField extends StatelessWidget {
   final String placeholder;
   final TextEditingController controller;
   final String? Function(String?)? validator;
+  bool extended;
 
-  const PlainTextField(
+   PlainTextField(
       {Key? key,
       required this.labelText,
       required this.placeholder,
       required this.controller,
-      required this.validator})
+      required this.validator,
+      this.extended = false})
       : super(key: key);
 
   @override
@@ -20,6 +22,8 @@ class PlainTextField extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.only(bottom: 35.0),
         child: TextFormField(
+          minLines: extended? 3 : 1,
+          maxLines: null,
           controller: controller,
           style: const TextStyle(
             fontSize: 16,
