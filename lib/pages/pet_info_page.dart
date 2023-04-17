@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pet_sitting/Models/pet_species.dart';
 import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/services/user_service.dart';
@@ -39,38 +40,44 @@ class PetInfoPageState extends State<PetInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60),
-          child: AppBar(
-              elevation: 1,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: DARK_GREEN,
-                ),
-                onPressed: () => {context.pop()},
-              )),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: AppBar(
+          elevation: 1,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: DARK_GREEN,
+            ),
+            onPressed: () => {context.pop()},
+          ),
         ),
-        body: _loading
-            ? const CircularProgressIndicator()
-            : Container(
-                padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
-                child: ListView(
-                  children: [
-                    const BasicTitle(text: 'PET PROFILE'),
-                    const SizedBox(
-                      height: 35,
-                    ),
-                    _buildForm(),
-                    const SizedBox(
-                      height: 35,
-                    ),
-                    RoundButton(
-                        color: MAIN_GREEN, text: 'SAVE', onPressed: () => _onSubmitPressed()),
-                  ],
-                )));
+      ),
+      body: _loading
+          ? const CircularProgressIndicator()
+          : Container(
+              padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
+              child: ListView(
+                children: [
+                  const BasicTitle(text: 'PET PROFILE'),
+                  const SizedBox(
+                    height: 35,
+                  ),
+                  _buildForm(),
+                  const SizedBox(
+                    height: 35,
+                  ),
+                  RoundButton(
+                    color: MAIN_GREEN,
+                    text: 'SAVE',
+                    onPressed: () => _onSubmitPressed(),
+                  ),
+                ],
+              ),
+            ),
+    );
   }
 
   Widget _buildForm() {
@@ -105,15 +112,7 @@ class PetInfoPageState extends State<PetInfoPage> {
           FormDropDown(
             label: 'Species*',
             hintText: "Select your pet's species",
-            items: const [
-              'Dog',
-              'Cat',
-              'Bird',
-              'Small Mammal',
-              'Reptile',
-              'Amphibian',
-              'Other'
-            ],
+            items: PetSpecies.values.map((e) => null),
             onChanged: (value) => {if (value != null) species = value},
           ),
           PlainTextField(
@@ -137,7 +136,7 @@ class PetInfoPageState extends State<PetInfoPage> {
   Future<void> _saveChanges() async {
     final id = get<AuthService>().currentUserId;
     final PetService petService = get<PetService>();
-    if (id != null){
+    if (id != null) {
       Pet pet = Pet(
         ownerId: id,
         name: _nameController.text,
@@ -157,7 +156,10 @@ class PetInfoPageState extends State<PetInfoPage> {
       setState(() {
         _loading = true;
       });
-      handleAsyncOperation(asyncOperation: _saveChanges(), onSuccessText: 'Pet profile creates', context: context);
+      handleAsyncOperation(
+          asyncOperation: _saveChanges(),
+          onSuccessText: 'Pet profile creates',
+          context: context);
       setState(() {
         _loading = false;
       });

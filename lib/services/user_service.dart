@@ -1,20 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../Models/user.dart';
+import '../Models/user_extended.dart';
 
-class UserService{
-  final CollectionReference userCollection = FirebaseFirestore.instance.collection("Users");
+class UserService {
+  final CollectionReference userCollection =
+      FirebaseFirestore.instance.collection("Users");
 
-  Future createNewUser(String uid, String email) async{
-    return await userCollection.doc(uid).set({
-      'name': "",
-      'phone': "",
-      'location': "",
-      'email': email
-    });
+  Future createNewUser(String uid, String email) async {
+    return await userCollection
+        .doc(uid)
+        .set({'name': "", 'phone': "", 'location': "", 'email': email});
   }
 
-  Future updateUser({required String id, String? email, String? phoneNumber, String? name, String? location}) async{
+  Future updateUserX(UserExtended user) async {
+    return await userCollection.doc(user.uid).set(user.toJson());
+  }
+
+  Future updateUser(
+      {required String id,
+      String? email,
+      String? phoneNumber,
+      String? name,
+      String? location}) async {
     return await userCollection.doc(id).set({
       'name': name ?? "",
       'phone': phoneNumber ?? "",
@@ -28,15 +35,6 @@ class UserService{
     if (!userSnapshot.exists) {
       return null; // User with specified UID does not exist
     }
-    Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
-    return UserExtended(
-      uid: uid,
-      email: userData['email'],
-      phoneNumber: userData['phone'],
-      name: userData['name'],
-      location: userData['location'],
-    );
+    return UserExtended.fromJson(userSnapshot.data() as Map<String, dynamic>);
   }
-
-
 }

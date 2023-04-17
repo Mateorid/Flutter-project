@@ -1,9 +1,18 @@
+import 'package:json_annotation/json_annotation.dart';
+import 'package:pet_sitting/Models/pet.dart';
+import 'package:pet_sitting/Models/review.dart';
+
+part 'user_extended.g.dart';
+
+@JsonSerializable()
 class UserExtended {
   final String uid;
   final String email;
   String? phoneNumber;
   String? name;
   String? location;
+  List<String> pets = List.empty();
+  List<Review> reviews = List.empty();
 
   UserExtended(
       {required this.uid,
@@ -21,4 +30,9 @@ class UserExtended {
         location: location ?? this.location,
         uid: uid);
   }
+
+  factory UserExtended.fromJson(Map<String, dynamic> json) =>
+      _$UserExtendedFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserExtendedToJson(this);
 }
