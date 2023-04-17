@@ -7,7 +7,7 @@ part 'pet.g.dart';
 
 @JsonSerializable()
 class Pet {
-  final String uid;
+  final String? id;
   final String name;
   final Gender? gender; //todo unnullable
   final PetSpecies? species; //todo unnullable
@@ -16,8 +16,8 @@ class Pet {
   final String? breed;
   final String? details;
 
-  Pet(this.uid, this.name, this.gender, this.species, this.birthday, this.size,
-      this.breed, this.details);
+  Pet({this.id, required this.name, this.gender, this.species, this.birthday, this.size,
+    this.breed, this.details});
 
   factory Pet.fromJson(Map<String, dynamic> json) => _$PetFromJson(json);
 

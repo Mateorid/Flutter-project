@@ -19,6 +19,6 @@ Future<void> handleAsyncOperation(
     GlobalSnackBar.showAlertError(
         context: context,
         bigText: "Error",
-        smallText: 'Unknown error, please try again later');
+        smallText: '$e');
   }
 }

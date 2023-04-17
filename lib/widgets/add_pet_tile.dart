@@ -45,7 +45,7 @@ class AddPetCard extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 20),
                     child: IconButton(
                       icon: const Icon(Icons.add, color: MAIN_GREEN),
-                      onPressed: () => {context.pushNamed("pet_profile")},
+                      onPressed: () => {context.pushNamed("create_pet")},
                     ),
                   ),
                 ),

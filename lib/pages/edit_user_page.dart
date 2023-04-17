@@ -197,12 +197,6 @@ class EditProfilePageState extends State<EditUserPage> {
         email: _emailController.text,
       );
       await userService.updateUserX(user);
-      // await userService.updateUser(
-      //     id: id,
-      //     name: _nameController.text,
-      //     phoneNumber: _phoneNumberController.text,
-      //     location: _locationController.text,
-      //     email: _emailController.text);
     }
   }
 
