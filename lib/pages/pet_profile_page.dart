@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/Models/pet.dart';
+import 'package:pet_sitting/Models/pet_size.dart';
+import 'package:pet_sitting/Models/pet_species.dart';
 import 'package:pet_sitting/widgets/core/info_tile.dart';
 
+import '../Models/Gender.dart';
 import '../styles.dart';
 
 class PetProfilePage extends StatefulWidget {
@@ -10,10 +13,14 @@ class PetProfilePage extends StatefulWidget {
 
   //todo I will have to load this info from DB?
   final _pet = Pet(
-    ownerId: "ownerId",
-    name: "Muffin",
-    gender: "male",
-    species: "dog",
+    "id",
+    "Doggo",
+    Gender.male,
+    PetSpecies.dog,
+    DateTime.now(),
+    PetSize.medium,
+    "Labradoodle",
+    "A good boy",
   );
 
   @override
