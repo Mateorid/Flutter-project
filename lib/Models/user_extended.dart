@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pet_sitting/Models/pet.dart';
 import 'package:pet_sitting/Models/review.dart';
 
 part 'user_extended.g.dart';

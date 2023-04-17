@@ -1,9 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_sitting/router.dart';
+
 import 'ioc_container.dart';
 
-Future<void> main() async{
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await IoCContainer().setup();
@@ -19,7 +20,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
-
         primarySwatch: Colors.green,
       ),
       routerConfig: RouterProvider.provideRouter(),

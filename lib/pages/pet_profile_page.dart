@@ -13,14 +13,14 @@ class PetProfilePage extends StatefulWidget {
 
   //todo I will have to load this info from DB?
   final _pet = Pet(
-    "id",
-    "Doggo",
-    Gender.male,
-    PetSpecies.dog,
-    DateTime.now(),
-    PetSize.medium,
-    "Labradoodle",
-    "A good boy",
+    id: "id",
+    name: "Doggo",
+    gender: Gender.male,
+    species: PetSpecies.dog,
+    birthday: DateTime.now(),
+    size: PetSize.medium,
+    breed: "Labradoodle",
+    details: "A good boy",
   );
 
   @override
@@ -47,20 +47,21 @@ class _PetProfilePageState extends State<PetProfilePage> {
         ),
       ),
       body: Container(
-          child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(children: [
-            _petPhoto(),
-            SizedBox(height: 10),
-            InfoTile(title: "Name", content: Text("XDD")),
-            SizedBox(height: 10),
-            InfoTile(title: "Type", content: Text("XDD")),
-            SizedBox(height: 10),
-            InfoTile(content: Text("XDD")),
-          ]),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(children: [
+              _petPhoto(),
+              SizedBox(height: 10),
+              InfoTile(title: "Name", content: Text("XDD")),
+              SizedBox(height: 10),
+              InfoTile(title: "Type", content: Text("XDD")),
+              SizedBox(height: 10),
+              InfoTile(content: Text("XDD")),
+            ]),
+          ),
         ),
-      )),
+      ),
     );
   }
 

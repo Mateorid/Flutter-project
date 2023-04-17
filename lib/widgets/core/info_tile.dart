@@ -4,6 +4,7 @@ import '../../styles.dart';
 
 class InfoTile extends StatelessWidget {
   const InfoTile({super.key, required this.content, this.title});
+
   final Widget content;
   final String? title;
 

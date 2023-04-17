@@ -8,6 +8,7 @@ import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/basic_title.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
+
 import '../ioc_container.dart';
 import '../services/auth_service.dart';
 import '../validators/email_validator.dart';
@@ -197,12 +198,6 @@ class EditProfilePageState extends State<EditUserPage> {
         email: _emailController.text,
       );
       await userService.updateUserX(user);
-      // await userService.updateUser(
-      //     id: id,
-      //     name: _nameController.text,
-      //     phoneNumber: _phoneNumberController.text,
-      //     location: _locationController.text,
-      //     email: _emailController.text);
     }
   }
 

@@ -4,10 +4,7 @@ import 'package:pet_sitting/styles.dart';
 class InputTextField extends StatelessWidget {
   final Widget child;
 
-  const InputTextField({
-    Key? key,
-    required this.child
-  }) : super(key: key);
+  const InputTextField({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

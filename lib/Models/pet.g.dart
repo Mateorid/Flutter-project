@@ -7,28 +7,34 @@ part of 'pet.dart';
 // **************************************************************************
 
 Pet _$PetFromJson(Map<String, dynamic> json) => Pet(
-      json['uid'] as String,
-      json['name'] as String,
-      json['gender'],
-      $enumDecodeNullable(_$PetSpeciesEnumMap, json['species']),
-      json['birthday'] == null
+      id: json['id'] as String?,
+      name: json['name'] as String,
+      gender: json['gender'],
+      species: $enumDecodeNullable(_$PetSpeciesEnumMap, json['species']),
+      birthday: json['birthday'] == null
           ? null
           : DateTime.parse(json['birthday'] as String),
-      $enumDecodeNullable(_$PetSizeEnumMap, json['size']),
-      json['breed'] as String?,
-      json['details'] as String?,
+      size: $enumDecodeNullable(_$PetSizeEnumMap, json['size']),
+      breed: json['breed'] as String?,
+      details: json['details'] as String?,
     );
 
 Map<String, dynamic> _$PetToJson(Pet instance) => <String, dynamic>{
-      'uid': instance.uid,
+      'id': instance.id,
       'name': instance.name,
-      'gender': instance.gender,
+      'gender': _$GenderEnumMap[instance.gender],
       'species': _$PetSpeciesEnumMap[instance.species],
       'size': _$PetSizeEnumMap[instance.size],
       'birthday': instance.birthday?.toIso8601String(),
       'breed': instance.breed,
       'details': instance.details,
     };
+
+const _$GenderEnumMap = {
+  Gender.female: 'female',
+  Gender.male: 'male',
+  Gender.other: 'other',
+};
 
 const _$PetSpeciesEnumMap = {
   PetSpecies.dog: 'dog',

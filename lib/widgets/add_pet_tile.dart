@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import '../styles.dart';
 
 class AddPetCard extends StatelessWidget {
@@ -45,7 +46,7 @@ class AddPetCard extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 20),
                     child: IconButton(
                       icon: const Icon(Icons.add, color: MAIN_GREEN),
-                      onPressed: () => {context.pushNamed("pet_profile")},
+                      onPressed: () => {context.pushNamed("create_pet")},
                     ),
                   ),
                 ),

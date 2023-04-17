@@ -17,8 +17,6 @@ Future<void> handleAsyncOperation(
         smallText: e.message ?? 'Unknown error occurred');
   } catch (e) {
     GlobalSnackBar.showAlertError(
-        context: context,
-        bigText: "Error",
-        smallText: 'Unknown error, please try again later');
+        context: context, bigText: "Error", smallText: '$e');
   }
 }

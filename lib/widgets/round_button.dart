@@ -5,7 +5,11 @@ class RoundButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  const RoundButton({Key? key, required this.color, required this.text, required this.onPressed})
+  const RoundButton(
+      {Key? key,
+      required this.color,
+      required this.text,
+      required this.onPressed})
       : super(key: key);
 
   @override
