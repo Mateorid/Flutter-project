@@ -7,6 +7,7 @@
 - jak globalne ukladat usera
 - kdyz mam nejaky podmineny redering (info_tile) v metode, mam vrace null/Container nebo co?
 - extractovat konstatny nekam (Radius atd)
+- co kdyz bude chtit inzerat na vice mazlicku? xd
 
 Otazky:
 - je nejaky lepsi zpusob jak z vice textfieldu udelat usera nez to co mame ted?

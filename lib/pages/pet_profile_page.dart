@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pet_sitting/Models/pet.dart';
-import 'package:pet_sitting/Models/pet_size.dart';
-import 'package:pet_sitting/Models/pet_species.dart';
+import 'package:pet_sitting/Models/Pet/pet.dart';
+import 'package:pet_sitting/Models/Pet/pet_size.dart';
 import 'package:pet_sitting/widgets/core/info_tile.dart';
 
-import '../Models/Gender.dart';
+import '../Models/Pet/pet_gender.dart';
+import '../Models/Pet/pet_species.dart';
 
 class PetProfilePage extends StatelessWidget {
   PetProfilePage({super.key});
@@ -13,7 +13,7 @@ class PetProfilePage extends StatelessWidget {
   final _pet = Pet(
     id: "id",
     name: "Doggo",
-    gender: Gender.male,
+    gender: PetGender.male,
     species: PetSpecies.dog,
     birthday: DateTime.now(),
     size: PetSize.medium,
@@ -75,19 +75,19 @@ class PetProfilePage extends StatelessWidget {
         ),
         //todo make this tappable and onclick it will change from Bday to age (scale it)
         InfoTile(
+          title: "Breed",
+          content: _infoText(p.breed.toString()),
+          icon: Icons.pets_outlined,
+        ),
+        InfoTile(
           title: "Birthday",
           content: _infoText(_getBirthdayText()),
           icon: Icons.cake_outlined,
           callback: () => print("//TODO: change to age"),
         ),
         InfoTile(
-          title: "Breed",
-          content: _infoText(p.breed.toString()),
-          icon: Icons.pets_outlined,
-        ),
-        InfoTile(
           title: "Photos",
-          content: _infoText("Photos will be here"),
+          content: _infoText("Click to show 9+ more photos"), //todo?
           icon: Icons.image_outlined,
           callback: () => print("//TODO: open photo page"),
         ),

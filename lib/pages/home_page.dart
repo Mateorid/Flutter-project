@@ -54,7 +54,7 @@ class HomePageState extends State<HomePage> {
           child: ListView(
             children: [
               BasicTitle(text: 'My pets'),
-              AddPetCard(),
+              const AddPetCard(),
               ElevatedButton(
                 onPressed: () => {_onLogoutPressed(context)},
                 child: Text('Logout'),

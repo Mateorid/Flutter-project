@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../Models/pet.dart';
+import '../Models/Pet/pet.dart';
 
 class PetService {
   final CollectionReference petCollection =
