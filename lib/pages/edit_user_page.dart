@@ -5,7 +5,7 @@ import 'package:pet_sitting/Models/user_extended.dart';
 import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
-import 'package:pet_sitting/widgets/basic_title.dart';
+import 'package:pet_sitting/widgets/core/basic_title.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
 

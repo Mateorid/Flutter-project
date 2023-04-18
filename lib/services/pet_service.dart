@@ -3,14 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../Models/Pet/pet.dart';
 
 class PetService {
-  final CollectionReference petCollection =
+  final CollectionReference _petCollection =
       FirebaseFirestore.instance.collection("Pets");
 
   Future createNewPet(Pet pet) async {
-    String newKey = petCollection.doc().id;
+    String newKey = _petCollection.doc().id;
     try {
       pet.id = newKey;
-      await petCollection.doc(newKey).set(pet.toJson());
+      await _petCollection.doc(newKey).set(pet.toJson());
     } catch (e) {
       print('An exception occurred while creating a new pet: $e');
       rethrow;
@@ -20,10 +20,19 @@ class PetService {
   //todo update & delete
 
   Future<Pet?> getPetById(String uid) async {
-    final petSnapshot = await petCollection.doc(uid).get();
+    final petSnapshot = await _petCollection.doc(uid).get();
     if (!petSnapshot.exists) {
       return null;
     }
-    return Pet.fromJson(petSnapshot.data() as Map<String, dynamic>);
+    return _petFromData(petSnapshot.data());
+  }
+
+  Future<List<Pet>> getAllPets() async {
+    final query = await _petCollection.get();
+    return query.docs.map((e) => _petFromData(e.data())).toList();
+  }
+
+  Pet _petFromData(Object? input) {
+    return Pet.fromJson(input as Map<String, dynamic>);
   }
 }

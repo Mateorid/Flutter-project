@@ -7,7 +7,7 @@ import 'package:pet_sitting/Models/Pet/pet_size.dart';
 import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/styles.dart';
-import 'package:pet_sitting/widgets/basic_title.dart';
+import 'package:pet_sitting/widgets/core/basic_title.dart';
 import 'package:pet_sitting/widgets/form_dropdown.dart';
 import 'package:pet_sitting/widgets/pet_size_select.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';

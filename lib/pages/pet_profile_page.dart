@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
 import 'package:pet_sitting/Models/Pet/pet_size.dart';
+import 'package:pet_sitting/services/icon_service.dart';
 import 'package:pet_sitting/widgets/core/info_tile.dart';
 
 import '../Models/Pet/pet_gender.dart';
 import '../Models/Pet/pet_species.dart';
+import '../ioc_container.dart';
 
 class PetProfilePage extends StatelessWidget {
   PetProfilePage({super.key});
@@ -13,7 +15,7 @@ class PetProfilePage extends StatelessWidget {
   final _pet = Pet(
     id: "id",
     name: "Doggo",
-    gender: PetGender.male,
+    gender: PetGender.female,
     species: PetSpecies.dog,
     birthday: DateTime.now(),
     size: PetSize.medium,
@@ -21,6 +23,8 @@ class PetProfilePage extends StatelessWidget {
     details:
         "A good boy LOOOOOOOOOOOOOOOOOOOOOOOOONG TEEEEEEEEEEEEEEEEEEEEEEEEEEEXT HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEEEEEEEEEEEEEEE",
   );
+
+  final iconService = get<IconService>();
 
   @override
   Widget build(BuildContext context) {
@@ -66,12 +70,12 @@ class PetProfilePage extends StatelessWidget {
         InfoTile(
           title: "Gender",
           content: _infoText(p.gender.toString()),
-          icon: Icons.male, //todo set icon based on sex
+          icon: iconService.getGenderIcon(p.gender),
         ),
         InfoTile(
           title: "PetSize",
           content: _infoText(p.size.toString()),
-          icon: Icons.accessibility_new, //todo better
+          icon: iconService.getSizeIcon(p.size),
         ),
         //todo make this tappable and onclick it will change from Bday to age (scale it)
         InfoTile(
