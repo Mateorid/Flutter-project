@@ -7,7 +7,7 @@ part 'pet.g.dart';
 
 @JsonSerializable()
 class Pet {
-  final String? id;
+  String? id;
   final String name;
   final PetGender gender;
   final PetSpecies species;
