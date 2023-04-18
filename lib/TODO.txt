@@ -12,6 +12,10 @@
 - udelat autofill hints pri user editu? (adrea a email?)
 - udelat si nejaky svuj future builder kde jen doplnime informace
 
+UDELAT TO S TIM ZE NAVIGATOR BUDE BRAT ID PETA  PRI PRESMEROVANI NA PET OVERVIEW
+
+
+
 Otazky:
 - nejlepsi reseni tech obrazku?
 - je nejaky lepsi zpusob jak z vice textfieldu udelat usera nez to co mame ted?
