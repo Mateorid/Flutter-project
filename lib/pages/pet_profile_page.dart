@@ -18,7 +18,8 @@ class PetProfilePage extends StatelessWidget {
     birthday: DateTime.now(),
     size: PetSize.medium,
     breed: "Labradoodle",
-    details: "A good boy",
+    details:
+        "A good boy LOOOOOOOOOOOOOOOOOOOOOOOOONG TEEEEEEEEEEEEEEEEEEEEEEEEEEEXT HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEEEEEEEEEEEEEEE",
   );
 
   @override
@@ -31,7 +32,7 @@ class PetProfilePage extends StatelessWidget {
               expandedHeight: 250,
               actions: [_editButton()],
               flexibleSpace: FlexibleSpaceBar(background: _petPhoto())),
-          SliverList(delegate: _petInfo()),
+          SliverList(delegate: _petInfo(context)),
         ],
       ),
     );
@@ -48,7 +49,7 @@ class PetProfilePage extends StatelessWidget {
     );
   }
 
-  SliverChildListDelegate _petInfo() {
+  SliverChildListDelegate _petInfo(BuildContext context) {
     final p = _pet;
     return SliverChildListDelegate(
       [
@@ -65,7 +66,7 @@ class PetProfilePage extends StatelessWidget {
         InfoTile(
           title: "Gender",
           content: _infoText(p.gender.toString()),
-          icon: Icons.male, //todo set this based on sex
+          icon: Icons.male, //todo set icon based on sex
         ),
         InfoTile(
           title: "PetSize",
@@ -85,17 +86,19 @@ class PetProfilePage extends StatelessWidget {
           icon: Icons.pets_outlined,
         ),
         InfoTile(
-          title: "Details",
-          content: _infoText(p.details.toString()),
-          icon: Icons.question_mark,
-        ),
-        InfoTile(
           title: "Photos",
           content: _infoText("Photos will be here"),
           icon: Icons.image_outlined,
           callback: () => print("//TODO: open photo page"),
         ),
-        //todo tile with more images?
+        InfoTile(
+          title: "Details",
+          content: _infoText(p.details.toString().length > 30
+              ? "${p.details.toString().substring(0, 24)}..."
+              : p.details.toString()),
+          icon: Icons.question_mark,
+          callback: _detailsCallback(context, p.details.toString()),
+        ),
       ],
     );
   }
@@ -110,12 +113,29 @@ class PetProfilePage extends StatelessWidget {
             style: TextStyle(fontSize: 20, color: Colors.white)));
   }
 
+  Widget _infoText(String text) {
+    return Text(text, style: const TextStyle(fontSize: 20));
+  }
+
   String _getBirthdayText() {
     final dt = _pet.birthday;
     return dt == null ? 'No info' : '${dt.day}. ${dt.month}. ${dt.year}';
   }
 
-  Widget _infoText(String text) {
-    return Text(text, style: const TextStyle(fontSize: 20));
+  VoidCallback _detailsCallback(BuildContext context, String text) {
+    return () {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(text),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Close"),
+            )
+          ],
+        ),
+      );
+    };
   }
 }

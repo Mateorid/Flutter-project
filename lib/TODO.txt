@@ -11,3 +11,4 @@
 Otazky:
 - je nejaky lepsi zpusob jak z vice textfieldu udelat usera nez to co mame ted?
 - V userovi mit list petu a reviews nebo len jejich IDs??
+- jde nejak zobrazit vsechny okraje widgetu?
