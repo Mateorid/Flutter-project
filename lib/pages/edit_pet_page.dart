@@ -54,12 +54,11 @@ class EditPetPageState extends State<EditPetPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: Column(
+        child: ListView(
           children: [
             const BasicTitle(text: 'ADD PET'),
             const SizedBox(height: 35),
             _buildForm(),
-            const Spacer(),
             RoundButton(
               color: MAIN_GREEN,
               text: 'SAVE',

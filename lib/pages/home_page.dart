@@ -19,8 +19,6 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  bool _loading = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
