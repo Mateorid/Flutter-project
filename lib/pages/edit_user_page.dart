@@ -1,12 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pet_sitting/Models/user_extended.dart';
 import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/basic_title.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
+
 import '../ioc_container.dart';
 import '../services/auth_service.dart';
 import '../validators/email_validator.dart';
@@ -40,9 +42,7 @@ class EditProfilePageState extends State<EditUserPage> {
           preferredSize: Size.fromHeight(60),
           child: AppBar(
               elevation: 1,
-              backgroundColor: Theme
-                  .of(context)
-                  .scaffoldBackgroundColor,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               centerTitle: true,
               leading: IconButton(
                 icon: const Icon(
@@ -53,34 +53,37 @@ class EditProfilePageState extends State<EditUserPage> {
               )),
         ),
         body: _loading
-            ? const CircularProgressIndicator() : Container(
-            padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
-            child: ListView(
-              children: [
-                const BasicTitle(text: 'Edit profile'),
-                const SizedBox(height: 15),
-                _buildImage(),
-                const SizedBox(
-                  height: 35,
-                ),
-                _buildForm(),
-                const SizedBox(
-                  height: 35,
-                ),
-                RoundButton(
-                    color: MAIN_GREEN,
-                    text: 'SAVE',
-                    onPressed: _onSubmitPressed),
-              ],
-            )));
+            ? const CircularProgressIndicator()
+            : Container(
+                padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
+                child: ListView(
+                  children: [
+                    const BasicTitle(text: 'Edit profile'),
+                    const SizedBox(height: 15),
+                    _buildImage(),
+                    const SizedBox(
+                      height: 35,
+                    ),
+                    _buildForm(),
+                    const SizedBox(
+                      height: 35,
+                    ),
+                    RoundButton(
+                        color: MAIN_GREEN,
+                        text: 'SAVE',
+                        onPressed: _onSubmitPressed),
+                  ],
+                )));
   }
 
   Future<void> _setControllerInitialValues() async {
     try {
+      // _loading = true;
       final id = get<AuthService>().currentUserId;
       if (id != null) {
         final user = await get<UserService>().getUserById(id);
         if (user != null) {
+          // _loading = false;
           _nameController.text = user.name ?? '';
           _emailController.text = user.email;
           _phoneNumberController.text = user.phoneNumber ?? '';
@@ -105,8 +108,7 @@ class EditProfilePageState extends State<EditUserPage> {
       key: _formKey,
       child: Column(
         children: [
-          _loading
-              ? const CircularProgressIndicator() : Container(),
+          _loading ? const CircularProgressIndicator() : Container(),
           PlainTextField(
             labelText: "Full Name",
             placeholder: "Enter your full name",
@@ -145,9 +147,7 @@ class EditProfilePageState extends State<EditUserPage> {
             height: 130,
             decoration: BoxDecoration(
                 border: Border.all(
-                    width: 4, color: Theme
-                    .of(context)
-                    .scaffoldBackgroundColor),
+                    width: 4, color: Theme.of(context).scaffoldBackgroundColor),
                 boxShadow: [
                   BoxShadow(
                       spreadRadius: 2,
@@ -172,9 +172,7 @@ class EditProfilePageState extends State<EditUserPage> {
                   shape: BoxShape.circle,
                   border: Border.all(
                     width: 4,
-                    color: Theme
-                        .of(context)
-                        .scaffoldBackgroundColor,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                   ),
                   color: MAIN_GREEN,
                 ),
@@ -188,17 +186,18 @@ class EditProfilePageState extends State<EditUserPage> {
     );
   }
 
-
   Future<void> _saveChanges() async {
     final id = get<AuthService>().currentUserId;
     final UserService userService = get<UserService>();
     if (id != null) {
-      await userService.updateUser(
-          id: id,
-          name: _nameController.text,
-          phoneNumber: _phoneNumberController.text,
-          location: _locationController.text,
-          email: _emailController.text);
+      final user = UserExtended(
+        uid: id,
+        name: _nameController.text,
+        phoneNumber: _phoneNumberController.text,
+        location: _locationController.text,
+        email: _emailController.text,
+      );
+      await userService.updateUserX(user);
     }
   }
 
@@ -207,11 +206,13 @@ class EditProfilePageState extends State<EditUserPage> {
       setState(() {
         _loading = true;
       });
-      handleAsyncOperation(asyncOperation: _saveChanges(), onSuccessText: 'Changes saved', context: context);
+      handleAsyncOperation(
+          asyncOperation: _saveChanges(),
+          onSuccessText: 'Changes saved',
+          context: context);
       setState(() {
         _loading = false;
       });
     }
   }
-
 }

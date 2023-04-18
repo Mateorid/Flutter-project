@@ -7,7 +7,11 @@ class FormDropDown extends StatefulWidget {
   final List<String> items;
   final void Function(String?) onChanged;
 
-  FormDropDown({required this.label, required this.hintText, required this.items, required this.onChanged});
+  FormDropDown(
+      {required this.label,
+      required this.hintText,
+      required this.items,
+      required this.onChanged});
 
   @override
   _FormDropDownState createState() => _FormDropDownState();
@@ -36,10 +40,7 @@ class _FormDropDownState extends State<FormDropDown> {
             child: Text(
               value,
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: DARK_GREEN
-              ),
+                  fontSize: 16, fontWeight: FontWeight.bold, color: DARK_GREEN),
             ),
           );
         }).toList(),

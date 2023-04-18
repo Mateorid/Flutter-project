@@ -1,14 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/pages/edit_user_page.dart';
 import 'package:pet_sitting/pages/home_page.dart';
 import 'package:pet_sitting/pages/login_page.dart';
 import 'package:pet_sitting/pages/pet_info_page.dart';
+import 'package:pet_sitting/pages/pet_profile_page.dart';
 import 'package:pet_sitting/pages/register_page.dart';
 import 'package:pet_sitting/services/auth_service.dart';
 
 import 'ioc_container.dart';
-
 
 class RouterProvider {
   static GoRouter provideRouter() {
@@ -40,7 +39,11 @@ class RouterProvider {
           path: "/create_pet",
           name: "create_pet",
           builder: (context, state) => PetInfoPage(),
-
+        ),
+        GoRoute(
+          path: "/pet_profile",
+          name: "pet_profile",
+          builder: (context, state) => PetProfilePage(),
         )
       ],
     );

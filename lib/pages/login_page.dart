@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/email_validation_field.dart';
-import 'package:pet_sitting/widgets/input_text_field.dart';
 import 'package:pet_sitting/widgets/password_validation_field.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
-import 'package:email_validator/email_validator.dart';
 
 import '../ioc_container.dart';
 import '../services/auth_service.dart';
@@ -27,7 +25,6 @@ class LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   bool _loading = false;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,15 +44,15 @@ class LoginPageState extends State<LoginPage> {
                   .textTheme
                   .headlineMedium
                   ?.copyWith(fontWeight: FontWeight.bold, color: DARK_GREEN)),
-          EmailValidationField(hint: "Your email", controller: _emailController),
-          PassWordValidationField(hint: "Password", controller: _passwordController),
+          EmailValidationField(
+              hint: "Your email", controller: _emailController),
+          PassWordValidationField(
+              hint: "Password", controller: _passwordController),
           const SizedBox(height: 5),
           RoundButton(
             color: orangeColor,
             text: "LOGIN",
-            onPressed: () => {
-              _onLoginPressed()
-            },
+            onPressed: () => {_onLoginPressed()},
           ),
           _buildProgressIndicator(),
           const SizedBox(height: 5),

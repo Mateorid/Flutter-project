@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import '../styles.dart';
 
 class AddPetCard extends StatelessWidget {
@@ -8,8 +9,7 @@ class AddPetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-          vertical: 10.0, horizontal: 20.0),
+      padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
       child: Material(
         elevation: 1,
         borderRadius: BorderRadius.circular(20.0),
@@ -30,10 +30,13 @@ class AddPetCard extends StatelessWidget {
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
-                    children:const [
-                      Text('ADD PET', style: TextStyle(color: DARK_GREEN, fontWeight: FontWeight.bold),),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'ADD PET',
+                        style: TextStyle(
+                            color: DARK_GREEN, fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                 ),
@@ -42,8 +45,7 @@ class AddPetCard extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(right: 20),
                     child: IconButton(
-                      icon: const Icon(Icons.add,
-                          color: MAIN_GREEN),
+                      icon: const Icon(Icons.add, color: MAIN_GREEN),
                       onPressed: () => {context.pushNamed("create_pet")},
                     ),
                   ),

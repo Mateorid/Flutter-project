@@ -9,7 +9,11 @@ class PassWordValidationField extends StatefulWidget {
   final Function(String name)? onChanged;
 
   const PassWordValidationField(
-      {Key? key, required this.hint, this.controller, this.matchValue, this.onChanged})
+      {Key? key,
+      required this.hint,
+      this.controller,
+      this.matchValue,
+      this.onChanged})
       : super(key: key);
 
   @override
@@ -24,8 +28,9 @@ class _PassWordValidationFieldState extends State<PassWordValidationField> {
   Widget build(BuildContext context) {
     return InputTextField(
       child: TextFormField(
-        onChanged: widget.onChanged,
-          controller: widget.controller, // using ternary operator
+          onChanged: widget.onChanged,
+          controller: widget.controller,
+          // using ternary operator
           obscureText: _obscurePassword,
           decoration: InputDecoration(
             hintText: widget.hint,
@@ -53,8 +58,8 @@ class _PassWordValidationFieldState extends State<PassWordValidationField> {
             if (value.length < 6) {
               return 'Password should have more than 6 characters';
             }
-            if (widget.matchValue != null && widget.matchValue != value){
-              print (widget.matchValue);
+            if (widget.matchValue != null && widget.matchValue != value) {
+              print(widget.matchValue);
               return "Passwords don't match";
             }
           }),

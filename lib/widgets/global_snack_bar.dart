@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pet_sitting/main.dart';
 import 'package:pet_sitting/styles.dart';
 
 class GlobalSnackBar {
-
-  static showAlertSuccess({required BuildContext context, String? bigText, String? smallText}){
-    _buildAlert(context: context, bigText: bigText?? "Success", smallText: smallText, alertColor: MAIN_GREEN);
+  static showAlertSuccess(
+      {required BuildContext context, String? bigText, String? smallText}) {
+    _buildAlert(
+        context: context,
+        bigText: bigText ?? "Success",
+        smallText: smallText,
+        alertColor: MAIN_GREEN);
   }
 
-  static showAlertError({required BuildContext context, String? bigText, String? smallText}){
-    _buildAlert(context: context, bigText:bigText?? "Error", smallText: smallText, alertColor: ERROR_RED);
+  static showAlertError(
+      {required BuildContext context, String? bigText, String? smallText}) {
+    _buildAlert(
+        context: context,
+        bigText: bigText ?? "Error",
+        smallText: smallText,
+        alertColor: ERROR_RED);
   }
 
   static _buildAlert(
-      {required BuildContext context, String? bigText, String? smallText, required Color alertColor}) {
+      {required BuildContext context,
+      String? bigText,
+      String? smallText,
+      required Color alertColor}) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Stack(children: [
         Container(

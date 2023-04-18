@@ -8,7 +8,7 @@ class PlainTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   bool extended;
 
-   PlainTextField(
+  PlainTextField(
       {Key? key,
       required this.labelText,
       required this.placeholder,
@@ -22,7 +22,7 @@ class PlainTextField extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.only(bottom: 35.0),
         child: TextFormField(
-          minLines: extended? 3 : 1,
+          minLines: extended ? 3 : 1,
           maxLines: null,
           controller: controller,
           style: const TextStyle(
