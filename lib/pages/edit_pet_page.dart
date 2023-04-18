@@ -1,81 +1,72 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pet_sitting/Models/pet_species.dart';
+import 'package:intl/intl.dart';
+import 'package:pet_sitting/Models/Pet/pet_gender.dart';
+import 'package:pet_sitting/Models/Pet/pet_size.dart';
 import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/styles.dart';
-import 'package:pet_sitting/widgets/basic_title.dart';
+import 'package:pet_sitting/widgets/core/basic_title.dart';
 import 'package:pet_sitting/widgets/form_dropdown.dart';
+import 'package:pet_sitting/widgets/pet_size_select.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
 
-import '../Models/Gender.dart';
-import '../Models/pet.dart';
+import '../Models/Pet/pet.dart';
+import '../Models/Pet/pet_species.dart';
 import '../ioc_container.dart';
 import '../services/auth_service.dart';
 import '../validators/name_validator.dart';
 
-class PetInfoPage extends StatefulWidget {
-  PetInfoPage({Key? key}) : super(key: key);
+class EditPetPage extends StatefulWidget {
+  EditPetPage({Key? key, this.petId}) : super(key: key);
 
+  final String? petId;
   final User? user = get<AuthService>().currentUser;
 
   @override
-  PetInfoPageState createState() => PetInfoPageState();
+  EditPetPageState createState() => EditPetPageState();
 }
 
-class PetInfoPageState extends State<PetInfoPage> {
+class EditPetPageState extends State<EditPetPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _speciesController = TextEditingController();
-  final _ageController = TextEditingController();
-  final _weightController = TextEditingController();
+  final _birthdayController = TextEditingController();
+  final _breedController = TextEditingController();
   final _detailsController = TextEditingController();
-  bool _loading = false;
-  late Gender gender;
+
+  late PetGender gender;
   late PetSpecies species;
+  PetSize size = PetSize.medium; //todo or load from pet when update
+  DateTime? birthday;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
-        child: AppBar(
-          elevation: 1,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-              color: DARK_GREEN,
-            ),
-            onPressed: () => {context.pop()},
-          ),
+      appBar: AppBar(
+        elevation: 1,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: DARK_GREEN),
+          onPressed: () => {context.pop()},
         ),
       ),
-      body: _loading
-          ? const CircularProgressIndicator()
-          : Container(
-              padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
-              child: ListView(
-                children: [
-                  const BasicTitle(text: 'PET PROFILE'),
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  _buildForm(),
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  RoundButton(
-                    color: MAIN_GREEN,
-                    text: 'SAVE',
-                    onPressed: () => _onSubmitPressed(),
-                  ),
-                ],
-              ),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: ListView(
+          children: [
+            const BasicTitle(text: 'ADD PET'),
+            const SizedBox(height: 35),
+            _buildForm(),
+            RoundButton(
+              color: MAIN_GREEN,
+              text: 'SAVE',
+              onPressed: () => _onSubmitPressed(),
             ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -93,28 +84,10 @@ class PetInfoPageState extends State<PetInfoPage> {
           FormDropDown(
             label: 'Gender*',
             hintText: "Select your pet's gender",
-            items: Gender.values
+            items: PetGender.values
                 .map((gender) => gender.toString().split('.')[1])
                 .toList(),
-            onChanged: (value) => {
-              if (value != null)
-                gender = gender = Gender.values.firstWhere(
-                  (e) => e.toString().split('.')[1] == value,
-                  orElse: () => Gender.other,
-                )
-            },
-          ),
-          PlainTextField(
-            labelText: "Pet age",
-            placeholder: "Enter your pet's age",
-            controller: _ageController,
-            validator: (value) => null,
-          ),
-          PlainTextField(
-            labelText: "Pet weight",
-            placeholder: "Enter your pet's weight in kg",
-            controller: _weightController,
-            validator: (value) => null,
+            onChanged: _genderSelected,
           ),
           FormDropDown(
             label: 'Species*',
@@ -130,10 +103,28 @@ class PetInfoPageState extends State<PetInfoPage> {
                 )
             },
           ),
+          PetSizeSelect(
+            size: size,
+            callback: (val) {
+              setState(() {
+                size = val as PetSize;
+              });
+            },
+            group: size,
+          ),
+          TextField(
+            controller: _birthdayController,
+            decoration: const InputDecoration(
+              icon: Icon(Icons.calendar_today), //icon of text field
+              labelText: "Enter birthday",
+            ),
+            readOnly: true,
+            onTap: _birthdayOnTap,
+          ),
           PlainTextField(
             labelText: "Breed",
             placeholder: "Further specify breed or species",
-            controller: _speciesController,
+            controller: _breedController,
             validator: (value) => null,
           ),
           PlainTextField(
@@ -141,7 +132,6 @@ class PetInfoPageState extends State<PetInfoPage> {
             placeholder: "Provide additional details about your pet",
             controller: _detailsController,
             validator: (value) => null,
-            extended: true,
           ),
         ],
       ),
@@ -154,26 +144,44 @@ class PetInfoPageState extends State<PetInfoPage> {
       name: _nameController.text,
       gender: gender,
       species: species,
-      breed: _speciesController.text,
+      size: size,
+      birthday: birthday,
+      breed: _breedController.text,
       details: _detailsController.text,
     );
-    print(pet.toJson());
     await petService.createNewPet(pet);
   }
 
   void _onSubmitPressed() async {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _loading = true;
-      });
-      handleAsyncOperation(
+      if (await handleAsyncOperation(
           asyncOperation: _saveChanges(),
           onSuccessText: 'Pet profile creates',
-          context: context);
+          context: context)) context.pop();
+    }
+  }
+
+  void _genderSelected(String? value) {
+    if (value != null) {
+      gender = gender = PetGender.values.firstWhere(
+        (e) => e.toString().split('.')[1] == value,
+        orElse: () => PetGender.other,
+      );
+    }
+  }
+
+  void _birthdayOnTap() async {
+    final date = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2101));
+    if (date != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(date);
       setState(() {
-        _loading = false;
+        birthday = date;
+        _birthdayController.text = formattedDate;
       });
-      //context.pop();
     }
   }
 }

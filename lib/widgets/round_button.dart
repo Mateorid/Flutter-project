@@ -15,7 +15,7 @@ class RoundButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
+    return SizedBox(
       width: size.width * 0.8,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(29),
@@ -23,7 +23,7 @@ class RoundButton extends StatelessWidget {
           style: TextButton.styleFrom(
             backgroundColor: color,
             foregroundColor: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+            // padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
           ),
           onPressed: onPressed,
           child: Text(text),

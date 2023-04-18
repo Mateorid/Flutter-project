@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../styles.dart';
+import '../../styles.dart';
 
 class BasicTitle extends StatelessWidget {
   final String text;

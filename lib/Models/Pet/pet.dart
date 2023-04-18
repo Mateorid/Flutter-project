@@ -1,17 +1,17 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pet_sitting/Models/Gender.dart';
-import 'package:pet_sitting/Models/pet_size.dart';
-import 'package:pet_sitting/Models/pet_species.dart';
+import 'package:pet_sitting/Models/Pet/pet_gender.dart';
+import 'package:pet_sitting/Models/Pet/pet_size.dart';
+import 'package:pet_sitting/Models/Pet/pet_species.dart';
 
 part 'pet.g.dart';
 
 @JsonSerializable()
 class Pet {
-  final String? id;
+  String? id;
   final String name;
-  final Gender? gender; //todo unnullable
-  final PetSpecies? species; //todo unnullable
-  final PetSize? size; //todo unnullable
+  final PetGender gender;
+  final PetSpecies species;
+  final PetSize size;
   final DateTime? birthday;
   final String? breed;
   final String? details;
@@ -19,10 +19,10 @@ class Pet {
   Pet(
       {this.id,
       required this.name,
-      this.gender,
-      this.species,
+      required this.gender,
+      required this.species,
+      required this.size,
       this.birthday,
-      this.size,
       this.breed,
       this.details});
 
