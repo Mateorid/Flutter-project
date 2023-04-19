@@ -16,7 +16,7 @@ class PetOverviewTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClickableOutlinedContainer(
-      onTap: () => {context.pushNamed('pet_profile')},
+      onTap: () => {context.pushNamed('pet_profile', extra: pet)},
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(

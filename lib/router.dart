@@ -7,6 +7,7 @@ import 'package:pet_sitting/pages/pet_profile_page.dart';
 import 'package:pet_sitting/pages/register_page.dart';
 import 'package:pet_sitting/services/auth_service.dart';
 
+import 'Models/Pet/pet.dart';
 import 'ioc_container.dart';
 
 class RouterProvider {
@@ -44,7 +45,10 @@ class RouterProvider {
         GoRoute(
           path: "/pet_profile",
           name: "pet_profile",
-          builder: (context, state) => PetProfilePage(),
+          builder: (context, state) {
+            Pet pet = state.extra as Pet;
+            return PetProfilePage(pet: pet);
+          },
         )
       ],
     );

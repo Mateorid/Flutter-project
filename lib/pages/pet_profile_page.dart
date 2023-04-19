@@ -1,29 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
-import 'package:pet_sitting/Models/Pet/pet_size.dart';
 import 'package:pet_sitting/services/icon_service.dart';
 import 'package:pet_sitting/widgets/core/info_tile.dart';
 
-import '../Models/Pet/pet_gender.dart';
-import '../Models/Pet/pet_species.dart';
 import '../ioc_container.dart';
 
 class PetProfilePage extends StatelessWidget {
-  PetProfilePage({super.key});
+  PetProfilePage({super.key, required this.pet});
 
-  //todo I will have to load this info from DB
-  final _pet = Pet(
-    id: "id",
-    name: "Doggo",
-    gender: PetGender.female,
-    species: PetSpecies.dog,
-    birthday: DateTime.now(),
-    size: PetSize.medium,
-    breed: "Labradoodle",
-    details:
-        "A good boy LOOOOOOOOOOOOOOOOOOOOOOOOONG TEEEEEEEEEEEEEEEEEEEEEEEEEEEXT HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEEEEEEEEEEEEEEE",
-  );
-
+  final Pet pet;
   final iconService = get<IconService>();
 
   @override
@@ -54,7 +39,7 @@ class PetProfilePage extends StatelessWidget {
   }
 
   SliverChildListDelegate _petInfo(BuildContext context) {
-    final p = _pet;
+    final p = pet;
     return SliverChildListDelegate(
       [
         InfoTile(
@@ -122,7 +107,7 @@ class PetProfilePage extends StatelessWidget {
   }
 
   String _getBirthdayText() {
-    final dt = _pet.birthday;
+    final dt = pet.birthday;
     return dt == null ? 'No info' : '${dt.day}. ${dt.month}. ${dt.year}';
   }
 
