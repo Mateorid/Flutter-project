@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../Models/user_extended.dart';
 
@@ -7,9 +8,8 @@ class UserService {
       FirebaseFirestore.instance.collection("Users");
 
   Future createNewUser(String uid, String email) async {
-    return await userCollection
-        .doc(uid)
-        .set({'name': "", 'phone': "", 'location': "", 'email': email});
+    final user = UserExtended(uid: uid, email: email);
+    return await userCollection.doc(user.uid).set(user.toJson());
   }
 
   Future updateUserX(UserExtended user) async {
