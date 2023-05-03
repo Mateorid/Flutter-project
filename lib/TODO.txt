@@ -23,3 +23,6 @@ Otazky:
 - jde nejak zobrazit vsechny okraje widgetu?
 - muzeme pouzit nejake preddelane veci? (graficke rozlozeni a tak)
 - animace na listings a pets slide left -> delete a zatreseni (jak moc je to tezke xd)
+
+
+CREATE inzeratu - check, aby from nebol neskor ako to atd.

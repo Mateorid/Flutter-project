@@ -1,25 +1,30 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pet_sitting/Models/user_extended.dart';
+import 'package:intl/intl.dart';
+import 'package:pet_sitting/Models/User/user_extended.dart';
 import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/core/basic_title.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
+import 'package:pet_sitting/widgets/user/user_round_image.dart';
 
-import '../ioc_container.dart';
-import '../services/auth_service.dart';
-import '../validators/email_validator.dart';
-import '../validators/locationValidator.dart';
-import '../validators/name_validator.dart';
-import '../validators/phoneValidator.dart';
-import '../widgets/global_snack_bar.dart';
+import '../../future_builder.dart';
+import '../../ioc_container.dart';
+import '../../services/auth_service.dart';
+import '../../validators/email_validator.dart';
+import '../../validators/locationValidator.dart';
+import '../../validators/name_validator.dart';
+import '../../validators/phoneValidator.dart';
+import '../../widgets/global_snack_bar.dart';
 
 class EditUserPage extends StatefulWidget {
   EditUserPage({Key? key}) : super(key: key);
-
+  final _userService = GetIt.I<UserService>();
+  final _authService = GetIt.I<AuthService>();
   final User? user = get<AuthService>().currentUser;
 
   @override
@@ -32,11 +37,23 @@ class EditProfilePageState extends State<EditUserPage> {
   final _emailController = TextEditingController();
   final _phoneNumberController = TextEditingController();
   final _locationController = TextEditingController();
+  final _detailsController = TextEditingController();
   bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
-    _setControllerInitialValues();
+    return GenericFutureBuilder(future: widget._userService.getUserById(widget._authService.currentUserId!), onLoaded: (user) {
+      final dateFormat = DateFormat('yyyy-MM-dd');
+      _nameController.text = user.name ?? '';
+      _emailController.text = user.email;
+      _phoneNumberController.text = user.phoneNumber ?? '';
+      _locationController.text = user.location ?? '';
+      _detailsController.text = user.aboutMe ?? '';
+      return _buildScaffold();
+    });
+  }
+
+  Widget _buildScaffold(){
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(60),
@@ -55,25 +72,22 @@ class EditProfilePageState extends State<EditUserPage> {
         body: _loading
             ? const CircularProgressIndicator()
             : Container(
-                padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
-                child: ListView(
-                  children: [
-                    const BasicTitle(text: 'Edit profile'),
-                    const SizedBox(height: 15),
-                    _buildImage(),
-                    const SizedBox(
-                      height: 35,
-                    ),
-                    _buildForm(),
-                    const SizedBox(
-                      height: 35,
-                    ),
-                    RoundButton(
-                        color: MAIN_GREEN,
-                        text: 'SAVE',
-                        onPressed: _onSubmitPressed),
-                  ],
-                )));
+            padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
+            child: ListView(
+              children: [
+                const BasicTitle(text: 'Edit profile'),
+                const SizedBox(height: 15),
+                _buildImage(),
+                const SizedBox(
+                  height: 35,
+                ),
+                _buildForm(),
+                RoundButton(
+                    color: MAIN_GREEN,
+                    text: 'SAVE',
+                    onPressed: _onSubmitPressed),
+              ],
+            )));
   }
 
   Future<void> _setControllerInitialValues() async {
@@ -88,6 +102,7 @@ class EditProfilePageState extends State<EditUserPage> {
           _emailController.text = user.email;
           _phoneNumberController.text = user.phoneNumber ?? '';
           _locationController.text = user.location ?? '';
+          _detailsController.text = user.aboutMe ?? '';
         }
       }
     } on FirebaseAuthException catch (e) {
@@ -120,18 +135,30 @@ class EditProfilePageState extends State<EditUserPage> {
             placeholder: "Enter your contact email",
             controller: _emailController,
             validator: emailValidator,
+            iconData: Icons.email,
           ),
           PlainTextField(
             labelText: "Contact phone number",
             placeholder: "Enter your contact phone number",
             controller: _phoneNumberController,
             validator: phoneValidator,
+            iconData: Icons.phone,
           ),
           PlainTextField(
             labelText: "Location",
             placeholder: "Enter your current location",
             controller: _locationController,
             validator: locationValidator,
+            iconData: Icons.location_on,
+          ),
+          PlainTextField(
+            labelText: "About me",
+            placeholder: "Enter additional details about you",
+            extended: true,
+            controller: _detailsController,
+            validator: (value) {
+              return null;
+            },
           ),
         ],
       ),
@@ -142,26 +169,7 @@ class EditProfilePageState extends State<EditUserPage> {
     return Center(
       child: Stack(
         children: [
-          Container(
-            width: 130,
-            height: 130,
-            decoration: BoxDecoration(
-                border: Border.all(
-                    width: 4, color: Theme.of(context).scaffoldBackgroundColor),
-                boxShadow: [
-                  BoxShadow(
-                      spreadRadius: 2,
-                      blurRadius: 10,
-                      color: Colors.black.withOpacity(0.1),
-                      offset: Offset(0, 10))
-                ],
-                shape: BoxShape.circle,
-                image: const DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      "https://www.gensoldx.com/wp-content/uploads/2017/06/cdn.akc_.orgwhy_life_is_better_with_d-d4168a4c5d58d6716e64ae4828e297751c32b51f.jpg",
-                    ))),
-          ),
+          UserRoundImage(size: 130),
           Positioned(
               bottom: 0,
               right: 0,
@@ -196,6 +204,7 @@ class EditProfilePageState extends State<EditUserPage> {
         phoneNumber: _phoneNumberController.text,
         location: _locationController.text,
         email: _emailController.text,
+        aboutMe: _detailsController.text,
       );
       await userService.updateUserX(user);
     }

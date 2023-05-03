@@ -50,7 +50,7 @@ class LoginPageState extends State<LoginPage> {
               hint: "Password", controller: _passwordController),
           const SizedBox(height: 5),
           RoundButton(
-            color: orangeColor,
+            color: ORANGE_COLOR,
             text: "LOGIN",
             onPressed: () => {_onLoginPressed()},
           ),
