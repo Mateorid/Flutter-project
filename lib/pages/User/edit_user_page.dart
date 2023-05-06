@@ -26,6 +26,7 @@ class EditUserPage extends StatefulWidget {
   final _userService = GetIt.I<UserService>();
   final _authService = GetIt.I<AuthService>();
   final User? user = get<AuthService>().currentUser;
+  late UserExtended userExtended;
 
   @override
   EditProfilePageState createState() => EditProfilePageState();
@@ -40,6 +41,7 @@ class EditProfilePageState extends State<EditUserPage> {
   final _detailsController = TextEditingController();
   bool _loading = false;
 
+
   @override
   Widget build(BuildContext context) {
     return GenericFutureBuilder(future: widget._userService.getUserById(widget._authService.currentUserId!), onLoaded: (user) {
@@ -49,6 +51,7 @@ class EditProfilePageState extends State<EditUserPage> {
       _phoneNumberController.text = user.phoneNumber ?? '';
       _locationController.text = user.location ?? '';
       _detailsController.text = user.aboutMe ?? '';
+      this.widget.userExtended = user;
       return _buildScaffold();
     });
   }
@@ -88,34 +91,6 @@ class EditProfilePageState extends State<EditUserPage> {
                     onPressed: _onSubmitPressed),
               ],
             )));
-  }
-
-  Future<void> _setControllerInitialValues() async {
-    try {
-      // _loading = true;
-      final id = get<AuthService>().currentUserId;
-      if (id != null) {
-        final user = await get<UserService>().getUserById(id);
-        if (user != null) {
-          // _loading = false;
-          _nameController.text = user.name ?? '';
-          _emailController.text = user.email;
-          _phoneNumberController.text = user.phoneNumber ?? '';
-          _locationController.text = user.location ?? '';
-          _detailsController.text = user.aboutMe ?? '';
-        }
-      }
-    } on FirebaseAuthException catch (e) {
-      GlobalSnackBar.showAlertError(
-          context: context,
-          bigText: "Error",
-          smallText: e.message ?? 'Unknown error occurred');
-    } catch (e) {
-      GlobalSnackBar.showAlertError(
-          context: context,
-          bigText: "Error",
-          smallText: 'Unknown error, please try again later');
-    }
   }
 
   Widget _buildForm() {
@@ -169,7 +144,7 @@ class EditProfilePageState extends State<EditUserPage> {
     return Center(
       child: Stack(
         children: [
-          UserRoundImage(size: 130),
+          UserRoundImage(size: 130, url: widget.userExtended.imageUrl,),
           Positioned(
               bottom: 0,
               right: 0,
@@ -184,9 +159,14 @@ class EditProfilePageState extends State<EditUserPage> {
                   ),
                   color: MAIN_GREEN,
                 ),
-                child: const Icon(
-                  Icons.edit,
-                  color: Colors.white,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    context.pushNamed("upload", params: {"id": widget._authService.currentUserId!});
+                  },
                 ),
               )),
         ],

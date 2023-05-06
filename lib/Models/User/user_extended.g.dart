@@ -12,6 +12,7 @@ UserExtended _$UserExtendedFromJson(Map<String, dynamic> json) => UserExtended(
       phoneNumber: json['phoneNumber'] as String?,
       location: json['location'] as String?,
       name: json['name'] as String?,
+      imageUrl: json['imageUrl'] as String?,
       aboutMe: json['aboutMe'] as String?,
     )
       ..pets = (json['pets'] as List<dynamic>).map((e) => e as String).toList()
@@ -27,6 +28,7 @@ Map<String, dynamic> _$UserExtendedToJson(UserExtended instance) =>
       'name': instance.name,
       'location': instance.location,
       'aboutMe': instance.aboutMe,
+      'imageUrl': instance.imageUrl,
       'pets': instance.pets,
       'reviews': instance.reviews,
     };

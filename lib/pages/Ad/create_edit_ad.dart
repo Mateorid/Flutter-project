@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:pet_sitting/Models/Pet/pet.dart';
-import 'package:pet_sitting/Models/Pet/pet_size.dart';
+
 import 'package:pet_sitting/future_builder.dart';
 import 'package:pet_sitting/services/ad_service.dart';
 import 'package:pet_sitting/validators/locationValidator.dart';
@@ -13,7 +12,6 @@ import '../../handle_async_operation.dart';
 import '../../ioc_container.dart';
 import '../../services/auth_service.dart';
 import '../../styles.dart';
-import '../../validators/name_validator.dart';
 import '../../widgets/core/basic_title.dart';
 import '../../widgets/plain_text_field.dart';
 import '../../widgets/round_button.dart';

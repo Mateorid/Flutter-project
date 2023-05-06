@@ -5,6 +5,7 @@ import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/core/basic_button.dart';
 import 'package:pet_sitting/widgets/core/custom_divider.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
+import 'package:pet_sitting/widgets/user/rating_bard.dart';
 import 'package:pet_sitting/widgets/user/user_round_image.dart';
 
 import '../../Models/User/user_extended.dart';
@@ -16,10 +17,10 @@ import '../../widgets/core/bottom_navigation.dart';
 
 class UserPage extends StatelessWidget {
   final String userId;
-  final bool currentUser;
+  final bool isDetail;
   late UserExtended user;
 
-  UserPage({Key? key, required this.userId, this.currentUser = false})
+  UserPage({Key? key, required this.userId, this.isDetail = true})
       : super(key: key);
 
   final _userService = GetIt.I<UserService>();
@@ -41,14 +42,26 @@ class UserPage extends StatelessWidget {
         elevation: 1,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         actions: [
-          IconButton(
-            onPressed: () {_onLogoutPressed(context);},
-            icon: const Icon(
-              Icons.exit_to_app,
-              color: MAIN_GREEN,
+          if (!isDetail) // Conditionally show IconButton if isDetail is set to false
+            IconButton(
+              onPressed: () {
+                _onLogoutPressed(context);
+              },
+              icon: const Icon(
+                Icons.exit_to_app,
+                color: MAIN_GREEN,
+              ),
             ),
-          ),
         ],
+        leading: isDetail
+            ? IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: DARK_GREEN,
+                ),
+                onPressed: () => context.pop(),
+              )
+            : null,
       ),
       bottomNavigationBar: BottomNavigation(),
       body: Column(
@@ -66,7 +79,9 @@ class UserPage extends StatelessWidget {
                     height: 10,
                   ),
                   _buildName(context),
-                  if (currentUser) _buildEditButton(context),
+                  RatingBar(rating: 3.2, ratingCount: 10),
+                  if (!isDetail && userId == _authService.currentUserId)
+                    _buildEditButton(context),
                   const SizedBox(
                     height: 20,
                   ),
@@ -75,7 +90,7 @@ class UserPage extends StatelessWidget {
           const Divider(
             thickness: 1,
           ),
-          if (user.aboutMe != null) _buildInformation(context),
+          _buildInformation(context),
         ],
       ),
     );
@@ -135,11 +150,12 @@ class UserPage extends StatelessWidget {
             const SizedBox(
               height: 5,
             ),
-            Text(
-              user.aboutMe!,
-              textAlign: TextAlign.justify,
-              maxLines: null,
-            ),
+            if (user.aboutMe != null)
+              Text(
+                user.aboutMe!,
+                textAlign: TextAlign.justify,
+                maxLines: null,
+              ),
           ],
         ));
   }
@@ -166,9 +182,7 @@ class UserPage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        UserRoundImage(
-          size: 130,
-        ),
+        UserRoundImage(size: 130, url: user.imageUrl),
       ],
     );
   }

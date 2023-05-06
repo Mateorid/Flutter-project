@@ -49,7 +49,10 @@ class BottomNavigation extends StatelessWidget {
       context.goNamed("ads");
     }
     if (index == 2){
-      context.goNamed("user_details", params: {"id": _authService.currentUserId! });
+      context.pushNamed("user_details", params: {
+        "id": _authService.currentUserId!,
+        "isDetail": false.toString(),
+      });
     }
 
   }

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
+import '../../services/storage_service.dart';
 import '../../styles.dart';
 
 class UserRoundImage extends StatelessWidget {
 
   final double size;
-  const UserRoundImage({Key? key, required this.size}) : super(key: key);
+  final String? url;
+  final _storageService = GetIt.I<StorageService>();
+  UserRoundImage({Key? key, required this.size, this.url}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +27,13 @@ class UserRoundImage extends StatelessWidget {
                   offset: const Offset(0, 10))
             ],
             shape: BoxShape.circle,
-            image: const DecorationImage(
+            image: DecorationImage(
                 fit: BoxFit.cover,
-                image: NetworkImage(
-                  "https://www.gensoldx.com/wp-content/uploads/2017/06/cdn.akc_.orgwhy_life_is_better_with_d-d4168a4c5d58d6716e64ae4828e297751c32b51f.jpg",
-                ))),
-      );
+              image: url != null
+                  ? NetworkImage(url!)
+                  : const AssetImage('assets/images/no_image.PNG') as ImageProvider,
+                )
+            ));
   }
 
 }

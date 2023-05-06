@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/pages/Ad/ad_detail_page.dart';
 import 'package:pet_sitting/pages/Ad/ads_page.dart';
 import 'package:pet_sitting/pages/Ad/create_edit_ad.dart';
+import 'package:pet_sitting/pages/User/upload_file_page.dart';
 import 'package:pet_sitting/pages/User/user_page.dart';
 import 'package:pet_sitting/pages/add_pet_page.dart';
 import 'package:pet_sitting/pages/edit_pet_page.dart';
@@ -27,12 +28,15 @@ class RouterProvider {
           builder: (context, state) => EditUserPage(),
         ),
         GoRoute(
-          path: "/user_details/:id",
+          path: "/user_details/:id/:isDetail",
           name: "user_details",
           builder: (context, state) {
+            final userId = state.params["id"]!;
+            final isCurrentUser = state.params["isDetail"] == "true";
+
             return UserPage(
-              userId: state.params["id"]!,
-              currentUser: true,
+              userId: userId,
+              isDetail: isCurrentUser,
             );
           },
         ),
@@ -71,6 +75,15 @@ class RouterProvider {
           path: "/ads",
           name: "ads",
           builder: (context, state) => AdsPage(),
+        ),
+        GoRoute(
+          path: "/upload/:id",
+          name: "upload",
+          builder: (context, state) {
+            return UploadFilePage(
+              id: state.params["id"]!,
+            );
+          },
         ),
         GoRoute(
           path: "/ad_detail/:id",

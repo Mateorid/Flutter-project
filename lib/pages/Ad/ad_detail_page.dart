@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +9,7 @@ import 'package:pet_sitting/widgets/ads/ad_detail_small_card.dart';
 import 'package:pet_sitting/future_builder.dart';
 import 'package:pet_sitting/widgets/core/basic_button.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
+import 'package:pet_sitting/widgets/user/rating_bard.dart';
 
 import '../../Models/User/user_extended.dart';
 import '../../services/ad_service.dart';
@@ -97,7 +97,10 @@ class AdDetailPage extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              _buildUserPart(),
+              const Divider(
+                thickness: 1,
+              ),
+              _buildUserPart(context),
               const SizedBox(
                 height: 20,
               ),
@@ -120,7 +123,7 @@ class AdDetailPage extends StatelessWidget {
   Widget _buildEditDelete(BuildContext context) {
     return Row(children: [
       BasicButton(text: "Edit", background: MAIN_GREEN, foreground: Colors.white, onPressed: () => {_onEditPressed(context)}),
-      SizedBox(
+      const SizedBox(
         width: 10,
       ),
       BasicButton(text: "Delete", background: ERROR_RED, foreground: Colors.white, onPressed: () => {}),
@@ -143,17 +146,38 @@ class AdDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildUserPart() {
+  Widget _buildUserPart(BuildContext context) {
     return Row(
       children: [
         UserRoundImage(
           size: 90,
+          url: user.imageUrl,
         ),
         const SizedBox(
           width: 10,
         ),
-        Text(user.name ?? user.email,
-            style: TextStyle(fontWeight: FontWeight.bold, color: DARK_GREEN))
+        _buildTextAndRating(context)
+      ],
+    );
+  }
+
+  Widget _buildTextAndRating(BuildContext context){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextButton(
+          onPressed: () {
+            context.pushNamed("user_details", params: {
+              "id": _authService.currentUserId!,
+              "isDetail": true.toString(),
+            });
+          },
+          child: Text(
+            user.name ?? user.email,
+            style: TextStyle(fontWeight: FontWeight.bold, color: DARK_GREEN),
+          ),
+        ),
+        RatingBar(rating: 3.5, ratingCount: 10)
       ],
     );
   }
