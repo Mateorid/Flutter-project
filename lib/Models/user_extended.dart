@@ -3,7 +3,7 @@ import 'package:pet_sitting/Models/review.dart';
 
 part 'user_extended.g.dart';
 
-@JsonSerializable()
+@JsonSerializable() //todo make final
 class UserExtended {
   final String uid;
   final String email;

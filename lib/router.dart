@@ -15,6 +15,7 @@ class RouterProvider {
     return GoRouter(
       debugLogDiagnostics: true,
       initialLocation: get<AuthService>().currentUser != null ? "/" : "/login",
+      // initialLocation: "/",
       routes: [
         GoRoute(
           path: "/edit_user",

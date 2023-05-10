@@ -6,7 +6,9 @@ class PetService {
   final CollectionReference _petCollection =
       FirebaseFirestore.instance.collection("Pets");
 
-  Future createNewPet(Pet pet) async {
+  //todo with converter
+
+  Future<void> createNewPet(Pet pet) async {
     String newKey = _petCollection.doc().id;
     try {
       pet.id = newKey;
