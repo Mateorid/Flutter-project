@@ -39,22 +39,23 @@ class BottomNavigation extends StatelessWidget {
     });
   }
 
-  void onTap(int index, BuildContext context){
+  void onTap(int index, BuildContext context) {
     final navbarIndex = Provider.of<NavbarIndex>(context, listen: false);
-    if (index == navbarIndex.index ) {
+    if (index == navbarIndex.index) {
       return;
     }
     navbarIndex.index = index;
-    if (index == 0){
+    if (index == 0) {
       context.goNamed("ads");
     }
-    if (index == 2){
+    if (index == 1) {
+      context.goNamed("pets");
+    }
+    if (index == 2) {
       context.pushNamed("user_details", params: {
         "id": _authService.currentUserId!,
         "isDetail": false.toString(),
       });
     }
-
   }
-
 }

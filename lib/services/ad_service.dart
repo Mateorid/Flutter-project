@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pet_sitting/Models/Ad/ad.dart';
 
-class AdService{
-  final _adCollection = FirebaseFirestore.instance.collection('Ads').withConverter(
+class AdService {
+  final _adCollection =
+      FirebaseFirestore.instance.collection('Ads').withConverter(
     fromFirestore: (snapshot, options) {
       final json = snapshot.data() ?? {};
       json['id'] = snapshot.id;
@@ -15,7 +16,7 @@ class AdService{
     },
   );
 
-  Future createNewAd(Ad ad) async {
+  Future<void> createNewAd(Ad ad) async {
     await _adCollection.add(ad);
   }
 
@@ -32,7 +33,7 @@ class AdService{
     await _adCollection.doc(adId).update(ad.toJson());
   }
 
-  Stream<List<Ad>> get adStream => _adCollection
-      .snapshots()
-      .map((querySnapshot) => querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList());
+  Stream<List<Ad>> get adStream =>
+      _adCollection.snapshots().map((querySnapshot) =>
+          querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList());
 }

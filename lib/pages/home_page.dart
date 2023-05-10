@@ -10,6 +10,7 @@ import '../ioc_container.dart';
 import '../services/auth_service.dart';
 import '../services/pet_service.dart';
 import '../widgets/add_pet_tile.dart';
+import '../widgets/core/bottom_navigation.dart';
 import '../widgets/core/home_page_title.dart';
 import '../widgets/global_snack_bar.dart';
 
@@ -29,6 +30,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _createAppBar(),
+      bottomNavigationBar: BottomNavigation(),
       body: Container(
         padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
         child: Center(

@@ -10,8 +10,9 @@
 - co kdyz bude chtit inzerat na vice mazlicku? xd
 - asi bude lepsi pridat owner id k petum -> lehci getovani vsech
 - udelat autofill hints pri user editu? (adrea a email?)
-- udelat si nejaky svuj future builder kde jen doplnime informace
+- udelat si nejaky svuj stream builder kde jen doplnime informace
 
+- change Pets -> My Pets?
 
 
 
@@ -23,5 +24,6 @@ Otazky:
 - muzeme pouzit nejake preddelane veci? (graficke rozlozeni a tak)
 - animace na listings a pets slide left -> delete a zatreseni (jak moc je to tezke xd)
 
+Jaky je rozdil mezi typem importu? klasicky vs package?
 
 CREATE inzeratu - check, aby from nebol neskor ako to atd.
