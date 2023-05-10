@@ -54,7 +54,7 @@ class LoginPageState extends State<LoginPage> {
           ),
           const SizedBox(height: 5),
           RoundButton(
-            color: orangeColor,
+            color: ORANGE_COLOR,
             text: "LOGIN",
             onPressed: _onLoginPressed,
           ),

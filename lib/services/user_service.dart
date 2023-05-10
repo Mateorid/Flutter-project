@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../Models/user_extended.dart';
+import '../Models/User/user_extended.dart';
 
 class UserService {
   final CollectionReference userCollection =
@@ -30,11 +30,8 @@ class UserService {
     });
   }
 
-  Future<UserExtended?> getUserById(String uid) async {
+  Future<UserExtended> getUserById(String uid) async {
     DocumentSnapshot userSnapshot = await userCollection.doc(uid).get();
-    if (!userSnapshot.exists) {
-      return null; // User with specified UID does not exist
-    }
     return UserExtended.fromJson(userSnapshot.data() as Map<String, dynamic>);
   }
 }
