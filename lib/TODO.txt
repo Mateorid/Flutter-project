@@ -10,16 +10,16 @@
 - co kdyz bude chtit inzerat na vice mazlicku? xd
 - asi bude lepsi pridat owner id k petum -> lehci getovani vsech
 - udelat autofill hints pri user editu? (adrea a email?)
-- udelat si nejaky svuj future builder kde jen doplnime informace
+- udelat si nejaky svuj stream builder kde jen doplnime informace
 
-UDELAT TO S TIM ZE NAVIGATOR BUDE BRAT ID PETA  PRI PRESMEROVANI NA PET OVERVIEW
+- change Pets -> My Pets?
+- unify the fonts and font sizes
+
 
 
 
 Otazky:
-- nejlepsi reseni tech obrazku?
-- je nejaky lepsi zpusob jak z vice textfieldu udelat usera nez to co mame ted?
-- V userovi mit list petu a reviews nebo len jejich IDs??
-- jde nejak zobrazit vsechny okraje widgetu?
-- muzeme pouzit nejake preddelane veci? (graficke rozlozeni a tak)
-- animace na listings a pets slide left -> delete a zatreseni (jak moc je to tezke xd)
+Jaky je rozdil mezi typem importu? klasicky vs package?
+Streambuilder vs Futurebuilder u petu - stream je zbytecne slozity?
+
+CREATE inzeratu - check, aby from nebol neskor ako to atd.

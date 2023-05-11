@@ -6,24 +6,27 @@ import 'package:pet_sitting/Models/Pet/pet_gender.dart';
 import 'package:pet_sitting/Models/Pet/pet_size.dart';
 import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/services/pet_service.dart';
+import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/core/basic_title.dart';
 import 'package:pet_sitting/widgets/form_dropdown.dart';
-import 'package:pet_sitting/widgets/pet_size_select.dart';
+import 'package:pet_sitting/widgets/pets/pet_size_select.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
 
-import '../Models/Pet/pet.dart';
-import '../Models/Pet/pet_species.dart';
-import '../ioc_container.dart';
-import '../services/auth_service.dart';
-import '../validators/name_validator.dart';
+import '../../Models/Pet/pet.dart';
+import '../../Models/Pet/pet_species.dart';
+import '../../ioc_container.dart';
+import '../../services/auth_service.dart';
+import '../../validators/name_validator.dart';
 
 class EditPetPage extends StatefulWidget {
   EditPetPage({Key? key, this.petId}) : super(key: key);
 
   final String? petId;
   final User? user = get<AuthService>().currentUser;
+  final petService = get<PetService>();
+  final userService = get<UserService>();
 
   @override
   EditPetPageState createState() => EditPetPageState();
@@ -139,7 +142,6 @@ class EditPetPageState extends State<EditPetPage> {
   }
 
   Future<void> _saveChanges() async {
-    final PetService petService = get<PetService>();
     final pet = Pet(
       name: _nameController.text,
       gender: gender,
@@ -149,15 +151,19 @@ class EditPetPageState extends State<EditPetPage> {
       breed: _breedController.text,
       details: _detailsController.text,
     );
-    await petService.createNewPet(pet);
+    final petId = await widget.petService.createNewPet(pet);
+    widget.userService.addPetToCurrentUser(petId);
   }
 
   void _onSubmitPressed() async {
     if (_formKey.currentState!.validate()) {
-      if (await handleAsyncOperation(
+      final ok = await handleAsyncOperation(
           asyncOperation: _saveChanges(),
-          onSuccessText: 'Pet profile creates',
-          context: context)) context.pop();
+          onSuccessText: 'Pet successfully added',
+          context: context);
+      if (ok && context.mounted) {
+        context.pop();
+      }
     }
   }
 

@@ -1,38 +1,61 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import '../Models/Pet/pet.dart';
+import 'package:pet_sitting/Models/Pet/pet.dart';
 
 class PetService {
-  final CollectionReference _petCollection =
-      FirebaseFirestore.instance.collection("Pets");
+  final _petCollection =
+      FirebaseFirestore.instance.collection("Pets").withConverter(
+    fromFirestore: (snapshot, options) {
+      final json = snapshot.data() ?? {};
+      json['id'] = snapshot.id;
+      return Pet.fromJson(json);
+    },
+    toFirestore: (value, options) {
+      final json = value.toJson();
+      json.remove('id');
+      return json;
+    },
+  );
 
-  Future createNewPet(Pet pet) async {
-    String newKey = _petCollection.doc().id;
-    try {
-      pet.id = newKey;
-      await _petCollection.doc(newKey).set(pet.toJson());
-    } catch (e) {
-      print('An exception occurred while creating a new pet: $e');
-      rethrow;
-    }
+  Future<String> createNewPet(Pet pet) async {
+    return await _petCollection.add(pet).then((p) => p.id);
   }
 
-  //todo update & delete
+  Future<void> deletePet(String petId) {
+    return _petCollection.doc(petId).delete();
+  }
 
   Future<Pet?> getPetById(String uid) async {
     final petSnapshot = await _petCollection.doc(uid).get();
-    if (!petSnapshot.exists) {
-      return null;
-    }
-    return _petFromData(petSnapshot.data());
+    return petSnapshot.data();
   }
 
+  Future<void> updatePet(String petId, Pet pet) async {
+    await _petCollection.doc(petId).update(pet.toJson());
+  }
+
+  Stream<List<Pet>> get petStream =>
+      _petCollection.snapshots().map((snapshot) =>
+          snapshot.docs.map((docSnapshot) => docSnapshot.data()).toList());
+
+  Stream<List<Pet>> petStreamFromIds(List<String> petIds) {
+    return _petCollection.snapshots().map((snapshot) => snapshot.docs
+        .map((docSnapshot) => docSnapshot.data())
+        .where((element) => petIds.contains(element.id))
+        .toList());
+  }
+
+  //todo does this make sense?
+  Future<List<Pet>> getPetsByIds(List<String> petIds) async {
+    final query = await _petCollection.get();
+    return query.docs
+        .map((e) => e.data())
+        .where((p) => petIds.contains(p.id))
+        .toList();
+  }
+
+  //todo delete these vvv
   Future<List<Pet>> getAllPets() async {
     final query = await _petCollection.get();
-    return query.docs.map((e) => _petFromData(e.data())).toList();
-  }
-
-  Pet _petFromData(Object? input) {
-    return Pet.fromJson(input as Map<String, dynamic>);
+    return query.docs.map((e) => e.data()).toList();
   }
 }

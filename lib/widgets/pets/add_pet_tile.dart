@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../styles.dart';
+import '../../styles.dart';
 
 class AddPetCard extends StatelessWidget {
   const AddPetCard({Key? key}) : super(key: key);

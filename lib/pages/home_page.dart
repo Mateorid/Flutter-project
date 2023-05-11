@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/core/clickable_outlined_container.dart';
-import 'package:pet_sitting/widgets/pet_overview_tile.dart';
+import 'package:pet_sitting/widgets/pets/pet_overview_tile.dart';
 
 import '../Models/Pet/pet.dart';
 import '../ioc_container.dart';
 import '../services/auth_service.dart';
 import '../services/pet_service.dart';
+import '../widgets/pets/add_pet_tile.dart';
+import '../widgets/core/bottom_navigation.dart';
 import '../widgets/core/home_page_title.dart';
 import '../widgets/global_snack_bar.dart';
 
@@ -28,6 +30,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _createAppBar(),
+      bottomNavigationBar: BottomNavigation(),
       body: Container(
         padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
         child: Center(
@@ -48,7 +51,7 @@ class HomePageState extends State<HomePage> {
                 addCallback: () => {context.pushNamed('create_pet')},
               ),
               _listUserPets(),
-              // const AddPetCard(),
+              const AddPetCard(),
               const SizedBox(height: 50),
               ElevatedButton(
                 onPressed: () => {_onLogoutPressed(context)},
@@ -93,6 +96,7 @@ class HomePageState extends State<HomePage> {
 
   //todo make all these parts a widget
   Widget _listUserPets() {
+    //todo stream builder
     return FutureBuilder(
       future: petService.getAllPets(),
       builder: (context, snapshot) {

@@ -1,30 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
-import 'package:pet_sitting/Models/Pet/pet_size.dart';
+import 'package:pet_sitting/ioc_container.dart';
+import 'package:pet_sitting/services/date_service.dart';
 import 'package:pet_sitting/services/icon_service.dart';
 import 'package:pet_sitting/widgets/core/info_tile.dart';
 
-import '../Models/Pet/pet_gender.dart';
-import '../Models/Pet/pet_species.dart';
-import '../ioc_container.dart';
-
 class PetProfilePage extends StatelessWidget {
-  PetProfilePage({super.key});
+  PetProfilePage({super.key, required this.pet});
 
-  //todo I will have to load this info from DB
-  final _pet = Pet(
-    id: "id",
-    name: "Doggo",
-    gender: PetGender.female,
-    species: PetSpecies.dog,
-    birthday: DateTime.now(),
-    size: PetSize.medium,
-    breed: "Labradoodle",
-    details:
-        "A good boy LOOOOOOOOOOOOOOOOOOOOOOOOONG TEEEEEEEEEEEEEEEEEEEEEEEEEEEXT HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRREEEEEEEEEEEEEEEEEEEEEEEEEE",
-  );
-
+  final Pet pet;
   final iconService = get<IconService>();
+  final dateService = get<DateService>();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +32,7 @@ class PetProfilePage extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/dog_img.jpg'),
+          image: AssetImage('assets/images/dog_img2.jpg'),
           fit: BoxFit.cover,
         ),
       ),
@@ -54,7 +40,7 @@ class PetProfilePage extends StatelessWidget {
   }
 
   SliverChildListDelegate _petInfo(BuildContext context) {
-    final p = _pet;
+    final p = pet;
     return SliverChildListDelegate(
       [
         InfoTile(
@@ -64,31 +50,32 @@ class PetProfilePage extends StatelessWidget {
         ),
         InfoTile(
           title: "Species",
-          content: _infoText(p.species.toString()),
+          content: _infoText(p.species.text),
           icon: Icons.info_outline,
         ),
         InfoTile(
           title: "Gender",
-          content: _infoText(p.gender.toString()),
+          content: _infoText(p.gender.text),
           icon: iconService.getGenderIcon(p.gender),
         ),
         InfoTile(
           title: "PetSize",
-          content: _infoText(p.size.toString()),
+          content: _infoText(p.size.text),
           icon: iconService.getSizeIcon(p.size),
         ),
-        //todo make this tappable and onclick it will change from Bday to age (scale it)
         InfoTile(
           title: "Breed",
           content: _infoText(p.breed.toString()),
           icon: Icons.pets_outlined,
         ),
+        //todo make this tappable and onclick it will change from Bday to age (scale it)
         InfoTile(
           title: "Birthday",
           content: _infoText(_getBirthdayText()),
           icon: Icons.cake_outlined,
           callback: () => print("//TODO: change to age"),
         ),
+        //todo open images?
         InfoTile(
           title: "Photos",
           content: _infoText("Click to show 9+ more photos"), //todo?
@@ -122,8 +109,8 @@ class PetProfilePage extends StatelessWidget {
   }
 
   String _getBirthdayText() {
-    final dt = _pet.birthday;
-    return dt == null ? 'No info' : '${dt.day}. ${dt.month}. ${dt.year}';
+    final dt = pet.birthday;
+    return dt == null ? 'No info' : dateService.getPrintableDate(dt);
   }
 
   VoidCallback _detailsCallback(BuildContext context, String text) {

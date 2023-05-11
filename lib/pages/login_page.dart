@@ -45,14 +45,18 @@ class LoginPageState extends State<LoginPage> {
                   .headlineMedium
                   ?.copyWith(fontWeight: FontWeight.bold, color: DARK_GREEN)),
           EmailValidationField(
-              hint: "Your email", controller: _emailController),
+            hint: "Your email",
+            controller: _emailController,
+          ),
           PassWordValidationField(
-              hint: "Password", controller: _passwordController),
+            hint: "Password",
+            controller: _passwordController,
+          ),
           const SizedBox(height: 5),
           RoundButton(
-            color: orangeColor,
+            color: ORANGE_COLOR,
             text: "LOGIN",
-            onPressed: () => {_onLoginPressed()},
+            onPressed: _onLoginPressed,
           ),
           _buildProgressIndicator(),
           const SizedBox(height: 5),
@@ -78,7 +82,7 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _onLoginPressed() async {
+  Future<void> _onLoginPressed() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _loading = true;
@@ -89,7 +93,7 @@ class LoginPageState extends State<LoginPage> {
           email: _emailController.text,
           password: _passwordController.text,
         );
-        context.go("/");
+        context.goNamed("pets");
       } on FirebaseAuthException catch (e) {
         GlobalSnackBar.showAlertError(
             context: context,

@@ -7,39 +7,43 @@ class PlainTextField extends StatelessWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final TextInputType? inputType;
+  final IconData? iconData;
   bool extended;
 
-  PlainTextField(
-      {Key? key,
-      required this.labelText,
-      required this.placeholder,
-      required this.controller,
-      required this.validator,
-      this.extended = false,
-      this.inputType = TextInputType.text})
-      : super(key: key);
+  PlainTextField({
+    Key? key,
+    required this.labelText,
+    required this.placeholder,
+    required this.controller,
+    required this.validator,
+    this.extended = false,
+    this.inputType = TextInputType.text,
+    this.iconData,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(bottom: 35.0),
-        child: TextFormField(
-          keyboardType: inputType,
-          minLines: extended ? 3 : 1,
-          maxLines: null,
-          controller: controller,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: DARK_GREEN,
-          ),
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(bottom: 3),
-            labelText: labelText,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintText: placeholder,
-          ),
-          validator: validator,
-        ));
+      padding: const EdgeInsets.only(bottom: 35.0),
+      child: TextFormField(
+        keyboardType: inputType,
+        minLines: extended ? 3 : 1,
+        maxLines: null,
+        controller: controller,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: DARK_GREEN,
+        ),
+        decoration: InputDecoration(
+          icon: iconData != null ? Icon(iconData) : null,
+          contentPadding: EdgeInsets.only(bottom: 3),
+          labelText: labelText,
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          hintText: placeholder,
+        ),
+        validator: validator,
+      ),
+    );
   }
 }

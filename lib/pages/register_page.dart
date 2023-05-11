@@ -51,7 +51,7 @@ class RegisterPageState extends State<RegisterPage> {
           _buildFields(),
           const SizedBox(height: 5),
           RoundButton(
-            color: orangeColor,
+            color: ORANGE_COLOR,
             text: "REGISTER",
             onPressed: () {
               _onRegisterPressed();
