@@ -59,7 +59,6 @@ class RouterProvider {
         GoRoute(
           path: "/create_pet",
           name: "create_pet",
-          // builder: (context, state) => AddPetPage(),
           builder: (context, state) => EditPetPage(),
         ),
         GoRoute(

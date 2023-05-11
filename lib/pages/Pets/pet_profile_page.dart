@@ -32,7 +32,7 @@ class PetProfilePage extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/dog_img.jpg'),
+          image: AssetImage('assets/images/dog_img2.jpg'),
           fit: BoxFit.cover,
         ),
       ),

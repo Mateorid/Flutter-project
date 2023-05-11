@@ -17,14 +17,9 @@
 
 
 
-Otazky:
-- nejlepsi reseni tech obrazku?
-- je nejaky lepsi zpusob jak z vice textfieldu udelat usera nez to co mame ted?
-- V userovi mit list petu a reviews nebo len jejich IDs??
-- jde nejak zobrazit vsechny okraje widgetu?
-- muzeme pouzit nejake preddelane veci? (graficke rozlozeni a tak)
-- animace na listings a pets slide left -> delete a zatreseni (jak moc je to tezke xd)
 
+Otazky:
 Jaky je rozdil mezi typem importu? klasicky vs package?
+Streambuilder vs Futurebuilder u petu - stream je zbytecne slozity?
 
 CREATE inzeratu - check, aby from nebol neskor ako to atd.

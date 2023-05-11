@@ -16,10 +16,6 @@ class IoCContainer {
       FirebaseAuth.instance,
     );
 
-    get.registerSingleton<UserService>(
-      UserService(),
-    );
-
     get.registerSingleton<StorageService>(
       StorageService(),
     );
@@ -34,6 +30,10 @@ class IoCContainer {
 
     get.registerSingleton<AuthService>(
       AuthService(get<FirebaseAuth>()),
+    );
+
+    get.registerSingleton<UserService>(
+      UserService(),
     );
 
     get.registerSingleton<IconService>(

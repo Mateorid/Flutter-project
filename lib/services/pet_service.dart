@@ -16,8 +16,8 @@ class PetService {
     },
   );
 
-  Future<void> createNewPet(Pet pet) async {
-    await _petCollection.add(pet);
+  Future<String> createNewPet(Pet pet) async {
+    return await _petCollection.add(pet).then((p) => p.id);
   }
 
   Future<void> deletePet(String petId) {
@@ -37,13 +37,25 @@ class PetService {
       _petCollection.snapshots().map((snapshot) =>
           snapshot.docs.map((docSnapshot) => docSnapshot.data()).toList());
 
+  Stream<List<Pet>> petStreamFromIds(List<String> petIds) {
+    return _petCollection.snapshots().map((snapshot) => snapshot.docs
+        .map((docSnapshot) => docSnapshot.data())
+        .where((element) => petIds.contains(element.id))
+        .toList());
+  }
+
+  //todo does this make sense?
+  Future<List<Pet>> getPetsByIds(List<String> petIds) async {
+    final query = await _petCollection.get();
+    return query.docs
+        .map((e) => e.data())
+        .where((p) => petIds.contains(p.id))
+        .toList();
+  }
+
   //todo delete these vvv
   Future<List<Pet>> getAllPets() async {
     final query = await _petCollection.get();
-    return query.docs.map((e) => _petFromData(e.data())).toList();
-  }
-
-  Pet _petFromData(Object? input) {
-    return Pet.fromJson(input as Map<String, dynamic>);
+    return query.docs.map((e) => e.data()).toList();
   }
 }

@@ -5,6 +5,7 @@ import 'package:pet_sitting/Models/Pet/pet_gender.dart';
 import 'package:pet_sitting/ioc_container.dart';
 import 'package:pet_sitting/services/date_service.dart';
 import 'package:pet_sitting/services/icon_service.dart';
+import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
 
 class PetOverviewTile extends StatelessWidget {
@@ -13,6 +14,8 @@ class PetOverviewTile extends StatelessWidget {
   final Pet pet;
   final IconService iconService = get<IconService>();
   final dateService = get<DateService>();
+
+  final service = get<UserService>();
 
   @override
   Widget build(BuildContext context) {

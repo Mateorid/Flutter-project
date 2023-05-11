@@ -93,7 +93,7 @@ class LoginPageState extends State<LoginPage> {
           email: _emailController.text,
           password: _passwordController.text,
         );
-        context.go("/");
+        context.goNamed("pets");
       } on FirebaseAuthException catch (e) {
         GlobalSnackBar.showAlertError(
             context: context,

@@ -6,6 +6,7 @@ import 'package:pet_sitting/Models/Pet/pet_gender.dart';
 import 'package:pet_sitting/Models/Pet/pet_size.dart';
 import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/services/pet_service.dart';
+import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/core/basic_title.dart';
 import 'package:pet_sitting/widgets/form_dropdown.dart';
@@ -24,6 +25,8 @@ class EditPetPage extends StatefulWidget {
 
   final String? petId;
   final User? user = get<AuthService>().currentUser;
+  final petService = get<PetService>();
+  final userService = get<UserService>();
 
   @override
   EditPetPageState createState() => EditPetPageState();
@@ -139,7 +142,6 @@ class EditPetPageState extends State<EditPetPage> {
   }
 
   Future<void> _saveChanges() async {
-    final PetService petService = get<PetService>();
     final pet = Pet(
       name: _nameController.text,
       gender: gender,
@@ -149,15 +151,19 @@ class EditPetPageState extends State<EditPetPage> {
       breed: _breedController.text,
       details: _detailsController.text,
     );
-    await petService.createNewPet(pet);
+    final petId = await widget.petService.createNewPet(pet);
+    widget.userService.addPetToCurrentUser(petId);
   }
 
   void _onSubmitPressed() async {
     if (_formKey.currentState!.validate()) {
-      if (await handleAsyncOperation(
+      final ok = await handleAsyncOperation(
           asyncOperation: _saveChanges(),
-          onSuccessText: 'Pet profile creates',
-          context: context)) context.pop();
+          onSuccessText: 'Pet successfully added',
+          context: context);
+      if (ok && context.mounted) {
+        context.pop();
+      }
     }
   }
 
