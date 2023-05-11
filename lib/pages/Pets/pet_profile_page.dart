@@ -50,31 +50,32 @@ class PetProfilePage extends StatelessWidget {
         ),
         InfoTile(
           title: "Species",
-          content: _infoText(p.species.toString()),
+          content: _infoText(p.species.text),
           icon: Icons.info_outline,
         ),
         InfoTile(
           title: "Gender",
-          content: _infoText(p.gender.toString()),
+          content: _infoText(p.gender.text),
           icon: iconService.getGenderIcon(p.gender),
         ),
         InfoTile(
           title: "PetSize",
-          content: _infoText(p.size.toString()),
+          content: _infoText(p.size.text),
           icon: iconService.getSizeIcon(p.size),
         ),
-        //todo make this tappable and onclick it will change from Bday to age (scale it)
         InfoTile(
           title: "Breed",
           content: _infoText(p.breed.toString()),
           icon: Icons.pets_outlined,
         ),
+        //todo make this tappable and onclick it will change from Bday to age (scale it)
         InfoTile(
           title: "Birthday",
           content: _infoText(_getBirthdayText()),
           icon: Icons.cake_outlined,
           callback: () => print("//TODO: change to age"),
         ),
+        //todo open images?
         InfoTile(
           title: "Photos",
           content: _infoText("Click to show 9+ more photos"), //todo?

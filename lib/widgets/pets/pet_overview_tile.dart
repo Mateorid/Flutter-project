@@ -72,7 +72,7 @@ class PetOverviewTile extends StatelessWidget {
         break;
     }
 
-    final text = '${pet.size.name} / ${genderText ?? ''}${pet.species.name}';
+    final text = '${pet.size.name} / ${genderText ?? ''}${pet.species.text}';
     return Text(
       text,
       style: const TextStyle(
