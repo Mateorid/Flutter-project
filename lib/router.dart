@@ -2,14 +2,14 @@ import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/pages/Ad/ad_detail_page.dart';
 import 'package:pet_sitting/pages/Ad/ads_page.dart';
 import 'package:pet_sitting/pages/Ad/create_edit_ad.dart';
+import 'package:pet_sitting/pages/Pets/pet_profile_page.dart';
 import 'package:pet_sitting/pages/Pets/pets_page.dart';
 import 'package:pet_sitting/pages/User/edit_user_page.dart';
 import 'package:pet_sitting/pages/User/upload_file_page.dart';
 import 'package:pet_sitting/pages/User/user_page.dart';
-import 'package:pet_sitting/pages/edit_pet_page.dart';
+import 'package:pet_sitting/pages/Pets/edit_pet_page.dart';
 import 'package:pet_sitting/pages/home_page.dart';
 import 'package:pet_sitting/pages/login_page.dart';
-import 'package:pet_sitting/pages/pet_profile_page.dart';
 import 'package:pet_sitting/pages/register_page.dart';
 import 'package:pet_sitting/services/auth_service.dart';
 

@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/core/clickable_outlined_container.dart';
-import 'package:pet_sitting/widgets/pet_overview_tile.dart';
+import 'package:pet_sitting/widgets/pets/pet_overview_tile.dart';
 
 import '../Models/Pet/pet.dart';
 import '../ioc_container.dart';
 import '../services/auth_service.dart';
 import '../services/pet_service.dart';
-import '../widgets/add_pet_tile.dart';
+import '../widgets/pets/add_pet_tile.dart';
 import '../widgets/core/bottom_navigation.dart';
 import '../widgets/core/home_page_title.dart';
 import '../widgets/global_snack_bar.dart';

@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
 import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/styles.dart';
-import 'package:pet_sitting/widgets/pet_overview_tile.dart';
+import 'package:pet_sitting/widgets/core/basic_title.dart';
+import 'package:pet_sitting/widgets/pets/pet_overview_tile.dart';
 
 import '../../widgets/core/bottom_navigation.dart';
 
@@ -16,13 +17,24 @@ class PetsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      ),
       bottomNavigationBar: BottomNavigation(),
       floatingActionButton: _buildAddButton(context),
-      body: _buildStreamBuilder(),
+      body: _buildPageContent(),
+    );
+  }
+
+  Widget _buildPageContent() {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const BasicTitle(text: 'Your pets'), //todo make this nicer
+            Expanded(child: _buildStreamBuilder()),
+          ],
+        ),
+      ),
     );
   }
 
@@ -39,11 +51,16 @@ class PetsPage extends StatelessWidget {
 
         final pets = snapshot.data!;
         if (pets.isEmpty) {
-          return const Center(child: Text('Add your first pet!'));
+          return _buildNoPetsInfo();
         }
         return _buildListView(pets);
       },
     );
+  }
+
+  Widget _buildNoPetsInfo() {
+    //Todo nicer
+    return const Center(child: Text('Add your first pet!'));
   }
 
   Widget _buildListView(List<Pet> pets) {
@@ -51,12 +68,12 @@ class PetsPage extends StatelessWidget {
       children: [
         Expanded(
           child: ListView.builder(
+            physics: const BouncingScrollPhysics(),
             itemCount: pets.length,
             itemBuilder: (context, index) {
               final pet = pets[index];
               return Column(
                 children: [
-                  const SizedBox(height: 16),
                   PetOverviewTile(pet: pet),
                 ],
               );

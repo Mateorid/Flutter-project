@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/Models/Ad/ad.dart';
 import 'package:pet_sitting/services/ad_service.dart';
 import 'package:pet_sitting/styles.dart';
-import 'package:pet_sitting/widgets/add_pet_tile.dart';
 import 'package:pet_sitting/widgets/core/bottom_navigation.dart';
 
 import '../../widgets/ads/ad_card.dart';
@@ -47,7 +46,8 @@ class AdsPage extends StatelessWidget {
 
                         return InkWell(
                           onTap: () {
-                            context.pushNamed("ad_details", params: {"id": ad.id ?? ""});
+                            context.pushNamed("ad_details",
+                                params: {"id": ad.id ?? ""});
                           },
                           child: Column(
                             children: [
@@ -70,7 +70,7 @@ class AdsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAddButton(BuildContext context){
+  Widget _buildAddButton(BuildContext context) {
     return Positioned(
       bottom: 16,
       right: 16,
@@ -84,12 +84,7 @@ class AdsPage extends StatelessWidget {
     );
   }
 
-  void _onAddPressed(BuildContext context){
+  void _onAddPressed(BuildContext context) {
     context.pushNamed("create_add");
-
   }
-
-
-
-
 }

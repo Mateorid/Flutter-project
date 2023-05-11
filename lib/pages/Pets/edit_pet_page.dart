@@ -9,15 +9,15 @@ import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/core/basic_title.dart';
 import 'package:pet_sitting/widgets/form_dropdown.dart';
-import 'package:pet_sitting/widgets/pet_size_select.dart';
+import 'package:pet_sitting/widgets/pets/pet_size_select.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
 
-import '../Models/Pet/pet.dart';
-import '../Models/Pet/pet_species.dart';
-import '../ioc_container.dart';
-import '../services/auth_service.dart';
-import '../validators/name_validator.dart';
+import '../../Models/Pet/pet.dart';
+import '../../Models/Pet/pet_species.dart';
+import '../../ioc_container.dart';
+import '../../services/auth_service.dart';
+import '../../validators/name_validator.dart';
 
 class EditPetPage extends StatefulWidget {
   EditPetPage({Key? key, this.petId}) : super(key: key);

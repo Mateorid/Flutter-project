@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
 import 'package:pet_sitting/Models/Pet/pet_size.dart';
 
-import '../Models/Pet/pet_gender.dart';
-import '../Models/Pet/pet_species.dart';
-import '../ioc_container.dart';
-import '../services/pet_service.dart';
-import '../validators/name_validator.dart';
-import '../widgets/form_dropdown.dart';
-import '../widgets/plain_text_field.dart';
+import '../../Models/Pet/pet_gender.dart';
+import '../../Models/Pet/pet_species.dart';
+import '../../ioc_container.dart';
+import '../../services/pet_service.dart';
+import '../../validators/name_validator.dart';
+import '../../widgets/form_dropdown.dart';
+import '../../widgets/plain_text_field.dart';
 
 class AddPetPage extends StatefulWidget {
   const AddPetPage({super.key});

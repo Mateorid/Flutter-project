@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
+import 'package:pet_sitting/ioc_container.dart';
+import 'package:pet_sitting/services/date_service.dart';
 import 'package:pet_sitting/services/icon_service.dart';
 import 'package:pet_sitting/widgets/core/info_tile.dart';
-
-import '../ioc_container.dart';
 
 class PetProfilePage extends StatelessWidget {
   PetProfilePage({super.key, required this.pet});
 
   final Pet pet;
   final iconService = get<IconService>();
+  final dateService = get<DateService>();
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +109,7 @@ class PetProfilePage extends StatelessWidget {
 
   String _getBirthdayText() {
     final dt = pet.birthday;
-    return dt == null ? 'No info' : '${dt.day}. ${dt.month}. ${dt.year}';
+    return dt == null ? 'No info' : dateService.getPrintableDate(dt);
   }
 
   VoidCallback _detailsCallback(BuildContext context, String text) {

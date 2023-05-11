@@ -13,6 +13,7 @@
 - udelat si nejaky svuj stream builder kde jen doplnime informace
 
 - change Pets -> My Pets?
+- unify the fonts and font sizes
 
 
 
