@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
-import 'package:pet_sitting/Models/Pet/pet_gender.dart';
 import 'package:pet_sitting/ioc_container.dart';
 import 'package:pet_sitting/services/date_service.dart';
 import 'package:pet_sitting/services/icon_service.dart';
@@ -19,19 +18,26 @@ class PetOverviewTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     return GestureDetector(
       onTap: () {
         context.pushNamed('pet_profile', extra: pet);
       },
       child: Container(
+        width: width,
         margin: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(25.0),
-              //todo load this properly?
-              child: Image.asset('assets/images/dog_img2.jpg'),
+              //todo load this properly? - change the placeholder image based on the type
+              child: Image.asset(
+                'assets/images/dog_img2.jpg',
+                width: width,
+                fit: BoxFit.fill,
+              ),
             ),
             const SizedBox(height: 10),
             Row(
@@ -60,21 +66,8 @@ class PetOverviewTile extends StatelessWidget {
   }
 
   Widget _petInfo(Pet pet) {
-    String? genderText;
-    switch (pet.gender) {
-      case PetGender.male:
-        genderText = 'boy / ';
-        break;
-      case PetGender.female:
-        genderText = 'girl / ';
-        break;
-      case PetGender.other:
-        break;
-    }
-
-    final text = '${pet.size.name} / ${genderText ?? ''}${pet.species.text}';
     return Text(
-      text,
+      '${pet.size.text} / ${pet.gender.text} / ${pet.species.text}',
       style: const TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 15,
