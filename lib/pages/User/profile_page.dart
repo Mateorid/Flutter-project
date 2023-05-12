@@ -34,7 +34,8 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context, UserExtended user) {
-    // final _ownProfile = userId == _authService.currentUserId
+    final ownProfile = userId == _authService.currentUserId;
+
     return Stack(children: [
       ListView(
         physics: const BouncingScrollPhysics(),
@@ -42,10 +43,10 @@ class ProfilePage extends StatelessWidget {
           const SizedBox(height: 25),
           ProfileWidget(
             image: _imageService.getUserImage(user),
-            onTap: () => {context.pushNamed('edit_user')},
+            onTap: ownProfile ? () => {context.pushNamed('edit_user')} : null,
           ),
           _buildNameOrEmail(user),
-//todo interactive ratings
+          //todo interactive ratings
           Center(child: RatingBar(rating: 4.6, ratingCount: 69, size: 30)),
           const SizedBox(height: 15),
           Center(child: _buildContactInformation(context, user)),
@@ -54,7 +55,11 @@ class ProfilePage extends StatelessWidget {
       Positioned(
         bottom: 20,
         width: MediaQuery.of(context).size.width,
-        child: Center(child: _buildLogoutButton(context)),
+        child: Center(
+          child: ownProfile
+              ? _buildLogoutButton(context)
+              : _buildCloseButton(context),
+        ),
       )
     ]);
   }
@@ -75,14 +80,23 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildLogoutButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Center(
-        child: IconTextButton(
-          text: 'Logout',
-          onPressed: () => _onLogoutPressed(context),
-          icon: Icons.exit_to_app_rounded,
-        ),
+    return Center(
+      child: IconTextButton(
+        color: MAIN_GREEN,
+        text: 'Logout',
+        onPressed: () => _onLogoutPressed(context),
+        icon: Icons.exit_to_app_rounded,
+      ),
+    );
+  }
+
+  Widget _buildCloseButton(BuildContext context) {
+    return Center(
+      child: IconTextButton(
+        color: ERROR_RED,
+        text: 'Close',
+        onPressed: context.pop,
+        icon: Icons.close,
       ),
     );
   }

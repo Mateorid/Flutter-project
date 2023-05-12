@@ -119,7 +119,7 @@ class AdDetailPage extends StatelessWidget {
                   color: MAIN_GREEN,
                   text: "Contact user",
                   onPressed: () => context
-                      .pushNamed("user_details", params: {"id": ad.creatorId}))
+                      .pushNamed("user_profile", params: {"id": ad.creatorId}))
               : null,
         ),
       ],
@@ -180,7 +180,7 @@ class AdDetailPage extends StatelessWidget {
       children: [
         TextButton(
           onPressed: () {
-            context.pushNamed("user_details", params: {"id": ad.creatorId});
+            context.pushNamed("user_profile", params: {"id": ad.creatorId});
           },
           child: Text(
             user.name ?? user.email,

@@ -3,9 +3,9 @@ import 'package:pet_sitting/styles.dart';
 
 class ProfileWidget extends StatelessWidget {
   final ImageProvider image;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
-  const ProfileWidget({super.key, required this.image, required this.onTap});
+  const ProfileWidget({super.key, required this.image, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,8 @@ class ProfileWidget extends StatelessWidget {
         onTap: onTap,
         child: Stack(children: [
           _buildImage(),
-          Positioned(bottom: 0, right: 4, child: _buildEditIcon()),
+          if (onTap != null)
+            Positioned(bottom: 0, right: 4, child: _buildEditIcon()),
         ]),
       ),
     );
