@@ -16,6 +16,7 @@ Pet _$PetFromJson(Map<String, dynamic> json) => Pet(
           ? null
           : DateTime.parse(json['birthday'] as String),
       breed: json['breed'] as String?,
+      imageUrl: json['imageUrl'] as String?,
       details: json['details'] as String?,
     );
 
@@ -28,6 +29,7 @@ Map<String, dynamic> _$PetToJson(Pet instance) => <String, dynamic>{
       'birthday': instance.birthday?.toIso8601String(),
       'breed': instance.breed,
       'details': instance.details,
+      'imageUrl': instance.imageUrl,
     };
 
 const _$PetGenderEnumMap = {

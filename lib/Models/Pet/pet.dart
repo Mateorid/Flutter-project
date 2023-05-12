@@ -15,6 +15,7 @@ class Pet {
   final DateTime? birthday;
   final String? breed;
   final String? details;
+  final String? imageUrl;
 
   Pet(
       {this.id,
@@ -24,6 +25,7 @@ class Pet {
       required this.size,
       this.birthday,
       this.breed,
+      this.imageUrl,
       this.details});
 
   factory Pet.fromJson(Map<String, dynamic> json) => _$PetFromJson(json);

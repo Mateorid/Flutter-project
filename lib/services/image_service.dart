@@ -4,7 +4,9 @@ import 'package:pet_sitting/Models/Pet/pet_species.dart';
 
 class ImageService {
   ImageProvider getPetImage(Pet pet) {
-    // if(pet.) todo: check for petImgUrl and load that instead
+    if (pet.imageUrl != null) {
+      return NetworkImage(pet.imageUrl!);
+    }
     switch (pet.species) {
       case PetSpecies.dog:
         return const AssetImage('assets/images/dog_img2.jpg');
