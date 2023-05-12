@@ -53,6 +53,7 @@ class LoginPageState extends State<LoginPage> {
             controller: _passwordController,
           ),
           const SizedBox(height: 5),
+          //TODO: conditionally render the button/circular instead of creating circular https://stackoverflow.com/a/53497047/12432947
           RoundButton(
             color: ORANGE_COLOR,
             text: "LOGIN",

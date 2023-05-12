@@ -20,43 +20,26 @@ class PetService {
     return await _petCollection.add(pet).then((p) => p.id);
   }
 
+  Stream<Pet?> getPetById(String id) {
+    return _petCollection.doc(id).snapshots().map((event) => event.data());
+  }
+
+  Future<void> updatePet(String petId, Pet pet) {
+    return _petCollection.doc(petId).update(pet.toJson());
+  }
+
   Future<void> deletePet(String petId) {
     return _petCollection.doc(petId).delete();
   }
 
-  Future<Pet?> getPetById(String uid) async {
-    final petSnapshot = await _petCollection.doc(uid).get();
-    return petSnapshot.data();
-  }
+  Stream<List<Pet>> get petStream => _petCollection
+      .snapshots()
+      .map((qs) => qs.docs.map((ds) => ds.data()).toList());
 
-  Future<void> updatePet(String petId, Pet pet) async {
-    await _petCollection.doc(petId).update(pet.toJson());
-  }
-
-  Stream<List<Pet>> get petStream =>
-      _petCollection.snapshots().map((snapshot) =>
-          snapshot.docs.map((docSnapshot) => docSnapshot.data()).toList());
-
-  //TODO" COMBINE LATEST
   Stream<List<Pet>> petStreamFromIds(List<String> petIds) {
     return _petCollection.snapshots().map((snapshot) => snapshot.docs
         .map((docSnapshot) => docSnapshot.data())
         .where((element) => petIds.contains(element.id))
         .toList());
-  }
-
-  //todo does this make sense?
-  Future<List<Pet>> getPetsByIds(List<String> petIds) async {
-    final query = await _petCollection.get();
-    return query.docs
-        .map((e) => e.data())
-        .where((p) => petIds.contains(p.id))
-        .toList();
-  }
-
-  //todo delete these vvv
-  Future<List<Pet>> getAllPets() async {
-    final query = await _petCollection.get();
-    return query.docs.map((e) => e.data()).toList();
   }
 }

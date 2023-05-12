@@ -34,6 +34,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context, UserExtended user) {
+    // final _ownProfile = userId == _authService.currentUserId
     return Stack(children: [
       ListView(
         physics: const BouncingScrollPhysics(),
