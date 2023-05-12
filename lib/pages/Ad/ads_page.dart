@@ -37,9 +37,10 @@ class AdsPage extends StatelessWidget {
                   children: [
                     Expanded(
                       child: ListView.builder(
+                        physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           final ad = ads[index];
-
+                          print(ad.id);
                           return InkWell(
                             onTap: () {
                               context.pushNamed("ad_details",

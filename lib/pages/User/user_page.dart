@@ -16,11 +16,9 @@ import '../../services/user_service.dart';
 
 class UserPage extends StatelessWidget {
   final String userId;
-  final bool isDetail;
   late UserExtended user;
 
-  UserPage({Key? key, required this.userId, this.isDetail = true})
-      : super(key: key);
+  UserPage({Key? key, required this.userId}) : super(key: key);
 
   final _userService = get<UserService>();
   final _authService = get<AuthService>();
