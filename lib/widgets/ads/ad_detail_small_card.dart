@@ -19,10 +19,9 @@ class AdDetailSmallCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
-          width: size.width * 0.23,
-          height: size.height * 0.06,
-          child: _buildContent(size)
-        ),
+            width: size.width * 0.23,
+            height: size.height * 0.06,
+            child: _buildContent(size)),
       ),
     );
   }

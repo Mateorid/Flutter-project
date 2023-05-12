@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-
 import 'package:pet_sitting/future_builder.dart';
 import 'package:pet_sitting/services/ad_service.dart';
 import 'package:pet_sitting/validators/locationValidator.dart';
@@ -18,9 +17,10 @@ import '../../widgets/round_button.dart';
 
 class CreateEditAdPage extends StatefulWidget {
   String? adId;
-  CreateEditAdPage({super.key, this.adId});
-  final adService = GetIt.I<AdService>();
 
+  CreateEditAdPage({super.key, this.adId});
+
+  final adService = GetIt.I<AdService>();
 
   @override
   State<CreateEditAdPage> createState() => _CreateEditAdPageState();
@@ -39,27 +39,26 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.adId != null){
-      return GenericFutureBuilder(future: widget.adService.getAdById(widget.adId!), onLoaded: (ad) {
-        final dateFormat = DateFormat('yyyy-MM-dd');
-        _fromController.text = dateFormat.format(ad.from);
-        _toController.text = dateFormat.format(ad.to);
-        _titleController.text = ad.title;
-        _costController.text = ad.costPerHour.toString();
-        _locationController.text = ad.location;
-        _detailsController.text = ad.description ?? '';
-        this.ad = ad;
-        return _buildScaffold();
-
-      });
-    }
-    else {
+    if (widget.adId != null) {
+      return GenericFutureBuilder(
+          future: widget.adService.getAdById(widget.adId!),
+          onLoaded: (ad) {
+            final dateFormat = DateFormat('yyyy-MM-dd');
+            _fromController.text = dateFormat.format(ad.from);
+            _toController.text = dateFormat.format(ad.to);
+            _titleController.text = ad.title;
+            _costController.text = ad.costPerHour.toString();
+            _locationController.text = ad.location;
+            _detailsController.text = ad.description ?? '';
+            this.ad = ad;
+            return _buildScaffold();
+          });
+    } else {
       return _buildScaffold();
     }
-
   }
 
-  Widget _buildScaffold(){
+  Widget _buildScaffold() {
     return Scaffold(
         appBar: AppBar(
           elevation: 1,
@@ -72,18 +71,20 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
         body: _loading
             ? const CircularProgressIndicator()
             : Container(
-            padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
-            child: ListView(
-              children: [
-                const BasicTitle(text: 'CREATE A REQUEST'),
-                const SizedBox(height: 15),
-                _buildForm(),
-                RoundButton(
-                    color: MAIN_GREEN,
-                    text: 'SAVE',
-                    onPressed: widget.adId == null? _onCreatePressed : _onEditPressed),
-              ],
-            )));
+                padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
+                child: ListView(
+                  children: [
+                    const BasicTitle(text: 'CREATE A REQUEST'),
+                    const SizedBox(height: 15),
+                    _buildForm(),
+                    RoundButton(
+                        color: MAIN_GREEN,
+                        text: 'SAVE',
+                        onPressed: widget.adId == null
+                            ? _onCreatePressed
+                            : _onEditPressed),
+                  ],
+                )));
   }
 
   Widget _buildForm() {
@@ -118,10 +119,10 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
             },
           ),
           PlainTextField(
-              labelText: "Location*",
-              placeholder: "Enter location",
-              controller: _locationController,
-              validator: locationValidator,
+            labelText: "Location*",
+            placeholder: "Enter location",
+            controller: _locationController,
+            validator: locationValidator,
             iconData: Icons.location_on,
           ),
           PlainTextField(

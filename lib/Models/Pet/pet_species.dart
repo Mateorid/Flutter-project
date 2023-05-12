@@ -8,5 +8,6 @@ enum PetSpecies {
   other('Other');
 
   final String text;
+
   const PetSpecies(this.text);
 }

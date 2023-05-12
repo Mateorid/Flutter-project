@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
     return [
       AdsPage(),
       PetsPage(),
-      UserPage(userId: _authService.currentUserId!), //todo better
+      UserPage(userId: _authService.currentUserId!), //todo better?
     ];
   }
 

@@ -4,5 +4,6 @@ enum PetGender {
   other('Other');
 
   final String text;
+
   const PetGender(this.text);
 }

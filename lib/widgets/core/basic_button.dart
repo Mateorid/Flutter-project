@@ -19,7 +19,7 @@ class BasicButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: disabled? null : onPressed,
+      onPressed: disabled ? null : onPressed,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(background),
         foregroundColor: MaterialStateProperty.all<Color>(foreground),

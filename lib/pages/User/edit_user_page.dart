@@ -19,7 +19,6 @@ import '../../validators/email_validator.dart';
 import '../../validators/locationValidator.dart';
 import '../../validators/name_validator.dart';
 import '../../validators/phoneValidator.dart';
-import '../../widgets/global_snack_bar.dart';
 
 class EditUserPage extends StatefulWidget {
   EditUserPage({Key? key}) : super(key: key);
@@ -41,22 +40,24 @@ class EditProfilePageState extends State<EditUserPage> {
   final _detailsController = TextEditingController();
   bool _loading = false;
 
-
   @override
   Widget build(BuildContext context) {
-    return GenericFutureBuilder(future: widget._userService.getUserById(widget._authService.currentUserId!), onLoaded: (user) {
-      final dateFormat = DateFormat('yyyy-MM-dd');
-      _nameController.text = user.name ?? '';
-      _emailController.text = user.email;
-      _phoneNumberController.text = user.phoneNumber ?? '';
-      _locationController.text = user.location ?? '';
-      _detailsController.text = user.aboutMe ?? '';
-      this.widget.userExtended = user;
-      return _buildScaffold();
-    });
+    return GenericFutureBuilder(
+        future:
+            widget._userService.getUserById(widget._authService.currentUserId!),
+        onLoaded: (user) {
+          final dateFormat = DateFormat('yyyy-MM-dd');
+          _nameController.text = user.name ?? '';
+          _emailController.text = user.email;
+          _phoneNumberController.text = user.phoneNumber ?? '';
+          _locationController.text = user.location ?? '';
+          _detailsController.text = user.aboutMe ?? '';
+          this.widget.userExtended = user;
+          return _buildScaffold();
+        });
   }
 
-  Widget _buildScaffold(){
+  Widget _buildScaffold() {
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(60),
@@ -75,22 +76,22 @@ class EditProfilePageState extends State<EditUserPage> {
         body: _loading
             ? const CircularProgressIndicator()
             : Container(
-            padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
-            child: ListView(
-              children: [
-                const BasicTitle(text: 'Edit profile'),
-                const SizedBox(height: 15),
-                _buildImage(),
-                const SizedBox(
-                  height: 35,
-                ),
-                _buildForm(),
-                RoundButton(
-                    color: MAIN_GREEN,
-                    text: 'SAVE',
-                    onPressed: _onSubmitPressed),
-              ],
-            )));
+                padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
+                child: ListView(
+                  children: [
+                    const BasicTitle(text: 'Edit profile'),
+                    const SizedBox(height: 15),
+                    _buildImage(),
+                    const SizedBox(
+                      height: 35,
+                    ),
+                    _buildForm(),
+                    RoundButton(
+                        color: MAIN_GREEN,
+                        text: 'SAVE',
+                        onPressed: _onSubmitPressed),
+                  ],
+                )));
   }
 
   Widget _buildForm() {
@@ -144,7 +145,10 @@ class EditProfilePageState extends State<EditUserPage> {
     return Center(
       child: Stack(
         children: [
-          UserRoundImage(size: 130, url: widget.userExtended.imageUrl,),
+          UserRoundImage(
+            size: 130,
+            url: widget.userExtended.imageUrl,
+          ),
           Positioned(
               bottom: 0,
               right: 0,
@@ -165,7 +169,8 @@ class EditProfilePageState extends State<EditUserPage> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    context.pushNamed("upload", params: {"id": widget._authService.currentUserId!});
+                    context.pushNamed("upload",
+                        params: {"id": widget._authService.currentUserId!});
                   },
                 ),
               )),

@@ -33,10 +33,12 @@ class _UploadFilePageState extends State<UploadFilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return GenericFutureBuilder(future: widget._userService.getUserById(widget.id), onLoaded: (user) {
-      widget.user = user;
-      return _buildScaffold(context);
-    });
+    return GenericFutureBuilder(
+        future: widget._userService.getUserById(widget.id),
+        onLoaded: (user) {
+          widget.user = user;
+          return _buildScaffold(context);
+        });
   }
 
   Widget _buildScaffold(BuildContext context) {
@@ -79,9 +81,10 @@ class _UploadFilePageState extends State<UploadFilePage> {
   }
 
   Future<void> _uploadFile() async {
-    final path = await widget._storageService.uploadFile(
-        filePath: _pickedFile!.path!, fileName: _pickedFile!.name!);
-    final fullPath = await widget._storageService.getDownloadUrl(partialUrl: path);
+    final path = await widget._storageService
+        .uploadFile(filePath: _pickedFile!.path!, fileName: _pickedFile!.name);
+    final fullPath =
+        await widget._storageService.getDownloadUrl(partialUrl: path);
     UserExtended updatedUser = widget.user.copyWith(imageUrl: fullPath);
     widget._userService.updateUserX(updatedUser);
   }

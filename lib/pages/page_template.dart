@@ -3,6 +3,7 @@ import 'package:pet_sitting/widgets/core/basic_title.dart';
 
 class PageTemplate extends StatelessWidget {
   const PageTemplate({super.key, required this.pageTitle, required this.body});
+
   final String pageTitle;
   final Widget body;
 

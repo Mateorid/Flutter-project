@@ -22,7 +22,8 @@ class RoundButton extends StatelessWidget {
     return SizedBox(
       width: width == 0 ? size.width * 0.8 : width,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius == 0? 29 : borderRadius),
+        borderRadius:
+            BorderRadius.circular(borderRadius == 0 ? 29 : borderRadius),
         child: TextButton(
           style: TextButton.styleFrom(
             backgroundColor: color,

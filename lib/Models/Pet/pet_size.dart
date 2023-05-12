@@ -4,5 +4,6 @@ enum PetSize {
   large('Large');
 
   final String text;
+
   const PetSize(this.text);
 }

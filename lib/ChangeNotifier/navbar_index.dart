@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class NavbarIndex extends ChangeNotifier{
+class NavbarIndex extends ChangeNotifier {
   int _index = 0;
 
   int get index => _index;
@@ -9,6 +9,4 @@ class NavbarIndex extends ChangeNotifier{
     _index = index;
     notifyListeners();
   }
-
-
 }
