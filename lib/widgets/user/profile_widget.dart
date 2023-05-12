@@ -10,7 +10,8 @@ class ProfileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: GestureDetector(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(45),
         onTap: onTap,
         child: Stack(children: [
           _buildImage(),
@@ -21,14 +22,26 @@ class ProfileWidget extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    return ClipOval(
-      child: Material(
-        color: Colors.transparent,
-        child: Ink.image(
-          image: image,
-          fit: BoxFit.cover,
-          width: 128,
-          height: 128,
+    return Container(
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            spreadRadius: 8.0,
+            blurRadius: 10.0,
+            color: Colors.black26,
+          )
+        ],
+      ),
+      child: ClipOval(
+        child: Material(
+          color: Colors.transparent,
+          child: Ink.image(
+            image: image,
+            fit: BoxFit.cover,
+            width: 128,
+            height: 128,
+          ),
         ),
       ),
     );

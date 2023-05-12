@@ -135,12 +135,7 @@ class UserPage extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        UserRoundImage(size: 130, url: user.imageUrl),
-      ],
-    );
+    return UserRoundImage(size: 130, url: user.imageUrl);
   }
 
   Widget _buildAboutMe() {
