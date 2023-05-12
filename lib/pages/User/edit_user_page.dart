@@ -1,23 +1,22 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pet_sitting/Models/User/user_extended.dart';
-import 'package:pet_sitting/handle_async_operation.dart';
-import 'package:pet_sitting/services/user_service.dart';
-import 'package:pet_sitting/styles.dart';
-import 'package:pet_sitting/widgets/core/basic_title.dart';
-import 'package:pet_sitting/widgets/plain_text_field.dart';
-import 'package:pet_sitting/widgets/round_button.dart';
-import 'package:pet_sitting/widgets/user/user_round_image.dart';
 import 'package:pet_sitting/future_builder.dart';
+import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/ioc_container.dart';
 import 'package:pet_sitting/services/auth_service.dart';
+import 'package:pet_sitting/services/user_service.dart';
+import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/validators/email_validator.dart';
 import 'package:pet_sitting/validators/locationValidator.dart';
 import 'package:pet_sitting/validators/name_validator.dart';
 import 'package:pet_sitting/validators/phoneValidator.dart';
+import 'package:pet_sitting/widgets/core/basic_title.dart';
+import 'package:pet_sitting/widgets/plain_text_field.dart';
+import 'package:pet_sitting/widgets/round_button.dart';
+import 'package:pet_sitting/widgets/user/user_round_image.dart';
 
 class EditUserPage extends StatefulWidget {
   EditUserPage({Key? key}) : super(key: key);

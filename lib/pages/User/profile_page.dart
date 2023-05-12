@@ -108,6 +108,7 @@ class ProfilePage extends StatelessWidget {
         user.aboutMe == null) {
       return const SizedBox.shrink();
     }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

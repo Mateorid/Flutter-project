@@ -45,10 +45,9 @@ class HomePage extends StatelessWidget {
 
   List<Widget> _buildScreens() {
     return [
-      ProfilePage(userId: _authService.currentUserId!),
       AdsPage(),
       PetsPage(),
-      // UserPage(userId: _authService.currentUserId!), //todo better?
+      ProfilePage(userId: _authService.currentUserId!),
     ];
   }
 

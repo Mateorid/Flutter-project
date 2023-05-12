@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
 import 'package:pet_sitting/Models/Pet/pet_species.dart';
