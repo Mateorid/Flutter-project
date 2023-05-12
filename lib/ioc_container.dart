@@ -34,7 +34,7 @@ class IoCContainer {
     );
 
     get.registerSingleton<UserService>(
-      UserService(),
+      UserService(get<AuthService>()),
     );
 
     get.registerSingleton<IconService>(

@@ -6,6 +6,7 @@ import 'package:pet_sitting/pages/Pets/edit_pet_page.dart';
 import 'package:pet_sitting/pages/Pets/pet_profile_page.dart';
 import 'package:pet_sitting/pages/Pets/pets_page.dart';
 import 'package:pet_sitting/pages/User/edit_user_page.dart';
+import 'package:pet_sitting/pages/User/profile_page.dart';
 import 'package:pet_sitting/pages/User/upload_file_page.dart';
 import 'package:pet_sitting/pages/User/user_page.dart';
 import 'package:pet_sitting/pages/home_page.dart';
@@ -31,6 +32,11 @@ class RouterProvider {
           path: "/user_details/:id",
           name: "user_details",
           builder: (context, state) => UserPage(userId: state.params["id"]!),
+        ),
+        GoRoute(
+          path: "/user_profile/:id",
+          name: "user_profile",
+          builder: (context, state) => ProfilePage(userId: state.params["id"]!),
         ),
         GoRoute(
           path: "/login",
@@ -98,11 +104,12 @@ class RouterProvider {
           },
         ),
         GoRoute(
-            path: "/pest",
-            name: "pets",
-            builder: (context, state) {
-              return PetsPage();
-            }),
+          path: "/pest",
+          name: "pets",
+          builder: (context, state) {
+            return PetsPage();
+          },
+        ),
       ],
     );
   }

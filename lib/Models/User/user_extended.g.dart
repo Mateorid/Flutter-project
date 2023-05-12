@@ -14,11 +14,14 @@ UserExtended _$UserExtendedFromJson(Map<String, dynamic> json) => UserExtended(
       name: json['name'] as String?,
       imageUrl: json['imageUrl'] as String?,
       aboutMe: json['aboutMe'] as String?,
-    )
-      ..pets = (json['pets'] as List<dynamic>).map((e) => e as String).toList()
-      ..reviews = (json['reviews'] as List<dynamic>)
-          .map((e) => Review.fromJson(e as Map<String, dynamic>))
-          .toList();
+      pets:
+          (json['pets'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+              const [],
+      reviews: (json['reviews'] as List<dynamic>?)
+              ?.map((e) => Review.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+    );
 
 Map<String, dynamic> _$UserExtendedToJson(UserExtended instance) =>
     <String, dynamic>{

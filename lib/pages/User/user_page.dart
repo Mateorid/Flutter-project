@@ -102,6 +102,7 @@ class UserPage extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       child: Center(
         child: IconTextButton(
+          color: MAIN_GREEN,
           text: 'Edit profile',
           onPressed: () => {context.pushNamed('edit_user')},
           icon: Icons.settings,
@@ -115,6 +116,7 @@ class UserPage extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       child: Center(
         child: IconTextButton(
+          color: MAIN_GREEN,
           text: 'Logout',
           onPressed: () => _onLogoutPressed(context),
           icon: Icons.exit_to_app_rounded,
@@ -135,12 +137,7 @@ class UserPage extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        UserRoundImage(size: 130, url: user.imageUrl),
-      ],
-    );
+    return UserRoundImage(size: 130, url: user.imageUrl);
   }
 
   Widget _buildAboutMe() {

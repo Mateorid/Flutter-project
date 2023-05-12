@@ -1,14 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pet_sitting/ioc_container.dart';
+import 'package:pet_sitting/Models/User/user_extended.dart';
 import 'package:pet_sitting/services/auth_service.dart';
-
-import '../Models/User/user_extended.dart';
 
 class UserService {
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection("Users");
+  final AuthService authService;
 
-  final authService = get<AuthService>();
+  UserService(this.authService);
+
+  String? get currentUserId => authService.currentUserId;
+
+  Future<UserExtended?> get currentUser async {
+    final id = currentUserId;
+    if (id == null) {
+      return null;
+    }
+    return getUserById(id);
+  }
+
+  Future<UserExtended> getUserById(String uid) async {
+    //todo change to stream
+    DocumentSnapshot userSnapshot = await userCollection.doc(uid).get();
+    return UserExtended.fromJson(userSnapshot.data() as Map<String, dynamic>);
+  }
 
   Future<void> createNewUser(String uid, String email) async {
     final user = UserExtended(uid: uid, email: email);
@@ -41,10 +56,5 @@ class UserService {
     return await userCollection.doc(userId).update({
       'pets': FieldValue.arrayUnion([petId]),
     });
-  }
-
-  Future<UserExtended> getUserById(String uid) async {
-    DocumentSnapshot userSnapshot = await userCollection.doc(uid).get();
-    return UserExtended.fromJson(userSnapshot.data() as Map<String, dynamic>);
   }
 }

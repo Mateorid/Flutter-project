@@ -53,6 +53,7 @@ class LoginPageState extends State<LoginPage> {
             controller: _passwordController,
           ),
           const SizedBox(height: 5),
+          //TODO: conditionally render the button/circular instead of creating circular https://stackoverflow.com/a/53497047/12432947
           RoundButton(
             color: ORANGE_COLOR,
             text: "LOGIN",
@@ -83,32 +84,33 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _onLoginPressed() async {
-    if (_formKey.currentState!.validate()) {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    // if (_formKey.currentState!.validate()) {
+    setState(() {
+      _loading = true;
+    });
+    final AuthService authService = get<AuthService>();
+    try {
+      await authService.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      context.go('/');
+    } on FirebaseAuthException catch (e) {
+      GlobalSnackBar.showAlertError(
+          context: context, bigText: "Error", smallText: "Account not found.");
+    } catch (e) {
+      GlobalSnackBar.showAlertError(
+          context: context,
+          bigText: "Error",
+          smallText: 'Unknown error, please try again later');
+    } finally {
       setState(() {
-        _loading = true;
+        _loading = false;
       });
-      final AuthService authService = get<AuthService>();
-      try {
-        await authService.signInWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text,
-        );
-        context.goNamed("pets");
-      } on FirebaseAuthException catch (e) {
-        GlobalSnackBar.showAlertError(
-            context: context,
-            bigText: "Error",
-            smallText: "Account not found.");
-      } catch (e) {
-        GlobalSnackBar.showAlertError(
-            context: context,
-            bigText: "Error",
-            smallText: 'Unknown error, please try again later');
-      } finally {
-        setState(() {
-          _loading = false;
-        });
-      }
+      // }
     }
   }
 

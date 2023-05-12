@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:pet_sitting/styles.dart';
 
 class IconTextButton extends StatelessWidget {
   const IconTextButton({
     super.key,
+    required this.color,
     required this.text,
     required this.icon,
     required this.onPressed,
   });
 
+  final Color color;
   final String text;
   final IconData icon;
   final VoidCallback onPressed;
@@ -18,7 +19,7 @@ class IconTextButton extends StatelessWidget {
     return FloatingActionButton.extended(
       icon: Icon(icon),
       label: Text(text),
-      backgroundColor: MAIN_GREEN,
+      backgroundColor: color,
       onPressed: onPressed,
     );
   }
