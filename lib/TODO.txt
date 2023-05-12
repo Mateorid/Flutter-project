@@ -12,9 +12,8 @@
 - udelat autofill hints pri user editu? (adrea a email?)
 - udelat si nejaky svuj stream builder kde jen doplnime informace
 
-- change Pets -> My Pets?
 - unify the fonts and font sizes
-
+- dummy pics podle pet typu alespon
 
 
 
