@@ -7,9 +7,8 @@
 - preteka error
 - ?? merge the auth & user service into one?
 - ?? umoznit vice mazlicku v inzeratu
+- lepsi a jednotne karty pro pety a ads
 
-
-- containbox??
-
-CREATE inzeratu - check, aby from nebol neskor ako to atd. COMBINE LATEST
-//TODO COMBINE LATEST
+CREATE inzeratu - check, aby from nebol neskor ako to atd. 
+- COMBINE LATEST
+- CONTAIN BOX
