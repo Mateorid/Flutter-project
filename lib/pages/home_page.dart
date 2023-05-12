@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:pet_sitting/pages/Ad/ads_page.dart';
 import 'package:pet_sitting/pages/Pets/pets_page.dart';
+import 'package:pet_sitting/pages/User/profile_page.dart';
 import 'package:pet_sitting/pages/User/user_page.dart';
 import 'package:pet_sitting/styles.dart';
 
@@ -48,6 +49,7 @@ class HomePage extends StatelessWidget {
       AdsPage(),
       PetsPage(),
       UserPage(userId: _authService.currentUserId!), //todo better?
+      // ProfilePage(userId: _authService.currentUserId!),
     ];
   }
 

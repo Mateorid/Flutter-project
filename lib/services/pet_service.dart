@@ -37,6 +37,7 @@ class PetService {
       _petCollection.snapshots().map((snapshot) =>
           snapshot.docs.map((docSnapshot) => docSnapshot.data()).toList());
 
+  //TODO" COMBINE LATEST
   Stream<List<Pet>> petStreamFromIds(List<String> petIds) {
     return _petCollection.snapshots().map((snapshot) => snapshot.docs
         .map((docSnapshot) => docSnapshot.data())

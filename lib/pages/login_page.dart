@@ -83,32 +83,33 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _onLoginPressed() async {
-    if (_formKey.currentState!.validate()) {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    // if (_formKey.currentState!.validate()) {
+    setState(() {
+      _loading = true;
+    });
+    final AuthService authService = get<AuthService>();
+    try {
+      await authService.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      context.go('/');
+    } on FirebaseAuthException catch (e) {
+      GlobalSnackBar.showAlertError(
+          context: context, bigText: "Error", smallText: "Account not found.");
+    } catch (e) {
+      GlobalSnackBar.showAlertError(
+          context: context,
+          bigText: "Error",
+          smallText: 'Unknown error, please try again later');
+    } finally {
       setState(() {
-        _loading = true;
+        _loading = false;
       });
-      final AuthService authService = get<AuthService>();
-      try {
-        await authService.signInWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text,
-        );
-        context.goNamed("pets");
-      } on FirebaseAuthException catch (e) {
-        GlobalSnackBar.showAlertError(
-            context: context,
-            bigText: "Error",
-            smallText: "Account not found.");
-      } catch (e) {
-        GlobalSnackBar.showAlertError(
-            context: context,
-            bigText: "Error",
-            smallText: 'Unknown error, please try again later');
-      } finally {
-        setState(() {
-          _loading = false;
-        });
-      }
+      // }
     }
   }
 

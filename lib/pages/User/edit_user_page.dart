@@ -11,20 +11,18 @@ import 'package:pet_sitting/widgets/core/basic_title.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
 import 'package:pet_sitting/widgets/user/user_round_image.dart';
-
-import '../../future_builder.dart';
-import '../../ioc_container.dart';
-import '../../services/auth_service.dart';
-import '../../validators/email_validator.dart';
-import '../../validators/locationValidator.dart';
-import '../../validators/name_validator.dart';
-import '../../validators/phoneValidator.dart';
+import 'package:pet_sitting/future_builder.dart';
+import 'package:pet_sitting/ioc_container.dart';
+import 'package:pet_sitting/services/auth_service.dart';
+import 'package:pet_sitting/validators/email_validator.dart';
+import 'package:pet_sitting/validators/locationValidator.dart';
+import 'package:pet_sitting/validators/name_validator.dart';
+import 'package:pet_sitting/validators/phoneValidator.dart';
 
 class EditUserPage extends StatefulWidget {
   EditUserPage({Key? key}) : super(key: key);
   final _userService = GetIt.I<UserService>();
   final _authService = GetIt.I<AuthService>();
-  final User? user = get<AuthService>().currentUser;
   late UserExtended userExtended;
 
   @override
@@ -52,46 +50,47 @@ class EditProfilePageState extends State<EditUserPage> {
           _phoneNumberController.text = user.phoneNumber ?? '';
           _locationController.text = user.location ?? '';
           _detailsController.text = user.aboutMe ?? '';
-          this.widget.userExtended = user;
+          widget.userExtended = user;
           return _buildScaffold();
         });
   }
 
   Widget _buildScaffold() {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60),
-          child: AppBar(
-              elevation: 1,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: DARK_GREEN,
-                ),
-                onPressed: () => {context.pop()},
-              )),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: AppBar(
+          elevation: 1,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: DARK_GREEN,
+            ),
+            onPressed: () => {context.pop()},
+          ),
         ),
-        body: _loading
-            ? const CircularProgressIndicator()
-            : Container(
-                padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
-                child: ListView(
-                  children: [
-                    const BasicTitle(text: 'Edit profile'),
-                    const SizedBox(height: 15),
-                    _buildImage(),
-                    const SizedBox(
-                      height: 35,
-                    ),
-                    _buildForm(),
-                    RoundButton(
-                        color: MAIN_GREEN,
-                        text: 'SAVE',
-                        onPressed: _onSubmitPressed),
-                  ],
-                )));
+      ),
+      body: _loading
+          ? const CircularProgressIndicator()
+          : Container(
+              padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
+              child: ListView(
+                children: [
+                  const BasicTitle(text: 'Edit profile'),
+                  const SizedBox(height: 15),
+                  _buildImage(),
+                  const SizedBox(height: 35),
+                  _buildForm(),
+                  RoundButton(
+                      color: MAIN_GREEN,
+                      text: 'SAVE',
+                      onPressed: _onSubmitPressed),
+                ],
+              ),
+            ),
+    );
   }
 
   Widget _buildForm() {
@@ -150,30 +149,33 @@ class EditProfilePageState extends State<EditUserPage> {
             url: widget.userExtended.imageUrl,
           ),
           Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    width: 4,
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                  color: MAIN_GREEN,
+            bottom: 0,
+            right: 0,
+            child: Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  width: 4,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                 ),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    context.pushNamed("upload",
-                        params: {"id": widget._authService.currentUserId!});
-                  },
+                color: MAIN_GREEN,
+              ),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.edit,
+                  color: Colors.white,
                 ),
-              )),
+                onPressed: () {
+                  context.pushNamed(
+                    "upload",
+                    params: {"id": widget._authService.currentUserId!},
+                  );
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -181,18 +183,21 @@ class EditProfilePageState extends State<EditUserPage> {
 
   Future<void> _saveChanges() async {
     final id = get<AuthService>().currentUserId;
-    final UserService userService = get<UserService>();
-    if (id != null) {
-      final user = UserExtended(
+    if (id == null) {
+      throw Exception('Error while loading current user!');
+    }
+    final usr = await widget._userService.getUserById(id);
+    final user = UserExtended(
         uid: id,
         name: _nameController.text,
         phoneNumber: _phoneNumberController.text,
         location: _locationController.text,
         email: _emailController.text,
         aboutMe: _detailsController.text,
-      );
-      await userService.updateUserX(user);
-    }
+        imageUrl: usr.imageUrl,
+        pets: usr.pets,
+        reviews: usr.reviews);
+    await get<UserService>().updateUserX(user);
   }
 
   void _onSubmitPressed() async {

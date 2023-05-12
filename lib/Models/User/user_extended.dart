@@ -3,26 +3,29 @@ import 'package:pet_sitting/Models/review.dart';
 
 part 'user_extended.g.dart';
 
-@JsonSerializable() //todo make final
+@JsonSerializable()
 class UserExtended {
   final String uid;
   final String email;
-  String? phoneNumber;
-  String? name;
-  String? location;
-  String? aboutMe;
-  String? imageUrl;
-  List<String> pets = List.empty();
-  List<Review> reviews = List.empty();
+  final String? phoneNumber;
+  final String? name;
+  final String? location;
+  final String? aboutMe;
+  final String? imageUrl;
+  final List<String> pets;
+  final List<Review> reviews;
 
-  UserExtended(
-      {required this.uid,
-      required this.email,
-      this.phoneNumber,
-      this.location,
-      this.name,
-      this.imageUrl,
-      this.aboutMe});
+  UserExtended({
+    required this.uid,
+    required this.email,
+    this.phoneNumber,
+    this.location,
+    this.name,
+    this.imageUrl,
+    this.aboutMe,
+    this.pets = const [],
+    this.reviews = const [],
+  });
 
   UserExtended copyWith(
       {String? email,

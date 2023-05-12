@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
 import 'package:pet_sitting/Models/Pet/pet_species.dart';
+import 'package:pet_sitting/Models/User/user_extended.dart';
 
 class ImageService {
   ImageProvider getPetImage(Pet pet) {
@@ -23,5 +25,12 @@ class ImageService {
       case PetSpecies.other:
         return const AssetImage('assets/images/other_img.jpg');
     }
+  }
+
+  ImageProvider getUserImage(UserExtended user) {
+    if (user.imageUrl == null) {
+      return const AssetImage('assets/images/no_image.PNG');
+    }
+    return NetworkImage(user.imageUrl!);
   }
 }

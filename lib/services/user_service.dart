@@ -8,7 +8,10 @@ class UserService {
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection("Users");
 
-  final authService = get<AuthService>();
+  //final authService = get<AuthService>();
+  final AuthService authService;
+
+  UserService(this.authService);
 
   Future<void> createNewUser(String uid, String email) async {
     final user = UserExtended(uid: uid, email: email);
@@ -44,6 +47,7 @@ class UserService {
   }
 
   Future<UserExtended> getUserById(String uid) async {
+    //todo change to stream
     DocumentSnapshot userSnapshot = await userCollection.doc(uid).get();
     return UserExtended.fromJson(userSnapshot.data() as Map<String, dynamic>);
   }

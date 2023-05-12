@@ -16,9 +16,12 @@
 - dummy pics podle pet typu alespon
 
 
+containbox??
+-preteka error
+
 
 Otazky:
 Jaky je rozdil mezi typem importu? klasicky vs package?
 Streambuilder vs Futurebuilder u petu - stream je zbytecne slozity?
 
-CREATE inzeratu - check, aby from nebol neskor ako to atd.
+CREATE inzeratu - check, aby from nebol neskor ako to atd. COMBINE LATEST
