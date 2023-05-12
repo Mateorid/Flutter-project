@@ -104,7 +104,8 @@ class AdDetailPage extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              if (ad.creatorId == _authService.currentUserId) _buildEditDelete(context),
+              if (ad.creatorId == _authService.currentUserId)
+                _buildEditDelete(context),
             ],
           ),
         ),
@@ -113,8 +114,13 @@ class AdDetailPage extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: ad.creatorId != _authService.currentUserId ? RoundButton(
-              color: MAIN_GREEN, text: "Contact user", onPressed: context.pop) : null,
+          child: ad.creatorId != _authService.currentUserId
+              ? RoundButton(
+                  color: MAIN_GREEN,
+                  text: "Contact user",
+                  onPressed: () => context
+                      .pushNamed("user_details", params: {"id": ad.creatorId}))
+              : null,
         ),
       ],
     );
@@ -122,18 +128,25 @@ class AdDetailPage extends StatelessWidget {
 
   Widget _buildEditDelete(BuildContext context) {
     return Row(children: [
-      BasicButton(text: "Edit", background: MAIN_GREEN, foreground: Colors.white, onPressed: () => {_onEditPressed(context)}),
+      BasicButton(
+          text: "Edit",
+          background: MAIN_GREEN,
+          foreground: Colors.white,
+          onPressed: () => {_onEditPressed(context)}),
       const SizedBox(
         width: 10,
       ),
-      BasicButton(text: "Delete", background: ERROR_RED, foreground: Colors.white, onPressed: () => {}),
+      BasicButton(
+          text: "Delete",
+          background: ERROR_RED,
+          foreground: Colors.white,
+          onPressed: () => {}),
     ]);
   }
 
   void _onEditPressed(BuildContext context) {
     context.pushNamed("ad_edit", params: {"id": ad.id ?? ""});
   }
-
 
   Widget _buildAdText(String text) {
     return Padding(
@@ -161,16 +174,13 @@ class AdDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTextAndRating(BuildContext context){
+  Widget _buildTextAndRating(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextButton(
           onPressed: () {
-            context.pushNamed("user_details", params: {
-              "id": _authService.currentUserId!,
-              "isDetail": true.toString(),
-            });
+            context.pushNamed("user_details", params: {"id": ad.creatorId});
           },
           child: Text(
             user.name ?? user.email,

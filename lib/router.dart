@@ -20,8 +20,7 @@ class RouterProvider {
   static GoRouter provideRouter() {
     return GoRouter(
       debugLogDiagnostics: true,
-      initialLocation:
-          get<AuthService>().currentUser != null ? "/ads" : "/login",
+      initialLocation: get<AuthService>().currentUser != null ? "/" : "/login",
       routes: [
         GoRoute(
           path: "/edit_user",
@@ -29,17 +28,9 @@ class RouterProvider {
           builder: (context, state) => EditUserPage(),
         ),
         GoRoute(
-          path: "/user_details/:id/:isDetail",
+          path: "/user_details/:id",
           name: "user_details",
-          builder: (context, state) {
-            final userId = state.params["id"]!;
-            final isCurrentUser = state.params["isDetail"] == "true";
-
-            return UserPage(
-              userId: userId,
-              isDetail: isCurrentUser,
-            );
-          },
+          builder: (context, state) => UserPage(userId: state.params["id"]!),
         ),
         GoRoute(
           path: "/login",

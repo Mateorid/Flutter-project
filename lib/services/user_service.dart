@@ -34,7 +34,7 @@ class UserService {
   }
 
   Future<void> addPetToCurrentUser(String petId) async {
-    final userId = authService.currentUser?.uid;
+    final userId = authService.currentUserId;
     if (userId == null) {
       throw Exception('Couldn\'t get current user!');
     }
