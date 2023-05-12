@@ -3,14 +3,16 @@ import 'package:pet_sitting/Models/Pet/pet.dart';
 import 'package:pet_sitting/ioc_container.dart';
 import 'package:pet_sitting/services/date_service.dart';
 import 'package:pet_sitting/services/icon_service.dart';
+import 'package:pet_sitting/services/image_service.dart';
 import 'package:pet_sitting/widgets/core/info_tile.dart';
 
 class PetProfilePage extends StatelessWidget {
   PetProfilePage({super.key, required this.pet});
 
   final Pet pet;
-  final iconService = get<IconService>();
-  final dateService = get<DateService>();
+  final _iconService = get<IconService>();
+  final _dateService = get<DateService>();
+  final _imageService = get<ImageService>();
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +20,11 @@ class PetProfilePage extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-              pinned: true,
-              expandedHeight: 250,
-              actions: [_editButton()],
-              flexibleSpace: FlexibleSpaceBar(background: _petPhoto())),
+            pinned: true,
+            expandedHeight: 250,
+            actions: [_editButton()],
+            flexibleSpace: FlexibleSpaceBar(background: _petPhoto()),
+          ),
           SliverList(delegate: _petInfo(context)),
         ],
       ),
@@ -30,9 +33,9 @@ class PetProfilePage extends StatelessWidget {
 
   Widget _petPhoto() {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/dog_img2.jpg'),
+          image: _imageService.getPetImage(pet),
           fit: BoxFit.cover,
         ),
       ),
@@ -56,12 +59,12 @@ class PetProfilePage extends StatelessWidget {
         InfoTile(
           title: "Gender",
           content: _infoText(p.gender.text),
-          icon: iconService.getGenderIcon(p.gender),
+          icon: _iconService.getGenderIcon(p.gender),
         ),
         InfoTile(
           title: "PetSize",
           content: _infoText(p.size.text),
-          icon: iconService.getSizeIcon(p.size),
+          icon: _iconService.getSizeIcon(p.size),
         ),
         InfoTile(
           title: "Breed",
@@ -110,7 +113,7 @@ class PetProfilePage extends StatelessWidget {
 
   String _getBirthdayText() {
     final dt = pet.birthday;
-    return dt == null ? 'No info' : dateService.getPrintableDate(dt);
+    return dt == null ? 'No info' : _dateService.getPrintableDate(dt);
   }
 
   VoidCallback _detailsCallback(BuildContext context, String text) {

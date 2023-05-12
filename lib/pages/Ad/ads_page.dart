@@ -40,7 +40,6 @@ class AdsPage extends StatelessWidget {
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           final ad = ads[index];
-                          print(ad.id);
                           return InkWell(
                             onTap: () {
                               context.pushNamed("ad_details",
@@ -73,6 +72,7 @@ class AdsPage extends StatelessWidget {
       bottom: 16,
       right: 16,
       child: FloatingActionButton(
+        heroTag: null,
         backgroundColor: MAIN_GREEN,
         onPressed: () {
           _onAddPressed(context);

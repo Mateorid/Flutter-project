@@ -4,6 +4,7 @@ import 'package:pet_sitting/services/ad_service.dart';
 import 'package:pet_sitting/services/auth_service.dart';
 import 'package:pet_sitting/services/date_service.dart';
 import 'package:pet_sitting/services/icon_service.dart';
+import 'package:pet_sitting/services/image_service.dart';
 import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/services/storage_service.dart';
 import 'package:pet_sitting/services/user_service.dart';
@@ -42,6 +43,10 @@ class IoCContainer {
 
     get.registerSingleton<DateService>(
       DateService(),
+    );
+
+    get.registerSingleton<ImageService>(
+      ImageService(),
     );
   }
 }

@@ -3,18 +3,15 @@ import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
 import 'package:pet_sitting/ioc_container.dart';
 import 'package:pet_sitting/services/date_service.dart';
-import 'package:pet_sitting/services/icon_service.dart';
-import 'package:pet_sitting/services/user_service.dart';
+import 'package:pet_sitting/services/image_service.dart';
 import 'package:pet_sitting/styles.dart';
 
 class PetOverviewTile extends StatelessWidget {
   PetOverviewTile({super.key, required this.pet});
 
   final Pet pet;
-  final IconService iconService = get<IconService>();
-  final dateService = get<DateService>();
-
-  final service = get<UserService>();
+  final _dateService = get<DateService>();
+  final _imageService = get<ImageService>();
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +29,7 @@ class PetOverviewTile extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(25.0),
-              //todo load this properly? - change the placeholder image based on the type
-              child: Image.asset(
-                'assets/images/dog_img2.jpg',
-                width: width,
-                fit: BoxFit.fill,
-              ),
+              child: Image(image: _imageService.getPetImage(pet)),
             ),
             const SizedBox(height: 10),
             Row(
@@ -78,7 +70,7 @@ class PetOverviewTile extends StatelessWidget {
 
   Widget _optionalPetInfo(Pet pet) {
     final text =
-        '${pet.breed} ${pet.birthday != null ? dateService.getAgeFromDate(pet.birthday!) : ''}';
+        '${pet.breed} ${pet.birthday != null ? _dateService.getAgeFromDate(pet.birthday!) : ''}';
     return Text(
       text,
       style: const TextStyle(

@@ -94,6 +94,7 @@ class PetsPage extends StatelessWidget {
 
   Widget _buildAddButton(BuildContext context) {
     return FloatingActionButton(
+      heroTag: null,
       backgroundColor: MAIN_GREEN,
       onPressed: () {
         context.pushNamed('create_pet');
