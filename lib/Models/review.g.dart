@@ -7,20 +7,15 @@ part of 'review.dart';
 // **************************************************************************
 
 Review _$ReviewFromJson(Map<String, dynamic> json) => Review(
-      json['rating'] as int,
-      json['text'] as String,
-      json['fromUser'] as String,
-      $enumDecode(_$UserTypeEnumMap, json['userType']),
+      rating: json['rating'] as int,
+      text: json['text'] as String,
+      fromUser: json['fromUser'] as String,
+      dateTime: DateTime.parse(json['dateTime'] as String),
     );
 
 Map<String, dynamic> _$ReviewToJson(Review instance) => <String, dynamic>{
       'rating': instance.rating,
       'text': instance.text,
+      'dateTime': instance.dateTime.toIso8601String(),
       'fromUser': instance.fromUser,
-      'userType': _$UserTypeEnumMap[instance.userType]!,
     };
-
-const _$UserTypeEnumMap = {
-  UserType.owner: 'owner',
-  UserType.sitter: 'sitter',
-};

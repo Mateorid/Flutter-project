@@ -33,7 +33,9 @@ class UserExtended {
       String? name,
       String? location,
       String? aboutMe,
-      String? imageUrl}) {
+      String? imageUrl,
+        List<Review>? reviews,
+      }) {
     return UserExtended(
         email: email ?? this.email,
         phoneNumber: phoneNumber ?? this.phoneNumber,
@@ -41,7 +43,21 @@ class UserExtended {
         location: location ?? this.location,
         aboutMe: aboutMe ?? this.aboutMe,
         imageUrl: imageUrl ?? this.imageUrl,
+        reviews: reviews ?? this.reviews,
         uid: uid);
+  }
+
+  double get averageReviewScore {
+    if (reviews.isEmpty) {
+      return 0.0; // or any default value you prefer
+    }
+
+    double totalScore = 0.0;
+    for (var review in reviews) {
+      totalScore += review.rating;
+    }
+
+    return totalScore / reviews.length;
   }
 
   factory UserExtended.fromJson(Map<String, dynamic> json) =>

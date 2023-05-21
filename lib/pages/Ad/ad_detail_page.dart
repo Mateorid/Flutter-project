@@ -179,15 +179,18 @@ class AdDetailPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextButton(
-          onPressed: () {
-            context.pushNamed("user_profile", params: {"id": ad.creatorId});
-          },
+          onPressed: (ad.creatorId != _authService.currentUserId)
+              ? () {
+                  context
+                      .pushNamed("user_profile", params: {"id": ad.creatorId});
+                }
+              : null,
           child: Text(
             user.name ?? user.email,
             style: TextStyle(fontWeight: FontWeight.bold, color: DARK_GREEN),
           ),
         ),
-        RatingBar(rating: 3.5, ratingCount: 10)
+        RatingBar(rating: user.averageReviewScore, ratingCount: user.reviews.length)
       ],
     );
   }

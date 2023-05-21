@@ -33,5 +33,5 @@ Map<String, dynamic> _$UserExtendedToJson(UserExtended instance) =>
       'aboutMe': instance.aboutMe,
       'imageUrl': instance.imageUrl,
       'pets': instance.pets,
-      'reviews': instance.reviews,
+      'reviews': instance.reviews.map((e) => e.toJson()).toList(),
     };

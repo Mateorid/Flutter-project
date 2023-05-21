@@ -7,10 +7,10 @@ part 'review.g.dart';
 class Review {
   final int rating; //0-5 *
   final String text;
+  final DateTime dateTime;
   final String fromUser;
-  final UserType userType;
 
-  Review(this.rating, this.text, this.fromUser, this.userType);
+  Review({required this.rating, required this.text, required this.fromUser, required this.dateTime});
 
   factory Review.fromJson(Map<String, dynamic> json) => _$ReviewFromJson(json);
 
