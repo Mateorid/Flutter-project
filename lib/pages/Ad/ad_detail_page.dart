@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:pet_sitting/Models/Ad/ad.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
 import 'package:pet_sitting/future_builder.dart';
+import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/ioc_container.dart';
 import 'package:pet_sitting/services/auth_service.dart';
 import 'package:pet_sitting/services/user_service.dart';
@@ -23,6 +24,7 @@ class AdDetailPage extends StatelessWidget {
   final _adService = get<AdService>();
   final _userService = get<UserService>();
   final _authService = get<AuthService>();
+
   // final _petService = get<PetService>();
   late Ad ad;
   late Pet pet;
@@ -144,12 +146,20 @@ class AdDetailPage extends StatelessWidget {
           text: "Delete",
           background: ERROR_RED,
           foreground: Colors.white,
-          onPressed: () => {}),
+          onPressed: () => {_onDeletePressed(context)}),
     ]);
   }
 
   void _onEditPressed(BuildContext context) {
     context.pushNamed("ad_edit", params: {"id": ad.id ?? ""});
+  }
+
+  void _onDeletePressed(BuildContext context) {
+    handleAsyncOperation(
+        asyncOperation: _adService.deleteAd(adId),
+        onSuccessText: "Ad deleted successfully",
+        context: context);
+    context.pop();
   }
 
   Widget _buildAdText(String text) {
