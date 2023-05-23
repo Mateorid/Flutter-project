@@ -15,14 +15,14 @@ class PetOverviewTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
     return GestureDetector(
       onTap: () {
         context.pushNamed('pet_profile', extra: pet);
       },
-      child: Container(
-        width: width,
+      child: Card(
+        elevation: 4,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         margin: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,12 +34,14 @@ class PetOverviewTile extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
+                const SizedBox(width: 18),
                 _petName(pet.name),
                 const SizedBox(width: 15),
                 _optionalPetInfo(pet)
               ],
             ),
-            _petInfo(pet)
+            _petInfo(pet),
+            // const Divider(),
           ],
         ),
       ),
@@ -58,19 +60,22 @@ class PetOverviewTile extends StatelessWidget {
   }
 
   Widget _petInfo(Pet pet) {
-    return Text(
-      '${pet.size.text} / ${pet.gender.text} / ${pet.species.text}',
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 15,
-        color: Colors.black,
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, bottom: 5),
+      child: Text(
+        '${pet.size.text} / ${pet.gender.text} / ${pet.species.text}',
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 15,
+          color: Colors.black,
+        ),
       ),
     );
   }
 
   Widget _optionalPetInfo(Pet pet) {
     final text =
-        '${pet.breed} ${pet.birthday != null ? _dateService.getAgeFromDate(pet.birthday!) : ''}';
+        '${pet.birthday != null ? '${_dateService.getAgeFromDate(pet.birthday!)} ${pet.breed != null ? '- ' : ''}' : ''}${pet.breed} ';
     return Text(
       text,
       style: const TextStyle(
