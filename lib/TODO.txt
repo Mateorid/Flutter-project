@@ -2,8 +2,6 @@
 - nastavit proper text field klavesnice
 - extrahovat konstatny nekam (Radius atd)
 - udelat autofill hints pri user editu? (city a email)
-- udelat stream builder
-- sjednotit styl aplikace
 - preteka error
 - ?? merge the auth & user service into one?
 - ?? umoznit vice mazlicku v inzeratu

@@ -16,6 +16,7 @@ class EmailValidationField extends StatelessWidget {
     return InputTextField(
       child: TextFormField(
           controller: controller,
+          keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             hintText: hint,
             icon: const Icon(
@@ -27,7 +28,7 @@ class EmailValidationField extends StatelessWidget {
             if (value == null || value.isEmpty) {
               return 'Please enter your email address';
             }
-            if (!EmailValidator.validate(value!)) {
+            if (!EmailValidator.validate(value)) {
               return 'Please enter a valid email';
             }
           }),
