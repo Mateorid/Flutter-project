@@ -59,13 +59,22 @@ class PetsPage extends StatelessWidget {
   }
 
   Widget _buildNotLoggedInInfo() {
-    //Todo make nicer
     return const Center(child: Text('Login to add your pets!'));
   }
 
   Widget _buildNoPetsInfo() {
-    //Todo make nicer
-    return const Center(child: Text('Add your first pet!'));
+    return Center(
+      child: Column(
+        children: [
+          Image.asset('assets/images/petSitting.png'),
+          const Text(
+            'Add your first pet!',
+            style: TextStyle(
+                fontSize: 25, fontWeight: FontWeight.bold, color: MAIN_GREEN),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildListView(List<Pet> pets) {

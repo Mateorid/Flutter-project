@@ -16,7 +16,7 @@ class PageTemplate extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: BasicTitle(text: pageTitle),
-          ), //todo make this nicer
+          ), //todo make this nicer?
           Expanded(child: body),
         ],
       ),
