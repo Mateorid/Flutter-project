@@ -9,6 +9,7 @@ class CreateEditPageTemplate extends StatelessWidget {
   final String buttonText;
   final VoidCallback buttonCallback;
   final Widget body;
+  final bool isLoading;
 
   const CreateEditPageTemplate({
     super.key,
@@ -16,6 +17,7 @@ class CreateEditPageTemplate extends StatelessWidget {
     required this.body,
     required this.buttonText,
     required this.buttonCallback,
+    required this.isLoading,
   });
 
   @override
@@ -38,11 +40,13 @@ class CreateEditPageTemplate extends StatelessWidget {
       body: body,
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        child: RoundButton(
-          color: MAIN_GREEN,
-          text: buttonText,
-          onPressed: buttonCallback,
-        ),
+        child: isLoading
+            ? const CircularProgressIndicator()
+            : RoundButton(
+                color: MAIN_GREEN,
+                text: buttonText,
+                onPressed: buttonCallback,
+              ),
       ),
     );
   }

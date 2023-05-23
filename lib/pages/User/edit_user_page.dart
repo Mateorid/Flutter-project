@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:pet_sitting/Models/User/user_extended.dart';
-import 'package:pet_sitting/future_builder.dart';
 import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/ioc_container.dart';
+import 'package:pet_sitting/pages/create_edit_page_template.dart';
 import 'package:pet_sitting/services/auth_service.dart';
+import 'package:pet_sitting/services/image_service.dart';
 import 'package:pet_sitting/services/user_service.dart';
-import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/validators/email_validator.dart';
 import 'package:pet_sitting/validators/locationValidator.dart';
 import 'package:pet_sitting/validators/name_validator.dart';
 import 'package:pet_sitting/validators/phoneValidator.dart';
-import 'package:pet_sitting/widgets/core/basic_title.dart';
+import 'package:pet_sitting/widgets/core/widget_future_builder.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
-import 'package:pet_sitting/widgets/round_button.dart';
-import 'package:pet_sitting/widgets/user/user_round_image.dart';
+import 'package:pet_sitting/widgets/user/profile_widget.dart';
 
 class EditUserPage extends StatefulWidget {
   EditUserPage({Key? key}) : super(key: key);
@@ -39,56 +37,41 @@ class EditProfilePageState extends State<EditUserPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GenericFutureBuilder(
+    return CreateEditPageTemplate(
+      pageTitle: 'Edit profile',
+      buttonText: 'SAVE',
+      buttonCallback: _onSubmitPressed,
+      isLoading: _loading,
+      body: WidgetFutureBuilder(
         future:
             widget._userService.getUserById(widget._authService.currentUserId!),
         onLoaded: (user) {
-          final dateFormat = DateFormat('yyyy-MM-dd');
           _nameController.text = user.name ?? '';
           _emailController.text = user.email;
           _phoneNumberController.text = user.phoneNumber ?? '';
           _locationController.text = user.location ?? '';
           _detailsController.text = user.aboutMe ?? '';
           widget.userExtended = user;
-          return _buildScaffold();
-        });
+          return _buildContent();
+        },
+      ),
+    );
   }
 
-  Widget _buildScaffold() {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
-        child: AppBar(
-          elevation: 1,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-              color: DARK_GREEN,
-            ),
-            onPressed: () => {context.pop()},
-          ),
+  Widget _buildContent() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
         ),
+        children: [
+          const SizedBox(height: 10),
+          _buildImage(),
+          const SizedBox(height: 35),
+          _buildForm(),
+        ],
       ),
-      body: _loading
-          ? const CircularProgressIndicator()
-          : Container(
-              padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
-              child: ListView(
-                children: [
-                  const BasicTitle(text: 'Edit profile'),
-                  const SizedBox(height: 15),
-                  _buildImage(),
-                  const SizedBox(height: 35),
-                  _buildForm(),
-                  RoundButton(
-                      color: MAIN_GREEN,
-                      text: 'SAVE',
-                      onPressed: _onSubmitPressed),
-                ],
-              ),
-            ),
     );
   }
 
@@ -97,12 +80,13 @@ class EditProfilePageState extends State<EditUserPage> {
       key: _formKey,
       child: Column(
         children: [
-          _loading ? const CircularProgressIndicator() : Container(),
+          // _loading ? const CircularProgressIndicator() : Container(),
           PlainTextField(
             labelText: "Full Name",
             placeholder: "Enter your full name",
             controller: _nameController,
             validator: nameValidator,
+            iconData: Icons.person,
           ),
           PlainTextField(
             labelText: "Contact email",
@@ -130,6 +114,7 @@ class EditProfilePageState extends State<EditUserPage> {
             placeholder: "Enter additional details about you",
             extended: true,
             controller: _detailsController,
+            iconData: Icons.info_outline_rounded,
             validator: (value) {
               return null;
             },
@@ -140,43 +125,14 @@ class EditProfilePageState extends State<EditUserPage> {
   }
 
   Widget _buildImage() {
-    return Center(
-      child: Stack(
-        children: [
-          UserRoundImage(
-            size: 130,
-            url: widget.userExtended.imageUrl,
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Container(
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  width: 4,
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                ),
-                color: MAIN_GREEN,
-              ),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  context.pushNamed(
-                    "upload",
-                    params: {"id": widget._authService.currentUserId!},
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
+    return ProfileWidget(
+      image: get<ImageService>().getUserImage(widget.userExtended),
+      onTap: () {
+        context.pushNamed(
+          "upload",
+          params: {"id": widget._authService.currentUserId!},
+        );
+      },
     );
   }
 

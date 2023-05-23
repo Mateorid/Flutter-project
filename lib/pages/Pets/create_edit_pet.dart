@@ -35,6 +35,7 @@ class CreateEditPetState extends State<CreateEditPet> {
   final _birthdayController = TextEditingController();
   final _breedController = TextEditingController();
   final _detailsController = TextEditingController();
+  bool _loading = false;
 
   late PetGender gender;
   late PetSpecies species;
@@ -49,6 +50,7 @@ class CreateEditPetState extends State<CreateEditPet> {
         pageTitle: edit ? 'Edit pet' : 'Add pet',
         buttonText: edit ? 'EDIT' : 'SAVE',
         buttonCallback: _onSubmitPressed,
+        isLoading: _loading,
         body: _buildContent(widget.pet));
   }
 
@@ -191,6 +193,9 @@ class CreateEditPetState extends State<CreateEditPet> {
 
   void _onSubmitPressed() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _loading = true;
+      });
       final ok = await handleAsyncOperation(
           asyncOperation: widget.pet == null ? _createPet() : _editPet(),
           onSuccessText: widget.pet == null
