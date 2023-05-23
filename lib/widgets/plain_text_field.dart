@@ -8,6 +8,7 @@ class PlainTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextInputType? inputType;
   final IconData? iconData;
+  final int maxLines;
   bool extended;
 
   PlainTextField({
@@ -18,6 +19,7 @@ class PlainTextField extends StatelessWidget {
     required this.validator,
     this.extended = false,
     this.inputType = TextInputType.text,
+    this.maxLines = 5,
     this.iconData,
   }) : super(key: key);
 
@@ -28,7 +30,7 @@ class PlainTextField extends StatelessWidget {
       child: TextFormField(
         keyboardType: inputType,
         minLines: extended ? 3 : 1,
-        maxLines: null,
+        maxLines: maxLines,
         controller: controller,
         style: const TextStyle(
           fontSize: 16,

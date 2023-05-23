@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:pet_sitting/Models/User/user_extended.dart';
 import 'package:pet_sitting/Models/review.dart';
 import 'package:pet_sitting/ioc_container.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/core/basic_button.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../handle_async_operation.dart';
 import '../../services/auth_service.dart';
@@ -59,9 +58,9 @@ class _ReviewDialogState extends State<ReviewDialog> {
     Review existingReview;
     if (reviewAlreadyWritten) {
       existingReview = widget.user.reviews.firstWhere(
-            (review) => review.fromUser == widget._authService.currentUserId);
-      _detailsController.text = existingReview?.text ?? '';
-      _rating = existingReview?.rating?.toDouble() ?? 3.0;
+          (review) => review.fromUser == widget._authService.currentUserId);
+      _detailsController.text = existingReview.text;
+      _rating = existingReview.rating.toDouble();
     }
 
     return Column(
@@ -75,6 +74,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
               PlainTextField(
                 labelText: "Review",
                 placeholder: "Tell us more about your experience",
+                maxLines: 5,
                 extended: true,
                 controller: _detailsController,
                 validator: (value) {
@@ -108,7 +108,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
 
   Future<void> _saveReview() async {
     final existingReviewIndex = widget.user.reviews.indexWhere(
-          (review) => review.fromUser == widget._authService.currentUserId,
+      (review) => review.fromUser == widget._authService.currentUserId,
     );
 
     if (existingReviewIndex != -1) {

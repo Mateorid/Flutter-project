@@ -9,6 +9,14 @@
 - ?? umoznit vice mazlicku v inzeratu
 - lepsi a jednotne karty pro pety a ads
 
+- clickable ratings v ads details
+- clcickable pfp v ads details
+- text kdyz nejsou zadne ratings
+- unify previews
+- pet ID v create inzeratu
+- rozhodit zdrojaky podle casti user/pet/ad/atd.
+- krizek na tech info boxech nefunguje
+
 CREATE inzeratu - check, aby from nebol neskor ako to atd. 
 - COMBINE LATEST
 - CONTAIN BOX
