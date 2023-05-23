@@ -11,8 +11,9 @@ import 'package:pet_sitting/pages/create_edit_page_template.dart';
 import 'package:pet_sitting/services/image_service.dart';
 import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/services/user_service.dart';
+import 'package:pet_sitting/validators/gender_validator.dart';
 import 'package:pet_sitting/validators/name_validator.dart';
-import 'package:pet_sitting/widgets/form_dropdown.dart';
+import 'package:pet_sitting/validators/species_validator.dart';
 import 'package:pet_sitting/widgets/pets/pet_size_select.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
 import 'package:pet_sitting/widgets/user/profile_widget.dart';
@@ -37,12 +38,21 @@ class CreateEditPetState extends State<CreateEditPet> {
   final _detailsController = TextEditingController();
   bool _loading = false;
 
-  late PetGender gender = PetGender.other;
-  late PetSpecies species;
+  PetGender? gender;
+  PetSpecies? species;
   String? url;
   bool imageUpdated = false;
   PetSize size = PetSize.medium;
   DateTime? birthday;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.pet != null) {
+      _setControllers(widget.pet!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,14 +86,12 @@ class CreateEditPetState extends State<CreateEditPet> {
   }
 
   void _setControllers(Pet pet) {
-    // setState(() { //todo
     size = pet.size;
     species = pet.species;
-    // });
+    gender = pet.gender;
     if (!imageUpdated) {
       url = pet.imageUrl;
     }
-    gender = pet.gender;
     _nameController.text = pet.name;
     _breedController.text = pet.breed ?? '';
     _detailsController.text = pet.details ?? '';
@@ -123,30 +131,8 @@ class CreateEditPetState extends State<CreateEditPet> {
             controller: _nameController,
             validator: nameValidator,
           ),
-          FormDropDown(
-            //todo better
-            label: 'Gender*',
-            hintText: "Select your pet's gender",
-            items: PetGender.values
-                .map((gender) => gender.toString().split('.')[1])
-                .toList(),
-            onChanged: _genderSelected,
-          ),
-          // _genderDropdown(),
-          FormDropDown(
-            label: 'Species*',
-            hintText: "Select your pet's species",
-            items: PetSpecies.values //todo show better names
-                .map((petSpecies) => petSpecies.toString().split('.')[1])
-                .toList(),
-            onChanged: (value) => {
-              if (value != null)
-                species = PetSpecies.values.firstWhere(
-                  (e) => e.toString().split('.')[1] == value,
-                  orElse: () => PetSpecies.other,
-                )
-            },
-          ),
+          _genderDropdown(),
+          _speciesDropdown(),
           PetSizeSelect(
             size: size,
             callback: (val) {
@@ -182,20 +168,39 @@ class CreateEditPetState extends State<CreateEditPet> {
     );
   }
 
-  Widget _genderDropdown() {
-    return DropdownButtonFormField<PetGender>(
-      value: gender,
+  Widget _speciesDropdown() {
+    return DropdownButtonFormField<PetSpecies>(
+      hint: const Text('Select species'),
+      value: species,
+      validator: speciesValidator,
       onChanged: (value) {
         if (value != null) {
-          setState(() {
-            gender = value;
-          });
+          species = value;
+        }
+      },
+      items: PetSpecies.values.map((s) {
+        return DropdownMenuItem<PetSpecies>(
+          value: s,
+          child: Text(s.text),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _genderDropdown() {
+    return DropdownButtonFormField<PetGender>(
+      hint: const Text('Select gender'),
+      value: gender,
+      validator: genderValidator,
+      onChanged: (value) {
+        if (value != null) {
+          gender = value;
         }
       },
       items: PetGender.values.map((g) {
         return DropdownMenuItem<PetGender>(
-          value: gender,
-          child: Text(gender.text),
+          value: g,
+          child: Text(g.text),
         );
       }).toList(),
     );
@@ -204,8 +209,8 @@ class CreateEditPetState extends State<CreateEditPet> {
   Future<void> _createPet() async {
     final pet = Pet(
       name: _nameController.text,
-      gender: gender,
-      species: species,
+      gender: gender!,
+      species: species!,
       size: size,
       imageUrl: url,
       birthday: birthday,
@@ -235,24 +240,21 @@ class CreateEditPetState extends State<CreateEditPet> {
       setState(() {
         _loading = true;
       });
+
       await handleAsyncOperation(
-          asyncOperation: widget.pet == null ? _createPet() : _editPet(),
-          onSuccessText: widget.pet == null
-              ? 'Pet successfully added'
-              : 'Pet successfully edited',
-          context: context);
+        asyncOperation: widget.pet == null ? _createPet() : _editPet(),
+        onSuccessText: widget.pet == null
+            ? 'Pet successfully added'
+            : 'Pet successfully edited',
+        context: context,
+      );
+
       if (context.mounted) {
         widget.pet == null ? context.pop() : context.goNamed('home');
+        setState(() {
+          _loading = true;
+        });
       }
-    }
-  }
-
-  void _genderSelected(String? value) {
-    if (value != null) {
-      gender = gender = PetGender.values.firstWhere(
-        (e) => e.toString().split('.')[1] == value,
-        orElse: () => PetGender.other,
-      );
     }
   }
 
