@@ -25,16 +25,16 @@ class IoCContainer {
       AdService(),
     );
 
-    get.registerSingleton<PetService>(
-      PetService(),
-    );
-
     get.registerSingleton<AuthService>(
       AuthService(get<FirebaseAuth>()),
     );
 
     get.registerSingleton<UserService>(
       UserService(get<AuthService>()),
+    );
+
+    get.registerSingleton<PetService>(
+      PetService(),
     );
 
     get.registerSingleton<IconService>(

@@ -5,11 +5,11 @@ import 'package:pet_sitting/services/auth_service.dart';
 class UserService {
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection("Users");
-  final AuthService authService;
+  final AuthService _authService;
 
-  UserService(this.authService);
+  UserService(this._authService);
 
-  String? get currentUserId => authService.currentUserId;
+  String? get currentUserId => _authService.currentUserId;
 
   Future<UserExtended?> get currentUser async {
     final id = currentUserId;
@@ -49,7 +49,7 @@ class UserService {
   }
 
   Future<void> addPetToCurrentUser(String petId) async {
-    final userId = authService.currentUserId;
+    final userId = _authService.currentUserId;
     if (userId == null) {
       throw Exception('Couldn\'t get current user!');
     }
