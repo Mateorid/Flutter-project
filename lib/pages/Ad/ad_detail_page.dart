@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pet_sitting/Models/Ad/ad.dart';
+import 'package:pet_sitting/Models/Pet/pet.dart';
 import 'package:pet_sitting/future_builder.dart';
+import 'package:pet_sitting/ioc_container.dart';
 import 'package:pet_sitting/services/auth_service.dart';
 import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/widgets/ads/ad_detail_small_card.dart';
@@ -19,10 +20,12 @@ import '../../widgets/user/user_round_image.dart';
 
 class AdDetailPage extends StatelessWidget {
   final String adId;
-  final _adService = GetIt.I<AdService>();
-  final _userService = GetIt.I<UserService>();
-  final _authService = GetIt.I<AuthService>();
+  final _adService = get<AdService>();
+  final _userService = get<UserService>();
+  final _authService = get<AuthService>();
+  // final _petService = get<PetService>();
   late Ad ad;
+  late Pet pet;
   late UserExtended user;
 
   AdDetailPage({Key? key, required this.adId}) : super(key: key);
@@ -41,6 +44,7 @@ class AdDetailPage extends StatelessWidget {
   Future<List<Object>> _load() async {
     ad = await _adService.getAdById(adId);
     user = await _userService.getUserById(ad.creatorId);
+    // pet = await _petService.getPetById(ad.petId);
     return [ad, user];
   }
 
@@ -190,7 +194,8 @@ class AdDetailPage extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold, color: DARK_GREEN),
           ),
         ),
-        RatingBar(rating: user.averageReviewScore, ratingCount: user.reviews.length)
+        RatingBar(
+            rating: user.averageReviewScore, ratingCount: user.reviews.length)
       ],
     );
   }

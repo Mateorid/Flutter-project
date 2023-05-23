@@ -9,14 +9,12 @@ import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/core/icon_text_button.dart';
 import 'package:pet_sitting/widgets/core/outlined_container.dart';
+import 'package:pet_sitting/widgets/core/widget_future_builder.dart';
 import 'package:pet_sitting/widgets/review/review_dialog.dart';
 import 'package:pet_sitting/widgets/user/profile_widget.dart';
 import 'package:pet_sitting/widgets/user/rating_bard.dart';
 import 'package:pet_sitting/widgets/user/user_info_field.dart';
-import 'package:pet_sitting/widgets/widget_future_builder.dart';
-
-import '../../widgets/core/basic_button.dart';
-import '../../widgets/review/reviewTile.dart';
+import 'package:pet_sitting/widgets/review/reviewTile.dart';
 
 class ProfilePage extends StatelessWidget {
   final String userId;
@@ -42,7 +40,9 @@ class ProfilePage extends StatelessWidget {
 
     return Stack(children: [
       ListView(
-        physics: const BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         children: [
           const SizedBox(height: 25),
           ProfileWidget(
@@ -89,14 +89,12 @@ class ProfilePage extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Reviews'),
+        title: const Text('Reviews'),
         content: SizedBox(
           width: double.maxFinite,
           child: ListView.separated(
             itemCount: sortedReviews.length,
-            separatorBuilder: (context, index) => Divider(
-              thickness: 1,
-            ),
+            separatorBuilder: (context, index) => const Divider(thickness: 1),
             itemBuilder: (context, index) {
               final review = sortedReviews[index];
               return ReviewTile(review: review);

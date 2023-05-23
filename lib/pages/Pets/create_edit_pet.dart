@@ -1,38 +1,36 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pet_sitting/Models/Pet/pet.dart';
 import 'package:pet_sitting/Models/Pet/pet_gender.dart';
 import 'package:pet_sitting/Models/Pet/pet_size.dart';
+import 'package:pet_sitting/Models/Pet/pet_species.dart';
 import 'package:pet_sitting/handle_async_operation.dart';
+import 'package:pet_sitting/ioc_container.dart';
+import 'package:pet_sitting/pages/create_edit_page_template.dart';
+import 'package:pet_sitting/services/image_service.dart';
 import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/services/user_service.dart';
-import 'package:pet_sitting/styles.dart';
-import 'package:pet_sitting/widgets/core/basic_title.dart';
+import 'package:pet_sitting/validators/name_validator.dart';
+import 'package:pet_sitting/widgets/core/widget_stream_builder.dart';
 import 'package:pet_sitting/widgets/form_dropdown.dart';
 import 'package:pet_sitting/widgets/pets/pet_size_select.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
-import 'package:pet_sitting/widgets/round_button.dart';
+import 'package:pet_sitting/widgets/user/profile_widget.dart';
 
-import '../../Models/Pet/pet.dart';
-import '../../Models/Pet/pet_species.dart';
-import '../../ioc_container.dart';
-import '../../services/auth_service.dart';
-import '../../validators/name_validator.dart';
-
-class EditPetPage extends StatefulWidget {
-  EditPetPage({Key? key, this.petId}) : super(key: key);
+class CreateEditPet extends StatefulWidget {
+  CreateEditPet({Key? key, this.petId}) : super(key: key);
 
   final String? petId;
-  final User? user = get<AuthService>().currentUser;
-  final petService = get<PetService>();
-  final userService = get<UserService>();
+  final _petService = get<PetService>();
+  final _userService = get<UserService>();
+  final _imageService = get<ImageService>();
 
   @override
-  EditPetPageState createState() => EditPetPageState();
+  CreateEditPetState createState() => CreateEditPetState();
 }
 
-class EditPetPageState extends State<EditPetPage> {
+class CreateEditPetState extends State<CreateEditPet> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _birthdayController = TextEditingController();
@@ -41,35 +39,63 @@ class EditPetPageState extends State<EditPetPage> {
 
   late PetGender gender;
   late PetSpecies species;
-  PetSize size = PetSize.medium; //todo or load from pet when update
+  PetSize size = PetSize.medium;
   DateTime? birthday;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: DARK_GREEN),
-          onPressed: () => {context.pop()},
+    final edit = widget.petId != null;
+
+    return CreateEditPageTemplate(
+      pageTitle: edit ? 'Edit pet' : 'Add pet',
+      buttonText: edit ? 'EDIT' : 'SAVE',
+      buttonCallback: _onSubmitPressed,
+      body: edit
+          ? WidgetStreamBuilder<Pet?>(
+              stream: widget._petService.getPetById(widget.petId!),
+              onLoaded: _buildContent,
+            )
+          : _buildContent(null),
+    );
+  }
+
+  Widget _buildContent(Pet? pet) {
+    if (pet != null) {
+      _setControllers(pet);
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: ListView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
         ),
+        children: [
+          _buildPhoto(pet),
+          _buildForm(),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListView(
-          children: [
-            const BasicTitle(text: 'ADD PET'),
-            const SizedBox(height: 35),
-            _buildForm(),
-            RoundButton(
-              color: MAIN_GREEN,
-              text: 'SAVE',
-              onPressed: () => _onSubmitPressed(),
-            ),
-          ],
-        ),
-      ),
+    );
+  }
+
+  void _setControllers(Pet pet) {
+    // setState(() { //todo
+    size = pet.size;
+    species = pet.species;
+    // });
+    gender = pet.gender;
+    _nameController.text = pet.name;
+    _breedController.text = pet.breed ?? '';
+    _detailsController.text = pet.details ?? '';
+    _birthdayController.text = pet.birthday != null
+        ? DateFormat('yyyy-MM-dd').format(pet.birthday!)
+        : '';
+  }
+
+  Widget _buildPhoto(Pet? pet) {
+    return ProfileWidget(
+      image: widget._imageService.getPetImage(pet),
+      onTap: () {}, //todo
     );
   }
 
@@ -85,6 +111,7 @@ class EditPetPageState extends State<EditPetPage> {
             validator: nameValidator,
           ),
           FormDropDown(
+            //todo better
             label: 'Gender*',
             hintText: "Select your pet's gender",
             items: PetGender.values
@@ -95,7 +122,7 @@ class EditPetPageState extends State<EditPetPage> {
           FormDropDown(
             label: 'Species*',
             hintText: "Select your pet's species",
-            items: PetSpecies.values
+            items: PetSpecies.values //todo show better names
                 .map((petSpecies) => petSpecies.toString().split('.')[1])
                 .toList(),
             onChanged: (value) => {
@@ -151,8 +178,8 @@ class EditPetPageState extends State<EditPetPage> {
       breed: _breedController.text,
       details: _detailsController.text,
     );
-    final petId = await widget.petService.createNewPet(pet);
-    widget.userService.addPetToCurrentUser(petId);
+    final petId = await widget._petService.createNewPet(pet);
+    widget._userService.addPetToCurrentUser(petId);
   }
 
   void _onSubmitPressed() async {
@@ -180,8 +207,8 @@ class EditPetPageState extends State<EditPetPage> {
     final date = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(2015),
-        lastDate: DateTime(2101));
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now());
     if (date != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(date);
       setState(() {

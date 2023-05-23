@@ -16,6 +16,10 @@
 - pet ID v create inzeratu
 - rozhodit zdrojaky podle casti user/pet/ad/atd.
 - krizek na tech info boxech nefunguje
+- unify and change add/edit pet/user/ad
+- create pet page species text je spatne
+- lepsi upload page - i pro peta
+formdropdown better
 
 CREATE inzeratu - check, aby from nebol neskor ako to atd. 
 - COMBINE LATEST

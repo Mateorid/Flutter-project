@@ -4,7 +4,10 @@ import 'package:pet_sitting/Models/Pet/pet_species.dart';
 import 'package:pet_sitting/Models/User/user_extended.dart';
 
 class ImageService {
-  ImageProvider getPetImage(Pet pet) {
+  ImageProvider getPetImage(Pet? pet) {
+    if (pet == null) {
+      return const AssetImage('assets/images/no_image.PNG');
+    }
     if (pet.imageUrl != null) {
       return NetworkImage(pet.imageUrl!);
     }

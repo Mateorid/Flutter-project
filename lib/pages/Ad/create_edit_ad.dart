@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:pet_sitting/Models/User/user_extended.dart';
 import 'package:pet_sitting/future_builder.dart';
+import 'package:pet_sitting/pages/create_edit_page_template.dart';
 import 'package:pet_sitting/services/ad_service.dart';
+import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/validators/locationValidator.dart';
+import 'package:pet_sitting/widgets/core/widget_future_builder.dart';
+import 'package:pet_sitting/widgets/form_dropdown.dart';
 
 import '../../Models/Ad/ad.dart';
 import '../../handle_async_operation.dart';
 import '../../ioc_container.dart';
 import '../../services/auth_service.dart';
-import '../../styles.dart';
-import '../../widgets/core/basic_title.dart';
 import '../../widgets/plain_text_field.dart';
-import '../../widgets/round_button.dart';
 
 class CreateEditAdPage extends StatefulWidget {
   String? adId;
@@ -27,8 +29,9 @@ class CreateEditAdPage extends StatefulWidget {
 }
 
 class _CreateEditAdPageState extends State<CreateEditAdPage> {
-  bool _loading = false;
   late Ad ad;
+  late String petId;
+  late UserExtended user;
   final _formKey = GlobalKey<FormState>();
   final _fromController = TextEditingController();
   final _toController = TextEditingController();
@@ -39,52 +42,48 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.adId != null) {
-      return GenericFutureBuilder(
-          future: widget.adService.getAdById(widget.adId!),
-          onLoaded: (ad) {
-            final dateFormat = DateFormat('yyyy-MM-dd');
-            _fromController.text = dateFormat.format(ad.from);
-            _toController.text = dateFormat.format(ad.to);
-            _titleController.text = ad.title;
-            _costController.text = ad.costPerHour.toString();
-            _locationController.text = ad.location;
-            _detailsController.text = ad.description ?? '';
-            this.ad = ad;
-            return _buildScaffold();
-          });
-    } else {
-      return _buildScaffold();
-    }
+    final edit = widget.adId != null;
+
+    return CreateEditPageTemplate(
+      pageTitle: edit ? 'Edit Ad' : 'Create Ad',
+      buttonText: edit ? 'EDIT' : 'SAVE',
+      buttonCallback: edit ? _onEditPressed : _onCreatePressed,
+      body: WidgetFutureBuilder<UserExtended?>(
+        future: get<UserService>().currentUser,
+        onLoaded: (instance) {
+          user = instance!;
+          return edit ? _initFields() : _buildContent();
+        },
+      ),
+    );
   }
 
-  Widget _buildScaffold() {
-    return Scaffold(
-        appBar: AppBar(
-          elevation: 1,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: DARK_GREEN),
-            onPressed: () => {context.pop()},
-          ),
-        ),
-        body: _loading
-            ? const CircularProgressIndicator()
-            : Container(
-                padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
-                child: ListView(
-                  children: [
-                    const BasicTitle(text: 'CREATE A REQUEST'),
-                    const SizedBox(height: 15),
-                    _buildForm(),
-                    RoundButton(
-                        color: MAIN_GREEN,
-                        text: 'SAVE',
-                        onPressed: widget.adId == null
-                            ? _onCreatePressed
-                            : _onEditPressed),
-                  ],
-                )));
+  Widget _initFields() {
+    return GenericFutureBuilder(
+      future: widget.adService.getAdById(widget.adId!),
+      onLoaded: (ad) {
+        final dateFormat = DateFormat('yyyy-MM-dd');
+        _fromController.text = dateFormat.format(ad.from);
+        _toController.text = dateFormat.format(ad.to);
+        _titleController.text = ad.title;
+        _costController.text = ad.costPerHour.toString();
+        _locationController.text = ad.location;
+        _detailsController.text = ad.description ?? '';
+        this.ad = ad;
+        return _buildContent();
+      },
+    );
+  }
+
+  Widget _buildContent() {
+    return Container(
+      padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
+      child: ListView(
+        children: [
+          _buildForm(),
+        ],
+      ),
+    );
   }
 
   Widget _buildForm() {
@@ -103,6 +102,14 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
               return null;
             },
           ),
+          FormDropDown(
+              //todo this should be like a pop-up select - similar to reviews
+              label: 'Pet',
+              hintText: 'Select which pet is this ad for',
+              items: user.pets,
+              onChanged: (id) {
+                petId = id!;
+              }),
           _buildDatePicker(_fromController, "From*: "),
           _buildDatePicker(_toController, "To*: "),
           PlainTextField(
@@ -184,7 +191,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
           costPerHour: int.parse(_costController.text),
           from: DateTime.parse(_fromController.text),
           to: DateTime.parse(_toController.text),
-          petId: "K3YvqdaiOoZDNnKJ2URi",
+          petId: petId,
           creatorId: id,
           active: true);
       await widget.adService.createNewAd(ad);
@@ -200,7 +207,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
         costPerHour: int.parse(_costController.text),
         from: DateTime.parse(_fromController.text),
         to: DateTime.parse(_toController.text),
-        petId: "K3YvqdaiOoZDNnKJ2URi",
+        petId: petId,
         creatorId: id,
         active: true);
     widget.adService.updateAd(newAd.id!, newAd);

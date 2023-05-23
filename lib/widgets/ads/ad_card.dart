@@ -68,7 +68,7 @@ class AdCard extends StatelessWidget {
                 .textTheme
                 .titleMedium
                 ?.copyWith(fontWeight: FontWeight.bold, color: ORANGE_COLOR)),
-        Text("per day")
+        const Text("per day")
       ],
     );
   }

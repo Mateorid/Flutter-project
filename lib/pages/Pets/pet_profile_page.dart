@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
 import 'package:pet_sitting/ioc_container.dart';
 import 'package:pet_sitting/services/date_service.dart';
 import 'package:pet_sitting/services/icon_service.dart';
 import 'package:pet_sitting/services/image_service.dart';
+import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/core/info_tile.dart';
 
 class PetProfilePage extends StatelessWidget {
@@ -22,7 +24,7 @@ class PetProfilePage extends StatelessWidget {
           SliverAppBar(
             pinned: true,
             expandedHeight: 250,
-            actions: [_editButton()],
+            actions: [_editButton(pet, context)],
             flexibleSpace: FlexibleSpaceBar(background: _petPhoto()),
           ),
           SliverList(delegate: _petInfo(context)),
@@ -97,14 +99,14 @@ class PetProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _editButton() {
+  Widget _editButton(Pet pet, BuildContext context) {
     //todo render this only if user is owner
     return TextButton(
         onPressed: () {
-          print("//TODO: open pet edit page");
+          context.pushNamed("edit_pet", params: {"id": pet.id!});
         },
         child: const Text("Edit",
-            style: TextStyle(fontSize: 20, color: Colors.white)));
+            style: TextStyle(fontSize: 20, color: MAIN_GREEN)));
   }
 
   Widget _infoText(String text) {

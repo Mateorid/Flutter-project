@@ -8,7 +8,7 @@ import '../../Models/review.dart';
 import '../../services/user_service.dart';
 import '../user/rating_bard.dart';
 import '../user/user_round_image.dart';
-import '../widget_future_builder.dart';
+import '../core/widget_future_builder.dart';
 
 class ReviewTile extends StatelessWidget {
   final Review review;
@@ -23,6 +23,7 @@ class ReviewTile extends StatelessWidget {
       onLoaded: (user) => _buildContent(context, user),
     );
   }
+
   Widget _buildContent(BuildContext context, UserExtended user) {
     return ListTile(
       leading: UserRoundImage(
@@ -33,14 +34,19 @@ class ReviewTile extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(user.name ?? user.email, style: const TextStyle(fontWeight: FontWeight.bold, color: MAIN_GREEN),),
+          Text(
+            user.name ?? user.email,
+            style:
+                const TextStyle(fontWeight: FontWeight.bold, color: MAIN_GREEN),
+          ),
           const SizedBox(height: 3),
           Text(review.text),
           const SizedBox(height: 3),
-          Text(DateFormat.yMMMd().format(review.dateTime),style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10)),
+          Text(DateFormat.yMMMd().format(review.dateTime),
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 10)),
         ],
       ),
     );
   }
-
 }

@@ -23,12 +23,11 @@ class RoundButton extends StatelessWidget {
       width: width == 0 ? size.width * 0.8 : width,
       child: ClipRRect(
         borderRadius:
-            BorderRadius.circular(borderRadius == 0 ? 29 : borderRadius),
+            BorderRadius.circular(borderRadius == 0 ? 30 : borderRadius),
         child: TextButton(
           style: TextButton.styleFrom(
             backgroundColor: color,
             foregroundColor: Colors.white,
-            // padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
           ),
           onPressed: onPressed,
           child: Text(text),

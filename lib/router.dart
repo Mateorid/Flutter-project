@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/pages/Ad/ad_detail_page.dart';
 import 'package:pet_sitting/pages/Ad/ads_page.dart';
 import 'package:pet_sitting/pages/Ad/create_edit_ad.dart';
-import 'package:pet_sitting/pages/Pets/edit_pet_page.dart';
+import 'package:pet_sitting/pages/Pets/create_edit_pet.dart';
 import 'package:pet_sitting/pages/Pets/pet_profile_page.dart';
 import 'package:pet_sitting/pages/Pets/pets_page.dart';
 import 'package:pet_sitting/pages/User/edit_user_page.dart';
@@ -56,7 +56,14 @@ class RouterProvider {
         GoRoute(
           path: "/create_pet",
           name: "create_pet",
-          builder: (context, state) => EditPetPage(),
+          builder: (context, state) => CreateEditPet(),
+        ),
+        GoRoute(
+          path: "/edit_pet/:id",
+          name: "edit_pet",
+          builder: (context, state) => CreateEditPet(
+            petId: state.params["id"]!,
+          ),
         ),
         GoRoute(
           path: "/pet_profile",
