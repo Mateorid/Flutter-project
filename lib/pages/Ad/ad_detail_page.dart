@@ -11,7 +11,7 @@ import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/widgets/ads/ad_detail_small_card.dart';
 import 'package:pet_sitting/widgets/core/basic_button.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
-import 'package:pet_sitting/widgets/user/rating_bard.dart';
+import 'package:pet_sitting/widgets/user/rating_bar.dart';
 
 import '../../Models/User/user_extended.dart';
 import '../../services/ad_service.dart';

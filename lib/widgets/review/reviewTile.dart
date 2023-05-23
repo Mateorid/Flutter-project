@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pet_sitting/Models/User/user_extended.dart';
+import 'package:pet_sitting/Models/review.dart';
 import 'package:pet_sitting/ioc_container.dart';
+import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
-
-import '../../Models/User/user_extended.dart';
-import '../../Models/review.dart';
-import '../../services/user_service.dart';
-import '../user/rating_bard.dart';
-import '../user/user_round_image.dart';
-import '../core/widget_future_builder.dart';
+import 'package:pet_sitting/widgets/core/widget_future_builder.dart';
+import 'package:pet_sitting/widgets/user/rating_bar.dart';
+import 'package:pet_sitting/widgets/user/user_round_image.dart';
 
 class ReviewTile extends StatelessWidget {
   final Review review;

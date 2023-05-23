@@ -10,7 +10,6 @@ import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/services/storage_service.dart';
 
 import '../../future_builder.dart';
-import '../../services/auth_service.dart';
 import '../../services/user_service.dart';
 import '../../styles.dart';
 import '../../widgets/core/basic_button.dart';
@@ -22,7 +21,8 @@ class UploadFilePage extends StatefulWidget {
   final bool onlyReturnUrl;
   late UserExtended user;
 
-  UploadFilePage({Key? key, required this.id, this.onlyReturnUrl = false}) : super(key: key);
+  UploadFilePage({Key? key, required this.id, this.onlyReturnUrl = false})
+      : super(key: key);
 
   @override
   _UploadFilePageState createState() => _UploadFilePageState();
@@ -33,10 +33,9 @@ class _UploadFilePageState extends State<UploadFilePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.onlyReturnUrl){
+    if (widget.onlyReturnUrl) {
       return _buildScaffold(context);
-    }
-    else {
+    } else {
       return GenericFutureBuilder(
           future: widget._userService.getUserById(widget.id),
           onLoaded: (user) {
@@ -82,10 +81,9 @@ class _UploadFilePageState extends State<UploadFilePage> {
         asyncOperation: _uploadFile(),
         onSuccessText: "Image uploaded successfully",
         context: context);
-    if (widget.onlyReturnUrl){
+    if (widget.onlyReturnUrl) {
       context.pop(url);
-    }
-    else {
+    } else {
       context.pop();
     }
   }
@@ -95,7 +93,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
         .uploadFile(filePath: _pickedFile!.path!, fileName: _pickedFile!.name);
     final fullPath =
         await widget._storageService.getDownloadUrl(partialUrl: path);
-    if (!widget.onlyReturnUrl){
+    if (!widget.onlyReturnUrl) {
       UserExtended updatedUser = widget.user.copyWith(imageUrl: fullPath);
       widget._userService.updateUserX(updatedUser);
     }

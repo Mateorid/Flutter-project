@@ -83,10 +83,8 @@ class PetProfilePage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'Description:',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(fontWeight: FontWeight.bold, color: DARK_GREEN),
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold, color: DARK_GREEN),
                 ),
               ),
               OutlinedContainer(

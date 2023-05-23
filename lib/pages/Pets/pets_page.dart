@@ -8,8 +8,8 @@ import 'package:pet_sitting/services/auth_service.dart';
 import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
-import 'package:pet_sitting/widgets/pets/pet_overview_tile.dart';
 import 'package:pet_sitting/widgets/core/widget_future_builder.dart';
+import 'package:pet_sitting/widgets/pets/pet_overview_tile.dart';
 
 class PetsPage extends StatelessWidget {
   PetsPage({super.key});
