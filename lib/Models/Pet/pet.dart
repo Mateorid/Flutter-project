@@ -28,6 +28,30 @@ class Pet {
       this.imageUrl,
       this.details});
 
+  Pet copyWith({
+    String? id,
+    String? name,
+    PetGender? gender,
+    PetSpecies? species,
+    PetSize? size,
+    DateTime? birthday,
+    String? breed,
+    String? details,
+    String? imageUrl,
+  }) {
+    return Pet(
+      id: this.id,
+      name: name ?? this.name,
+      gender: gender ?? this.gender,
+      species: species ?? this.species,
+      size: size ?? this.size,
+      birthday: birthday ?? this.birthday,
+      breed: breed ?? this.breed,
+      imageUrl: imageUrl ?? imageUrl,
+      details: details ?? this.details,
+    );
+  }
+
   factory Pet.fromJson(Map<String, dynamic> json) => _$PetFromJson(json);
 
   Map<String, dynamic> toJson() => _$PetToJson(this);

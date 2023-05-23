@@ -57,4 +57,12 @@ class UserService {
       'pets': FieldValue.arrayUnion([petId]),
     });
   }
+
+  Future<bool> currentUserIsOwnerOfPet(String petId) async {
+    final user = await currentUser;
+    if (user == null) {
+      throw Exception('Couldn\'t get current user!');
+    }
+    return user.pets.contains(petId);
+  }
 }

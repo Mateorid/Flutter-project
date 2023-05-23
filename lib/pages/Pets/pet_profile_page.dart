@@ -6,10 +6,12 @@ import 'package:pet_sitting/ioc_container.dart';
 import 'package:pet_sitting/services/date_service.dart';
 import 'package:pet_sitting/services/icon_service.dart';
 import 'package:pet_sitting/services/image_service.dart';
+import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/ads/ad_detail_small_card.dart';
 import 'package:pet_sitting/widgets/core/basic_title.dart';
 import 'package:pet_sitting/widgets/core/outlined_container.dart';
+import 'package:pet_sitting/widgets/core/widget_future_builder.dart';
 
 class PetProfilePage extends StatelessWidget {
   PetProfilePage({super.key, required this.pet});
@@ -23,28 +25,35 @@ class PetProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: CustomScrollView(
-          physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics(),
-          ),
-          slivers: [
-            SliverAppBar(
-              floating: true,
-              expandedHeight: 250,
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: MAIN_GREEN,
-                ),
-                onPressed: () => {context.pop()},
-              ),
-              actions: [_editButton(pet, context)],
-              flexibleSpace: FlexibleSpaceBar(background: _petPhoto()),
-            ),
-            SliverList(delegate: _petInfo(context)),
-          ],
+        body: WidgetFutureBuilder(
+          future: get<UserService>().currentUserIsOwnerOfPet(pet.id!),
+          onLoaded: (isOwner) => _buildContent(context, isOwner),
         ),
       ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, bool isOwner) {
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      slivers: [
+        SliverAppBar(
+          floating: true,
+          expandedHeight: 250,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: MAIN_GREEN,
+            ),
+            onPressed: () => {context.pop()},
+          ),
+          actions: [if (isOwner) _editButton(pet, context)],
+          flexibleSpace: FlexibleSpaceBar(background: _petPhoto()),
+        ),
+        SliverList(delegate: _petInfo(context)),
+      ],
     );
   }
 
@@ -130,7 +139,7 @@ class PetProfilePage extends StatelessWidget {
     //todo render this only if user is owner
     return TextButton(
         onPressed: () {
-          context.pushNamed("edit_pet", params: {"id": pet.id!});
+          context.pushNamed('edit_pet', extra: pet);
         },
         child: const Text("Edit",
             style: TextStyle(fontSize: 20, color: MAIN_GREEN)));
