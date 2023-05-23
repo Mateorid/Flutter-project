@@ -12,7 +12,6 @@ import 'package:pet_sitting/services/image_service.dart';
 import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/validators/name_validator.dart';
-import 'package:pet_sitting/widgets/core/widget_stream_builder.dart';
 import 'package:pet_sitting/widgets/form_dropdown.dart';
 import 'package:pet_sitting/widgets/pets/pet_size_select.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
@@ -38,7 +37,7 @@ class CreateEditPetState extends State<CreateEditPet> {
   final _detailsController = TextEditingController();
   bool _loading = false;
 
-  late PetGender gender;
+  late PetGender gender = PetGender.other;
   late PetSpecies species;
   String? url;
   bool imageUpdated = false;
@@ -81,7 +80,7 @@ class CreateEditPetState extends State<CreateEditPet> {
     size = pet.size;
     species = pet.species;
     // });
-    if (!imageUpdated){
+    if (!imageUpdated) {
       url = pet.imageUrl;
     }
     gender = pet.gender;
@@ -99,19 +98,18 @@ class CreateEditPetState extends State<CreateEditPet> {
         : widget._imageService.getPetImage(pet);
     return ProfileWidget(
         image: imageProvider,
-        onTap: () async{
+        onTap: () async {
           String? url = await context.pushNamed(
             "upload_pet_image",
             params: {"id": "1"},
           );
-          if (url != null){
+          if (url != null) {
             setState(() {
               imageUpdated = true;
               this.url = url;
             });
           }
-        }
-    );
+        });
   }
 
   Widget _buildForm() {
@@ -134,6 +132,7 @@ class CreateEditPetState extends State<CreateEditPet> {
                 .toList(),
             onChanged: _genderSelected,
           ),
+          // _genderDropdown(),
           FormDropDown(
             label: 'Species*',
             hintText: "Select your pet's species",
@@ -180,6 +179,25 @@ class CreateEditPetState extends State<CreateEditPet> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _genderDropdown() {
+    return DropdownButtonFormField<PetGender>(
+      value: gender,
+      onChanged: (value) {
+        if (value != null) {
+          setState(() {
+            gender = value;
+          });
+        }
+      },
+      items: PetGender.values.map((g) {
+        return DropdownMenuItem<PetGender>(
+          value: gender,
+          child: Text(gender.text),
+        );
+      }).toList(),
     );
   }
 

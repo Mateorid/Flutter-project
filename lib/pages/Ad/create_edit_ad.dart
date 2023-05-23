@@ -9,7 +9,6 @@ import 'package:pet_sitting/services/ad_service.dart';
 import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/validators/locationValidator.dart';
 import 'package:pet_sitting/widgets/core/widget_future_builder.dart';
-import 'package:pet_sitting/widgets/form_dropdown.dart';
 
 import '../../Models/Ad/ad.dart';
 import '../../handle_async_operation.dart';
@@ -30,7 +29,7 @@ class CreateEditAdPage extends StatefulWidget {
 
 class _CreateEditAdPageState extends State<CreateEditAdPage> {
   late Ad ad;
-  late String petId;
+  late String petId = 'Xnlwf3sU98FSl6BbvJC6'; //todo
   late UserExtended user;
   final _formKey = GlobalKey<FormState>();
   final _fromController = TextEditingController();
@@ -104,14 +103,14 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
               return null;
             },
           ),
-          FormDropDown(
-              //todo this should be like a pop-up select - similar to reviews
-              label: 'Pet',
-              hintText: 'Select which pet is this ad for',
-              items: user.pets,
-              onChanged: (id) {
-                petId = id!;
-              }),
+          //todo this should be like a pop-up select - similar to reviews
+          // FormDropDown(
+          //     label: 'Pet',
+          //     hintText: 'Select which pet is this ad for',
+          //     items: user.pets,
+          //     onChanged: (id) {
+          //       petId = id!;
+          //     }),
           _buildDatePicker(_fromController, "From*: "),
           _buildDatePicker(_toController, "To*: "),
           PlainTextField(

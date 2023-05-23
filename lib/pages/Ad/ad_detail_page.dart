@@ -87,7 +87,7 @@ class AdDetailPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildPetName(context),
+              // _buildPetName(context), //todo
               const SizedBox(height: 10),
               _buildCards(),
               const SizedBox(
