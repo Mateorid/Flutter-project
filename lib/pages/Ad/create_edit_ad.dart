@@ -236,11 +236,11 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
       setState(() {
         _loading = true;
       });
-      final ok = await handleAsyncOperation(
+      await handleAsyncOperation(
           asyncOperation: _createAdd(),
           onSuccessText: 'Request created',
           context: context);
-      if (ok && context.mounted) {
+      if (context.mounted) {
         context.pop();
       }
     }

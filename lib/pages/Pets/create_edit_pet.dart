@@ -12,6 +12,7 @@ import 'package:pet_sitting/services/image_service.dart';
 import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/validators/name_validator.dart';
+import 'package:pet_sitting/widgets/core/widget_stream_builder.dart';
 import 'package:pet_sitting/widgets/form_dropdown.dart';
 import 'package:pet_sitting/widgets/pets/pet_size_select.dart';
 import 'package:pet_sitting/widgets/plain_text_field.dart';
@@ -39,6 +40,8 @@ class CreateEditPetState extends State<CreateEditPet> {
 
   late PetGender gender;
   late PetSpecies species;
+  String? url;
+  bool imageUpdated = false;
   PetSize size = PetSize.medium;
   DateTime? birthday;
 
@@ -78,6 +81,9 @@ class CreateEditPetState extends State<CreateEditPet> {
     size = pet.size;
     species = pet.species;
     // });
+    if (!imageUpdated){
+      url = pet.imageUrl;
+    }
     gender = pet.gender;
     _nameController.text = pet.name;
     _breedController.text = pet.breed ?? '';
@@ -88,9 +94,23 @@ class CreateEditPetState extends State<CreateEditPet> {
   }
 
   Widget _buildPhoto(Pet? pet) {
+    final imageProvider = imageUpdated
+        ? NetworkImage(url!)
+        : widget._imageService.getPetImage(pet);
     return ProfileWidget(
-      image: widget._imageService.getPetImage(pet),
-      onTap: () {}, //todo
+        image: imageProvider,
+        onTap: () async{
+          String? url = await context.pushNamed(
+            "upload_pet_image",
+            params: {"id": "1"},
+          );
+          if (url != null){
+            setState(() {
+              imageUpdated = true;
+              this.url = url;
+            });
+          }
+        }
     );
   }
 
@@ -169,6 +189,7 @@ class CreateEditPetState extends State<CreateEditPet> {
       gender: gender,
       species: species,
       size: size,
+      imageUrl: url,
       birthday: birthday,
       breed: _breedController.text,
       details: _detailsController.text,
@@ -186,7 +207,7 @@ class CreateEditPetState extends State<CreateEditPet> {
       birthday: birthday,
       breed: _breedController.text,
       details: _detailsController.text,
-      //todo imgurl
+      imageUrl: url,
     );
     await widget._petService.updatePet(widget.pet!.id!, newPet);
   }
@@ -196,13 +217,13 @@ class CreateEditPetState extends State<CreateEditPet> {
       setState(() {
         _loading = true;
       });
-      final ok = await handleAsyncOperation(
+      await handleAsyncOperation(
           asyncOperation: widget.pet == null ? _createPet() : _editPet(),
           onSuccessText: widget.pet == null
               ? 'Pet successfully added'
               : 'Pet successfully edited',
           context: context);
-      if (ok && context.mounted) {
+      if (context.mounted) {
         widget.pet == null ? context.pop() : context.goNamed('home');
       }
     }

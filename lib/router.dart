@@ -94,6 +94,16 @@ class RouterProvider {
           },
         ),
         GoRoute(
+          path: "/upload_pet_image/:id",
+          name: "upload_pet_image",
+          builder: (context, state) {
+            return UploadFilePage(
+              id: state.params["id"]!,
+              onlyReturnUrl: true,
+            );
+          },
+        ),
+        GoRoute(
           path: "/ad_detail/:id",
           name: "ad_details",
           builder: (context, state) {

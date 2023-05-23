@@ -1,6 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pet_sitting/Models/review.dart';
 
+import '../Pet/pet.dart';
+
 part 'user_extended.g.dart';
 
 @JsonSerializable()
@@ -35,6 +37,7 @@ class UserExtended {
       String? aboutMe,
       String? imageUrl,
         List<Review>? reviews,
+        List<String>? pets
       }) {
     return UserExtended(
         email: email ?? this.email,
@@ -44,6 +47,7 @@ class UserExtended {
         aboutMe: aboutMe ?? this.aboutMe,
         imageUrl: imageUrl ?? this.imageUrl,
         reviews: reviews ?? this.reviews,
+        pets: pets ?? this.pets,
         uid: uid);
   }
 

@@ -24,6 +24,11 @@ class PetService {
     return _petCollection.doc(id).snapshots().map((event) => event.data());
   }
 
+  Future<Pet> getPetByIdFuture(String uid) async {
+    DocumentSnapshot petSnapshot = await _petCollection.doc(uid).get();
+    return Pet.fromJson(petSnapshot.data() as Map<String, dynamic>);
+  }
+
   Future<void> updatePet(String petId, Pet pet) {
     return _petCollection.doc(petId).update(pet.toJson());
   }

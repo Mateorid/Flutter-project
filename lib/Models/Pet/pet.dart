@@ -40,15 +40,15 @@ class Pet {
     String? imageUrl,
   }) {
     return Pet(
-      id: this.id,
+      id: id ?? this.id,
       name: name ?? this.name,
       gender: gender ?? this.gender,
       species: species ?? this.species,
       size: size ?? this.size,
       birthday: birthday ?? this.birthday,
       breed: breed ?? this.breed,
-      imageUrl: imageUrl ?? imageUrl,
       details: details ?? this.details,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 
