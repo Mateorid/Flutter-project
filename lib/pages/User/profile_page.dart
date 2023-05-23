@@ -50,7 +50,6 @@ class ProfilePage extends StatelessWidget {
             onTap: ownProfile ? () => {context.pushNamed('edit_user')} : null,
           ),
           _buildNameOrEmail(user),
-          //todo interactive ratings
           GestureDetector(
             // Wrap RatingBar with GestureDetector
             onTap: () {

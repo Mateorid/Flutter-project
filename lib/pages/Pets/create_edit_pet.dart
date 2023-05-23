@@ -19,9 +19,9 @@ import 'package:pet_sitting/widgets/plain_text_field.dart';
 import 'package:pet_sitting/widgets/user/profile_widget.dart';
 
 class CreateEditPet extends StatefulWidget {
-  CreateEditPet({Key? key, this.petId}) : super(key: key);
+  CreateEditPet({Key? key, this.pet}) : super(key: key);
 
-  final String? petId;
+  final Pet? pet;
   final _petService = get<PetService>();
   final _userService = get<UserService>();
   final _imageService = get<ImageService>();
@@ -36,6 +36,7 @@ class CreateEditPetState extends State<CreateEditPet> {
   final _birthdayController = TextEditingController();
   final _breedController = TextEditingController();
   final _detailsController = TextEditingController();
+  bool _loading = false;
 
   late PetGender gender;
   late PetSpecies species;
@@ -46,19 +47,14 @@ class CreateEditPetState extends State<CreateEditPet> {
 
   @override
   Widget build(BuildContext context) {
-    final edit = widget.petId != null;
+    final edit = widget.pet != null;
 
     return CreateEditPageTemplate(
-      pageTitle: edit ? 'Edit pet' : 'Add pet',
-      buttonText: edit ? 'EDIT' : 'SAVE',
-      buttonCallback: _onSubmitPressed,
-      body: edit
-          ? WidgetStreamBuilder<Pet?>(
-              stream: widget._petService.getPetById(widget.petId!),
-              onLoaded: _buildContent,
-            )
-          : _buildContent(null),
-    );
+        pageTitle: edit ? 'Edit pet' : 'Add pet',
+        buttonText: edit ? 'EDIT' : 'SAVE',
+        buttonCallback: _onSubmitPressed,
+        isLoading: _loading,
+        body: _buildContent(widget.pet));
   }
 
   Widget _buildContent(Pet? pet) {
@@ -86,9 +82,6 @@ class CreateEditPetState extends State<CreateEditPet> {
     species = pet.species;
     // });
     gender = pet.gender;
-    if (!imageUpdated){
-      url = pet.imageUrl;
-    }
     _nameController.text = pet.name;
     _breedController.text = pet.breed ?? '';
     _detailsController.text = pet.details ?? '';
@@ -98,25 +91,9 @@ class CreateEditPetState extends State<CreateEditPet> {
   }
 
   Widget _buildPhoto(Pet? pet) {
-    print(url);
-    final imageProvider = imageUpdated
-        ? NetworkImage(url!)
-        : widget._imageService.getPetImage(pet);
     return ProfileWidget(
-        image: imageProvider,
-      onTap: () async{
-        String? url = await context.pushNamed(
-          "upload_pet_image",
-          params: {"id": "1"},
-        );
-        if (url != null){
-          setState(() {
-            imageUpdated = true;
-            this.url = url;
-          });
-        }
-      }
-
+      image: widget._imageService.getPetImage(pet),
+      onTap: () {}, //todo
     );
   }
 
@@ -189,7 +166,7 @@ class CreateEditPetState extends State<CreateEditPet> {
     );
   }
 
-  Future<void> _saveChanges() async {
+  Future<void> _createPet() async {
     final pet = Pet(
       name: _nameController.text,
       gender: gender,
@@ -204,14 +181,33 @@ class CreateEditPetState extends State<CreateEditPet> {
     widget._userService.addPetToCurrentUser(petId);
   }
 
+  Future<void> _editPet() async {
+    final newPet = widget.pet!.copyWith(
+      name: _nameController.text,
+      gender: gender,
+      species: species,
+      size: size,
+      birthday: birthday,
+      breed: _breedController.text,
+      details: _detailsController.text,
+      imageUrl: url,
+    );
+    await widget._petService.updatePet(widget.pet!.id!, newPet);
+  }
+
   void _onSubmitPressed() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _loading = true;
+      });
       await handleAsyncOperation(
-          asyncOperation: _saveChanges(),
-          onSuccessText: 'Pet successfully added',
+          asyncOperation: widget.pet == null ? _createPet() : _editPet(),
+          onSuccessText: widget.pet == null
+              ? 'Pet successfully added'
+              : 'Pet successfully edited',
           context: context);
       if (context.mounted) {
-        context.pop();
+        widget.pet == null ? context.pop() : context.goNamed('home');
       }
     }
   }

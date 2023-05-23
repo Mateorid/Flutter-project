@@ -39,6 +39,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
   final _costController = TextEditingController();
   final _detailsController = TextEditingController();
   final _locationController = TextEditingController();
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +49,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
       pageTitle: edit ? 'Edit Ad' : 'Create Ad',
       buttonText: edit ? 'EDIT' : 'SAVE',
       buttonCallback: edit ? _onEditPressed : _onCreatePressed,
+      isLoading: _loading,
       body: WidgetFutureBuilder<UserExtended?>(
         future: get<UserService>().currentUser,
         onLoaded: (instance) {
@@ -215,21 +217,32 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
 
   void _onEditPressed() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _loading = true;
+      });
       await handleAsyncOperation(
           asyncOperation: _editAd(),
           onSuccessText: 'Request edited',
           context: context);
-      context.pop();
+      // context.pop();
+      setState(() {
+        _loading = false;
+      });
     }
   }
 
   void _onCreatePressed() async {
     if (_formKey.currentState!.validate()) {
-      await handleAsyncOperation(
+      setState(() {
+        _loading = true;
+      });
+      final ok = await handleAsyncOperation(
           asyncOperation: _createAdd(),
           onSuccessText: 'Request created',
           context: context);
-      context.pop();
+      if (ok && context.mounted) {
+        context.pop();
+      }
     }
   }
 }

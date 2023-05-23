@@ -59,11 +59,12 @@ class RouterProvider {
           builder: (context, state) => CreateEditPet(),
         ),
         GoRoute(
-          path: "/edit_pet/:id",
+          path: "/edit_pet",
           name: "edit_pet",
-          builder: (context, state) => CreateEditPet(
-            petId: state.params["id"]!,
-          ),
+          builder: (context, state) {
+            Pet pet = state.extra as Pet;
+            return CreateEditPet(pet: pet);
+          },
         ),
         GoRoute(
           path: "/pet_profile",
