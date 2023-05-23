@@ -129,6 +129,7 @@ class EditProfilePageState extends State<EditUserPage> {
   Widget _buildImage() {
     return ProfileWidget(
       image: get<ImageService>().getUserImage(widget.userExtended),
+      icon: const Icon(Icons.image_search, color: Colors.white, size: 25),
       onTap: () {
         context.pushNamed(
           "upload",

@@ -4,8 +4,9 @@ import 'package:pet_sitting/styles.dart';
 class ProfileWidget extends StatelessWidget {
   final ImageProvider image;
   final VoidCallback? onTap;
+  final Icon? icon;
 
-  const ProfileWidget({super.key, required this.image, this.onTap});
+  const ProfileWidget({super.key, required this.image, this.onTap, this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -48,30 +49,28 @@ class ProfileWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildEditIcon() => _buildCircle(
-        color: Colors.white,
-        all: 3,
-        child: _buildCircle(
-          color: MAIN_GREEN,
-          all: 8,
-          child: const Icon(
-            Icons.edit,
-            color: Colors.white,
-            size: 20,
-          ),
-        ),
-      );
+  Widget _buildEditIcon() {
+    return _buildCircle(
+      color: Colors.white,
+      all: 3,
+      child: _buildCircle(
+        color: MAIN_GREEN,
+        all: 8,
+        child: icon != null
+            ? icon!
+            : const Icon(Icons.edit, color: Colors.white, size: 20),
+      ),
+    );
+  }
 
-  Widget _buildCircle({
-    required Widget child,
-    required double all,
-    required Color color,
-  }) =>
-      ClipOval(
-        child: Container(
-          padding: EdgeInsets.all(all),
-          color: color,
-          child: child,
-        ),
-      );
+  Widget _buildCircle(
+      {required Widget child, required double all, required Color color}) {
+    return ClipOval(
+      child: Container(
+        padding: EdgeInsets.all(all),
+        color: color,
+        child: child,
+      ),
+    );
+  }
 }
