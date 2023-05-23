@@ -18,11 +18,11 @@ import '../../widgets/core/basic_button.dart';
 class UploadFilePage extends StatefulWidget {
   final _storageService = GetIt.I<StorageService>();
   final _userService = GetIt.I<UserService>();
-  final _authService = GetIt.I<AuthService>();
   final String id;
+  final bool onlyReturnUrl;
   late UserExtended user;
 
-  UploadFilePage({Key? key, required this.id}) : super(key: key);
+  UploadFilePage({Key? key, required this.id, this.onlyReturnUrl = false}) : super(key: key);
 
   @override
   _UploadFilePageState createState() => _UploadFilePageState();
@@ -33,12 +33,17 @@ class _UploadFilePageState extends State<UploadFilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return GenericFutureBuilder(
-        future: widget._userService.getUserById(widget.id),
-        onLoaded: (user) {
-          widget.user = user;
-          return _buildScaffold(context);
-        });
+    if (widget.onlyReturnUrl){
+      return _buildScaffold(context);
+    }
+    else {
+      return GenericFutureBuilder(
+          future: widget._userService.getUserById(widget.id),
+          onLoaded: (user) {
+            widget.user = user;
+            return _buildScaffold(context);
+          });
+    }
   }
 
   Widget _buildScaffold(BuildContext context) {
@@ -73,20 +78,28 @@ class _UploadFilePageState extends State<UploadFilePage> {
   }
 
   Future<void> _onUploadPressed(BuildContext context) async {
-    handleAsyncOperation(
+    var url = await handleAsyncOperation(
         asyncOperation: _uploadFile(),
         onSuccessText: "Image uploaded successfully",
         context: context);
-    context.pop();
+    if (widget.onlyReturnUrl){
+      context.pop(url);
+    }
+    else {
+      context.pop();
+    }
   }
 
-  Future<void> _uploadFile() async {
+  Future<String> _uploadFile() async {
     final path = await widget._storageService
         .uploadFile(filePath: _pickedFile!.path!, fileName: _pickedFile!.name);
     final fullPath =
         await widget._storageService.getDownloadUrl(partialUrl: path);
-    UserExtended updatedUser = widget.user.copyWith(imageUrl: fullPath);
-    widget._userService.updateUserX(updatedUser);
+    if (!widget.onlyReturnUrl){
+      UserExtended updatedUser = widget.user.copyWith(imageUrl: fullPath);
+      widget._userService.updateUserX(updatedUser);
+    }
+    return fullPath;
   }
 
   Future<void> _selectFile() async {

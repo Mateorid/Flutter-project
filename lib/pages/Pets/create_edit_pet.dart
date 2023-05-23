@@ -39,6 +39,8 @@ class CreateEditPetState extends State<CreateEditPet> {
 
   late PetGender gender;
   late PetSpecies species;
+  String? url;
+  bool imageUpdated = false;
   PetSize size = PetSize.medium;
   DateTime? birthday;
 
@@ -84,6 +86,9 @@ class CreateEditPetState extends State<CreateEditPet> {
     species = pet.species;
     // });
     gender = pet.gender;
+    if (!imageUpdated){
+      url = pet.imageUrl;
+    }
     _nameController.text = pet.name;
     _breedController.text = pet.breed ?? '';
     _detailsController.text = pet.details ?? '';
@@ -93,9 +98,25 @@ class CreateEditPetState extends State<CreateEditPet> {
   }
 
   Widget _buildPhoto(Pet? pet) {
+    print(url);
+    final imageProvider = imageUpdated
+        ? NetworkImage(url!)
+        : widget._imageService.getPetImage(pet);
     return ProfileWidget(
-      image: widget._imageService.getPetImage(pet),
-      onTap: () {}, //todo
+        image: imageProvider,
+      onTap: () async{
+        String? url = await context.pushNamed(
+          "upload_pet_image",
+          params: {"id": "1"},
+        );
+        if (url != null){
+          setState(() {
+            imageUpdated = true;
+            this.url = url;
+          });
+        }
+      }
+
     );
   }
 
@@ -174,6 +195,7 @@ class CreateEditPetState extends State<CreateEditPet> {
       gender: gender,
       species: species,
       size: size,
+      imageUrl: url,
       birthday: birthday,
       breed: _breedController.text,
       details: _detailsController.text,
@@ -184,11 +206,11 @@ class CreateEditPetState extends State<CreateEditPet> {
 
   void _onSubmitPressed() async {
     if (_formKey.currentState!.validate()) {
-      final ok = await handleAsyncOperation(
+      await handleAsyncOperation(
           asyncOperation: _saveChanges(),
           onSuccessText: 'Pet successfully added',
           context: context);
-      if (ok && context.mounted) {
+      if (context.mounted) {
         context.pop();
       }
     }
