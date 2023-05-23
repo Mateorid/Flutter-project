@@ -39,7 +39,7 @@ class LoginPageState extends State<LoginPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset("assets/images/petSittingLighter.png"),
-          Text("TODO: APP NAME",
+          Text("Pet Sitting",
               style: Theme.of(context)
                   .textTheme
                   .headlineMedium
@@ -53,24 +53,18 @@ class LoginPageState extends State<LoginPage> {
             controller: _passwordController,
           ),
           const SizedBox(height: 5),
-          //TODO: conditionally render the button/circular instead of creating circular https://stackoverflow.com/a/53497047/12432947
-          RoundButton(
-            color: ORANGE_COLOR,
-            text: "LOGIN",
-            onPressed: _onLoginPressed,
-          ),
-          _buildProgressIndicator(),
+          _buildLoginButton(),
           const SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Don't have an accout yet?"),
+              const Text("Don't have an accout yet?"),
               TextButton(
                 onPressed: () {
                   context.pushNamed("register");
                 },
                 style: TextButton.styleFrom(
-                    padding: EdgeInsets.all(2),
+                    padding: const EdgeInsets.all(2),
                     alignment: Alignment.centerLeft),
                 child: const Text('Sign up.',
                     style: TextStyle(
@@ -87,20 +81,26 @@ class LoginPageState extends State<LoginPage> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    // if (_formKey.currentState!.validate()) {
+
     setState(() {
       _loading = true;
     });
+
     final AuthService authService = get<AuthService>();
     try {
       await authService.signInWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
-      context.go('/');
-    } on FirebaseAuthException catch (e) {
+      if (context.mounted) {
+        context.go('/');
+      }
+    } on FirebaseAuthException {
       GlobalSnackBar.showAlertError(
-          context: context, bigText: "Error", smallText: "Account not found.");
+        context: context,
+        bigText: "Error",
+        smallText: "Account not found.",
+      );
     } catch (e) {
       GlobalSnackBar.showAlertError(
           context: context,
@@ -110,11 +110,16 @@ class LoginPageState extends State<LoginPage> {
       setState(() {
         _loading = false;
       });
-      // }
     }
   }
 
-  Widget _buildProgressIndicator() {
-    return _loading ? CircularProgressIndicator() : Container();
+  Widget _buildLoginButton() {
+    return _loading
+        ? const CircularProgressIndicator()
+        : RoundButton(
+            color: ORANGE_COLOR,
+            text: "LOGIN",
+            onPressed: _onLoginPressed,
+          );
   }
 }
