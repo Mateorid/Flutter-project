@@ -14,7 +14,7 @@ class AdCard extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Container(
-      width: width * 0.75,
+      width: width * 0.9,
       child: Card(
         elevation: 4,
         clipBehavior: Clip.antiAlias,
@@ -24,8 +24,8 @@ class AdCard extends StatelessWidget {
           children: [
             _buildImage(),
             SizedBox(
-              width: width * 0.75,
-              height: height * 0.11,
+              width: width * 0.85,
+              height: height * 0.13,
               child: Container(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -52,10 +52,9 @@ class AdCard extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    return SizedBox(
-      height: 200,
-      child: Image.network(
-          'https://cdn.pixabay.com/photo/2017/09/25/13/12/puppy-2785074__340.jpg'),
+    return Image.network(
+      'https://cdn.pixabay.com/photo/2017/09/25/13/12/puppy-2785074__340.jpg',
+      fit: BoxFit.cover,
     );
   }
 

@@ -71,26 +71,33 @@ class PetProfilePage extends StatelessWidget {
   SliverChildListDelegate _petInfo(BuildContext context) {
     return SliverChildListDelegate(
       [
-        BasicTitle(text: pet.name),
-        const SizedBox(height: 15),
-        _buildInfoCards(pet),
-        const SizedBox(height: 15),
         Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Description:',
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(fontWeight: FontWeight.bold, color: DARK_GREEN),
-          ),
-        ),
-        OutlinedContainer(
-          width: MediaQuery.of(context).size.width * 0.9,
-          child: Text(
-            _getDetailsText(pet.details),
-            style: const TextStyle(fontSize: 18),
-            textAlign: TextAlign.justify,
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              BasicTitle(text: pet.name),
+              const SizedBox(height: 15),
+              _buildInfoCards(pet),
+              const SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Description:',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(fontWeight: FontWeight.bold, color: DARK_GREEN),
+                ),
+              ),
+              OutlinedContainer(
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: Text(
+                  _getDetailsText(pet.details),
+                  style: const TextStyle(fontSize: 18),
+                  textAlign: TextAlign.justify,
+                ),
+              ),
+            ],
           ),
         )
       ],
