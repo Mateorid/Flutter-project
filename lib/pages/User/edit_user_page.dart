@@ -91,6 +91,7 @@ class EditProfilePageState extends State<EditUserPage> {
           PlainTextField(
             labelText: "Contact email",
             placeholder: "Enter your contact email",
+            inputType: TextInputType.emailAddress,
             controller: _emailController,
             validator: emailValidator,
             iconData: Icons.email,
@@ -98,6 +99,7 @@ class EditProfilePageState extends State<EditUserPage> {
           PlainTextField(
             labelText: "Contact phone number",
             placeholder: "Enter your contact phone number",
+            inputType: TextInputType.phone,
             controller: _phoneNumberController,
             validator: phoneValidator,
             iconData: Icons.phone,
