@@ -81,6 +81,9 @@ class CreateEditPetState extends State<CreateEditPet> {
     size = pet.size;
     species = pet.species;
     // });
+    if (!imageUpdated){
+      url = pet.imageUrl;
+    }
     gender = pet.gender;
     _nameController.text = pet.name;
     _breedController.text = pet.breed ?? '';
@@ -91,9 +94,23 @@ class CreateEditPetState extends State<CreateEditPet> {
   }
 
   Widget _buildPhoto(Pet? pet) {
+    final imageProvider = imageUpdated
+        ? NetworkImage(url!)
+        : widget._imageService.getPetImage(pet);
     return ProfileWidget(
-      image: widget._imageService.getPetImage(pet),
-      onTap: () {}, //todo
+        image: imageProvider,
+        onTap: () async{
+          String? url = await context.pushNamed(
+            "upload_pet_image",
+            params: {"id": "1"},
+          );
+          if (url != null){
+            setState(() {
+              imageUpdated = true;
+              this.url = url;
+            });
+          }
+        }
     );
   }
 
