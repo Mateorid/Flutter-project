@@ -4,10 +4,10 @@ import 'package:pet_sitting/ioc_container.dart';
 import 'package:pet_sitting/pages/page_template.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/core/icon_text_button.dart';
-import 'package:pet_sitting/widgets/user/rating_bard.dart';
+import 'package:pet_sitting/widgets/core/widget_future_builder.dart';
+import 'package:pet_sitting/widgets/user/rating_bar.dart';
 import 'package:pet_sitting/widgets/user/user_info_field.dart';
 import 'package:pet_sitting/widgets/user/user_round_image.dart';
-import 'package:pet_sitting/widgets/core/widget_future_builder.dart';
 
 import '../../Models/User/user_extended.dart';
 import '../../handle_async_operation.dart';

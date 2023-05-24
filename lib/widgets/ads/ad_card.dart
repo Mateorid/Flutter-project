@@ -1,59 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pet_sitting/Models/Ad/ad.dart';
+import 'package:pet_sitting/Models/Pet/pet.dart';
+import 'package:pet_sitting/ioc_container.dart';
+import 'package:pet_sitting/services/image_service.dart';
+import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/widgets/core/custom_divider.dart';
+import 'package:pet_sitting/widgets/core/widget_stream_builder.dart';
 
 import '../../styles.dart';
 
 class AdCard extends StatelessWidget {
-  const AdCard({Key? key, required this.ad}) : super(key: key);
+  AdCard({Key? key, required this.ad}) : super(key: key);
   final Ad ad;
+  late Pet pet;
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return Container(
-      width: width * 0.9,
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.9,
       child: Card(
         elevation: 4,
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildImage(),
-            SizedBox(
-              width: width * 0.85,
-              height: height * 0.13,
-              child: Container(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      flex: 7,
-                      child: Container(
-                        width: double.infinity,
-                        child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: _buildLeftColumn(context)),
-                      ),
-                    ),
-                    const CustomDivider(),
-                    Expanded(flex: 3, child: _buildRightColumn(context)),
-                  ],
-                ),
-              ),
-            ),
-          ],
+        child: WidgetStreamBuilder(
+          stream: get<PetService>().getPetByIdStream(ad.petId),
+          onLoaded: (instance) {
+            pet = instance!;
+            return _buildContent(context);
+          },
         ),
       ),
     );
   }
 
+  Widget _buildContent(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _buildImage(),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.85,
+          height: MediaQuery.of(context).size.height * 0.13,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                flex: 7,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: _buildLeftColumn(context)),
+                ),
+              ),
+              const CustomDivider(),
+              Expanded(flex: 3, child: _buildRightColumn(context)),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildImage() {
-    return Image.network(
-      'https://cdn.pixabay.com/photo/2017/09/25/13/12/puppy-2785074__340.jpg',
+    return Image(
+      image: get<ImageService>().getPetImage(pet),
       fit: BoxFit.cover,
     );
   }

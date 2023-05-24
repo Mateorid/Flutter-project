@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
+import 'package:pet_sitting/services/user_service.dart';
+import 'package:rxdart/rxdart.dart';
 
 class PetService {
   final _petCollection =
@@ -15,22 +17,25 @@ class PetService {
       return json;
     },
   );
+  final UserService _userService;
+
+  PetService(this._userService);
 
   Future<String> createNewPet(Pet pet) async {
     return await _petCollection.add(pet).then((p) => p.id);
   }
 
-  Stream<Pet?> getPetById(String id) {
+  Future<Pet> getPetById(String id) async {
+    final pet = await _petCollection.doc(id).get();
+    return pet.data()!;
+  }
+
+  Stream<Pet?> getPetByIdStream(String id) {
     return _petCollection.doc(id).snapshots().map((event) => event.data());
   }
 
-  Future<Pet> getPetByIdFuture(String uid) async {
-    DocumentSnapshot petSnapshot = await _petCollection.doc(uid).get();
-    return Pet.fromJson(petSnapshot.data() as Map<String, dynamic>);
-  }
-
   Future<void> updatePet(String petId, Pet pet) {
-    return _petCollection.doc(petId).update(pet.toJson());
+    return _petCollection.doc(petId).set(pet);
   }
 
   Future<void> deletePet(String petId) {
@@ -40,6 +45,9 @@ class PetService {
   Stream<List<Pet>> get petStream => _petCollection
       .snapshots()
       .map((qs) => qs.docs.map((ds) => ds.data()).toList());
+
+  Stream<List<Pet>> get currentUserPetStream => _userService.currentUserStream
+      .flatMap((value) => petStreamFromIds(value!.pets));
 
   Stream<List<Pet>> petStreamFromIds(List<String> petIds) {
     return _petCollection.snapshots().map((snapshot) => snapshot.docs

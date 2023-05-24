@@ -19,6 +19,8 @@
 - lepsi upload page - i pro peta
 formdropdown better
 
+-delete ad -> error ->go_to home
+
 CREATE inzeratu - check, aby from nebol neskor ako to atd. 
 - COMBINE LATEST
 - CONTAIN BOX

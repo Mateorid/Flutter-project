@@ -10,11 +10,11 @@ import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/core/icon_text_button.dart';
 import 'package:pet_sitting/widgets/core/outlined_container.dart';
 import 'package:pet_sitting/widgets/core/widget_future_builder.dart';
+import 'package:pet_sitting/widgets/review/reviewTile.dart';
 import 'package:pet_sitting/widgets/review/review_dialog.dart';
 import 'package:pet_sitting/widgets/user/profile_widget.dart';
-import 'package:pet_sitting/widgets/user/rating_bard.dart';
+import 'package:pet_sitting/widgets/user/rating_bar.dart';
 import 'package:pet_sitting/widgets/user/user_info_field.dart';
-import 'package:pet_sitting/widgets/review/reviewTile.dart';
 
 class ProfilePage extends StatelessWidget {
   final String userId;
@@ -50,18 +50,11 @@ class ProfilePage extends StatelessWidget {
             onTap: ownProfile ? () => {context.pushNamed('edit_user')} : null,
           ),
           _buildNameOrEmail(user),
-          GestureDetector(
-            // Wrap RatingBar with GestureDetector
-            onTap: () {
-              _showDialog(context, user);
-            },
-            child: Center(
-              child: RatingBar(
-                rating: user.averageReviewScore,
-                ratingCount: user.reviews.length,
-                size: 30,
-              ),
-            ),
+          RatingBar(
+            onTap: () => _showDialog(context, user),
+            rating: user.averageReviewScore,
+            ratingCount: user.reviews.length,
+            size: 30,
           ),
           if (!ownProfile) ReviewDialog(user: user),
           const SizedBox(height: 15),
@@ -92,6 +85,9 @@ class ProfilePage extends StatelessWidget {
         content: SizedBox(
           width: double.maxFinite,
           child: ListView.separated(
+            physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
             itemCount: sortedReviews.length,
             separatorBuilder: (context, index) => const Divider(thickness: 1),
             itemBuilder: (context, index) {

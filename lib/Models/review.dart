@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pet_sitting/Models/user_type.dart';
 
 part 'review.g.dart';
 
@@ -10,7 +9,11 @@ class Review {
   final DateTime dateTime;
   final String fromUser;
 
-  Review({required this.rating, required this.text, required this.fromUser, required this.dateTime});
+  Review(
+      {required this.rating,
+      required this.text,
+      required this.fromUser,
+      required this.dateTime});
 
   factory Review.fromJson(Map<String, dynamic> json) => _$ReviewFromJson(json);
 

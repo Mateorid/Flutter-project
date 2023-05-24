@@ -29,11 +29,11 @@ class GlobalSnackBar {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Stack(children: [
         Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           height: 90,
           decoration: BoxDecoration(
               color: alertColor,
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: const BorderRadius.all(Radius.circular(20))),
           child: Row(
             children: [
               const SizedBox(width: 30),
@@ -56,14 +56,14 @@ class GlobalSnackBar {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(bigText ?? "",
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 20,
                   color: Colors.white,
                   fontWeight: FontWeight.bold)),
           Text(smallText ?? "",
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 14, color: Colors.white)),
+              style: const TextStyle(fontSize: 14, color: Colors.white)),
         ],
       ),
     );
@@ -71,9 +71,9 @@ class GlobalSnackBar {
 
   static Widget _buildPawsDecoration() {
     return Container(
-        margin: EdgeInsets.all(5),
+        margin: const EdgeInsets.all(5),
         child: SvgPicture.asset("assets/svgs/paws.svg",
-            colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
             height: 60,
             width: 60,
             fit: BoxFit.scaleDown));
@@ -87,7 +87,8 @@ class GlobalSnackBar {
           padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
           child: IconButton(
               icon: SvgPicture.asset("assets/svgs/close-square.svg",
-                  colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn)),
+                  colorFilter:
+                      const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
               onPressed: () {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
               } //do something,
