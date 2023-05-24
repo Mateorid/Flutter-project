@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:pet_sitting/Models/Ad/ad.dart';
 import 'package:pet_sitting/pages/Ad/ad_detail_page.dart';
 import 'package:pet_sitting/pages/Ad/ads_page.dart';
 import 'package:pet_sitting/pages/Ad/create_edit_ad.dart';
@@ -62,8 +63,7 @@ class RouterProvider {
           path: "/edit_pet",
           name: "edit_pet",
           builder: (context, state) {
-            Pet pet = state.extra as Pet;
-            return CreateEditPet(pet: pet);
+            return CreateEditPet(pet: state.extra as Pet);
           },
         ),
         GoRoute(
@@ -76,6 +76,24 @@ class RouterProvider {
           path: "/create_ad",
           name: "create_add",
           builder: (context, state) => CreateEditAdPage(),
+        ),
+        GoRoute(
+          path: "/ad_detail/:id",
+          name: "ad_details",
+          builder: (context, state) {
+            return AdDetailPage(
+              adId: state.params["id"]!,
+            );
+          },
+        ),
+        GoRoute(
+          path: "/ad_edit",
+          name: "ad_edit",
+          builder: (context, state) {
+            return CreateEditAdPage(
+              ad: state.extra as Ad,
+            );
+          },
         ),
         GoRoute(
           path: "/ads",
@@ -102,25 +120,7 @@ class RouterProvider {
           },
         ),
         GoRoute(
-          path: "/ad_detail/:id",
-          name: "ad_details",
-          builder: (context, state) {
-            return AdDetailPage(
-              adId: state.params["id"]!,
-            );
-          },
-        ),
-        GoRoute(
-          path: "/ad_edit/:id",
-          name: "ad_edit",
-          builder: (context, state) {
-            return CreateEditAdPage(
-              adId: state.params["id"]!,
-            );
-          },
-        ),
-        GoRoute(
-          path: "/pest",
+          path: "/pets",
           name: "pets",
           builder: (context, state) {
             return PetsPage();

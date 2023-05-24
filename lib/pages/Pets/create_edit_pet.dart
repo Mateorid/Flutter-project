@@ -54,37 +54,6 @@ class CreateEditPetState extends State<CreateEditPet> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final edit = widget.pet != null;
-
-    return CreateEditPageTemplate(
-        pageTitle: edit ? 'Edit pet' : 'Add pet',
-        buttonText: edit ? 'EDIT' : 'SAVE',
-        buttonCallback: _onSubmitPressed,
-        isLoading: _loading,
-        body: _buildContent(widget.pet));
-  }
-
-  Widget _buildContent(Pet? pet) {
-    if (pet != null) {
-      _setControllers(pet);
-    }
-
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: ListView(
-        physics: const BouncingScrollPhysics(
-          parent: AlwaysScrollableScrollPhysics(),
-        ),
-        children: [
-          _buildPhoto(pet),
-          _buildForm(),
-        ],
-      ),
-    );
-  }
-
   void _setControllers(Pet pet) {
     size = pet.size;
     species = pet.species;
@@ -98,6 +67,34 @@ class CreateEditPetState extends State<CreateEditPet> {
     _birthdayController.text = pet.birthday != null
         ? DateFormat('yyyy-MM-dd').format(pet.birthday!)
         : '';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final edit = widget.pet != null;
+
+    return CreateEditPageTemplate(
+      pageTitle: edit ? 'Edit pet' : 'Add pet',
+      buttonText: edit ? 'EDIT' : 'SAVE',
+      buttonCallback: _onSubmitPressed,
+      isLoading: _loading,
+      body: _buildContent(widget.pet),
+    );
+  }
+
+  Widget _buildContent(Pet? pet) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: ListView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
+        children: [
+          _buildPhoto(pet),
+          _buildForm(),
+        ],
+      ),
+    );
   }
 
   Widget _buildPhoto(Pet? pet) {

@@ -151,7 +151,7 @@ class AdDetailPage extends StatelessWidget {
   }
 
   void _onEditPressed(BuildContext context) {
-    context.pushNamed("ad_edit", params: {"id": ad.id ?? ""});
+    context.pushNamed("ad_edit", extra: ad);
   }
 
   void _onDeletePressed(BuildContext context) {
