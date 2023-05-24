@@ -20,13 +20,17 @@ class AdService {
     await _adCollection.add(ad);
   }
 
-  Future<void> deleteAd(String adId) {
-    return _adCollection.doc(adId).delete();
+  Stream<Ad?> getAdByIdStream(String adId) {
+    return _adCollection.doc(adId).snapshots().map((event) => event.data());
   }
 
   Future<Ad> getAdById(String adId) async {
     final doc = await _adCollection.doc(adId).get();
     return doc.data()!;
+  }
+
+  Future<void> deleteAd(String adId) {
+    return _adCollection.doc(adId).delete();
   }
 
   Future<void> updateAd(String adId, Ad ad) async {

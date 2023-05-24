@@ -41,7 +41,7 @@ class CreateEditPageTemplate extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         child: isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const LinearProgressIndicator()
             : RoundButton(
                 color: MAIN_GREEN,
                 text: buttonText,

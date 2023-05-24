@@ -1,36 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:pet_sitting/Models/User/user_extended.dart';
-import 'package:pet_sitting/future_builder.dart';
+import 'package:pet_sitting/Models/Ad/ad.dart';
+import 'package:pet_sitting/Models/Pet/pet.dart';
+import 'package:pet_sitting/handle_async_operation.dart';
+import 'package:pet_sitting/ioc_container.dart';
 import 'package:pet_sitting/pages/create_edit_page_template.dart';
 import 'package:pet_sitting/services/ad_service.dart';
-import 'package:pet_sitting/services/user_service.dart';
+import 'package:pet_sitting/services/auth_service.dart';
+import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/validators/locationValidator.dart';
-import 'package:pet_sitting/widgets/core/widget_future_builder.dart';
-
-import '../../Models/Ad/ad.dart';
-import '../../handle_async_operation.dart';
-import '../../ioc_container.dart';
-import '../../services/auth_service.dart';
-import '../../widgets/plain_text_field.dart';
+import 'package:pet_sitting/validators/not_null_validator.dart';
+import 'package:pet_sitting/widgets/core/widget_stream_builder.dart';
+import 'package:pet_sitting/widgets/plain_text_field.dart';
 
 class CreateEditAdPage extends StatefulWidget {
-  String? adId;
+  final Ad? ad;
+  final adService = get<AdService>();
 
-  CreateEditAdPage({super.key, this.adId});
-
-  final adService = GetIt.I<AdService>();
+  CreateEditAdPage({super.key, this.ad});
 
   @override
   State<CreateEditAdPage> createState() => _CreateEditAdPageState();
 }
 
 class _CreateEditAdPageState extends State<CreateEditAdPage> {
-  late Ad ad;
-  late String petId = 'Xnlwf3sU98FSl6BbvJC6'; //todo
-  late UserExtended user;
   final _formKey = GlobalKey<FormState>();
   final _fromController = TextEditingController();
   final _toController = TextEditingController();
@@ -39,47 +33,54 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
   final _detailsController = TextEditingController();
   final _locationController = TextEditingController();
   bool _loading = false;
+  String? _petId;
+  late List<Pet> _pets;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.ad != null) {
+      _setControllers(widget.ad!);
+    }
+  }
+
+  void _setControllers(Ad ad) {
+    final dateFormat = DateFormat('yyyy-MM-dd');
+    _fromController.text = dateFormat.format(ad.from);
+    _toController.text = dateFormat.format(ad.to);
+    _titleController.text = ad.title;
+    _costController.text = ad.costPerHour.toString();
+    _locationController.text = ad.location;
+    _detailsController.text = ad.description ?? '';
+    _petId = ad.petId;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final edit = widget.adId != null;
+    final edit = widget.ad != null;
 
     return CreateEditPageTemplate(
       pageTitle: edit ? 'Edit Ad' : 'Create Ad',
       buttonText: edit ? 'EDIT' : 'SAVE',
       buttonCallback: edit ? _onEditPressed : _onCreatePressed,
       isLoading: _loading,
-      body: WidgetFutureBuilder<UserExtended?>(
-        future: get<UserService>().currentUser,
-        onLoaded: (instance) {
-          user = instance!;
-          return edit ? _initFields() : _buildContent();
+      body: WidgetStreamBuilder(
+        stream: get<PetService>().currentUserPetStream,
+        onLoaded: (pets) {
+          _pets = pets;
+          return _buildContent();
         },
       ),
     );
   }
 
-  Widget _initFields() {
-    return GenericFutureBuilder(
-      future: widget.adService.getAdById(widget.adId!),
-      onLoaded: (ad) {
-        final dateFormat = DateFormat('yyyy-MM-dd');
-        _fromController.text = dateFormat.format(ad.from);
-        _toController.text = dateFormat.format(ad.to);
-        _titleController.text = ad.title;
-        _costController.text = ad.costPerHour.toString();
-        _locationController.text = ad.location;
-        _detailsController.text = ad.description ?? '';
-        this.ad = ad;
-        return _buildContent();
-      },
-    );
-  }
-
   Widget _buildContent() {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
       child: ListView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         children: [
           _buildForm(),
         ],
@@ -96,21 +97,9 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
             labelText: "Title*",
             placeholder: "Enter the title of request",
             controller: _titleController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a title';
-              }
-              return null;
-            },
+            validator: notNullValidator,
           ),
-          //todo this should be like a pop-up select - similar to reviews
-          // FormDropDown(
-          //     label: 'Pet',
-          //     hintText: 'Select which pet is this ad for',
-          //     items: user.pets,
-          //     onChanged: (id) {
-          //       petId = id!;
-          //     }),
+          _buildPetDropdown(),
           _buildDatePicker(_fromController, "From*: "),
           _buildDatePicker(_toController, "To*: "),
           PlainTextField(
@@ -119,12 +108,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
             controller: _costController,
             iconData: Icons.euro,
             inputType: TextInputType.number,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter an daily rate';
-              }
-              return null;
-            },
+            validator: notNullValidator,
           ),
           PlainTextField(
             labelText: "Location*",
@@ -138,12 +122,29 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
             placeholder: "Enter additional details",
             extended: true,
             controller: _detailsController,
-            validator: (value) {
-              return null;
-            },
+            validator: (_) => null,
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPetDropdown() {
+    return DropdownButtonFormField<String>(
+      hint: const Text('Select pet for pet sitting'),
+      value: _petId,
+      validator: notNullValidator,
+      onChanged: (value) {
+        if (value != null) {
+          _petId = value;
+        }
+      },
+      items: _pets.map((p) {
+        return DropdownMenuItem(
+          value: p.id,
+          child: Text(p.name),
+        );
+      }).toList(),
     );
   }
 
@@ -172,7 +173,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
     final date = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(2015),
+        firstDate: DateTime.now(),
         lastDate: DateTime(2101));
     if (date != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(date);
@@ -192,7 +193,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
           costPerHour: int.parse(_costController.text),
           from: DateTime.parse(_fromController.text),
           to: DateTime.parse(_toController.text),
-          petId: petId,
+          petId: _petId!,
           creatorId: id,
           active: true);
       await widget.adService.createNewAd(ad);
@@ -201,14 +202,14 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
 
   Future<void> _editAd() async {
     final id = get<AuthService>().currentUserId;
-    var newAd = ad.copyWith(
+    var newAd = widget.ad!.copyWith(
         title: _titleController.text,
         location: _locationController.text,
         description: _detailsController.text,
         costPerHour: int.parse(_costController.text),
         from: DateTime.parse(_fromController.text),
         to: DateTime.parse(_toController.text),
-        petId: petId,
+        petId: _petId,
         creatorId: id,
         active: true);
     widget.adService.updateAd(newAd.id!, newAd);

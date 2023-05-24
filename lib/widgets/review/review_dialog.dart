@@ -121,7 +121,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
         dateTime: DateTime.now(),
       );
       final user = widget.user.copyWith(reviews: updatedReviews);
-      widget._userService.updateUserX(user);
+      widget._userService.updateUser(user);
     } else {
       // Add new review
       final newReview = Review(
@@ -132,7 +132,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
       );
       final updatedReviews = [...widget.user.reviews, newReview];
       final user = widget.user.copyWith(reviews: updatedReviews);
-      widget._userService.updateUserX(user);
+      widget._userService.updateUser(user);
     }
   }
 

@@ -24,4 +24,3 @@ Future<T> handleAsyncOperation<T>({
     rethrow;
   }
 }
-
