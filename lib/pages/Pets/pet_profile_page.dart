@@ -31,7 +31,7 @@ class PetProfilePage extends StatelessWidget {
         body: WidgetFutureBuilder(
           future: get<UserService>().currentUserIsOwnerOfPet(petId),
           onLoaded: (isOwner) => WidgetStreamBuilder(
-            stream: get<PetService>().getPetById(petId),
+            stream: get<PetService>().getPetByIdStream(petId),
             onLoaded: (p) {
               pet = p!;
               return _buildContent(context, isOwner);

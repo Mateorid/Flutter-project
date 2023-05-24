@@ -25,7 +25,12 @@ class PetService {
     return await _petCollection.add(pet).then((p) => p.id);
   }
 
-  Stream<Pet?> getPetById(String id) {
+  Future<Pet> getPetById(String id) async {
+    final pet = await _petCollection.doc(id).get();
+    return pet.data()!;
+  }
+
+  Stream<Pet?> getPetByIdStream(String id) {
     return _petCollection.doc(id).snapshots().map((event) => event.data());
   }
 

@@ -3,21 +3,22 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pet_sitting/Models/Ad/ad.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
-import 'package:pet_sitting/future_builder.dart';
+import 'package:pet_sitting/Models/User/user_extended.dart';
 import 'package:pet_sitting/handle_async_operation.dart';
 import 'package:pet_sitting/ioc_container.dart';
+import 'package:pet_sitting/services/ad_service.dart';
 import 'package:pet_sitting/services/auth_service.dart';
+import 'package:pet_sitting/services/image_service.dart';
+import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/services/user_service.dart';
+import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/ads/ad_detail_small_card.dart';
 import 'package:pet_sitting/widgets/core/basic_button.dart';
+import 'package:pet_sitting/widgets/core/basic_title.dart';
+import 'package:pet_sitting/widgets/core/widget_future_builder.dart';
 import 'package:pet_sitting/widgets/round_button.dart';
 import 'package:pet_sitting/widgets/user/rating_bar.dart';
-
-import '../../Models/User/user_extended.dart';
-import '../../services/ad_service.dart';
-import '../../styles.dart';
-import '../../widgets/core/basic_title.dart';
-import '../../widgets/user/user_round_image.dart';
+import 'package:pet_sitting/widgets/user/user_round_image.dart';
 
 class AdDetailPage extends StatelessWidget {
   final String adId;
@@ -25,7 +26,6 @@ class AdDetailPage extends StatelessWidget {
   final _userService = get<UserService>();
   final _authService = get<AuthService>();
 
-  // final _petService = get<PetService>();
   late Ad ad;
   late Pet pet;
   late UserExtended user;
@@ -34,45 +34,52 @@ class AdDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GenericFutureBuilder(
+    return Scaffold(
+      body: WidgetFutureBuilder(
         future: _load(),
         onLoaded: (data) {
-          final ad = data[0] as Ad;
-          final user = data[1] as UserExtended;
-          return _onAdLoaded(context, ad, user);
-        });
+          return _onAdLoaded(context);
+        },
+      ),
+    );
   }
 
-  Future<List<Object>> _load() async {
+  //todo to stream
+  Future<void> _load() async {
     ad = await _adService.getAdById(adId);
     user = await _userService.getUserById(ad.creatorId);
-    // pet = await _petService.getPetById(ad.petId);
-    return [ad, user];
+    pet = await get<PetService>().getPetById(ad.petId);
   }
 
-  Widget _onAdLoaded(BuildContext context, Ad ad, UserExtended user) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            expandedHeight: 250,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      'https://cdn.pixabay.com/photo/2017/09/25/13/12/puppy-2785074__340.jpg',
-                    ),
-                    fit: BoxFit.cover,
-                  ),
+  Widget _onAdLoaded(BuildContext context) {
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      slivers: [
+        SliverAppBar(
+          pinned: true,
+          expandedHeight: 250,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: MAIN_GREEN,
+            ),
+            onPressed: () => {context.pop()},
+          ),
+          flexibleSpace: FlexibleSpaceBar(
+            background: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: get<ImageService>().getPetImage(pet),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
           ),
-          SliverList(delegate: _adInfo(context)),
-        ],
-      ),
+        ),
+        SliverList(delegate: _adInfo(context)),
+      ],
     );
   }
 
@@ -87,7 +94,7 @@ class AdDetailPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // _buildPetName(context), //todo
+              _buildPetName(context),
               const SizedBox(height: 10),
               _buildCards(),
               const SizedBox(
@@ -201,7 +208,8 @@ class AdDetailPage extends StatelessWidget {
               : null,
           child: Text(
             user.name ?? user.email,
-            style: TextStyle(fontWeight: FontWeight.bold, color: DARK_GREEN),
+            style:
+                const TextStyle(fontWeight: FontWeight.bold, color: DARK_GREEN),
           ),
         ),
         RatingBar(
@@ -211,16 +219,25 @@ class AdDetailPage extends StatelessWidget {
   }
 
   Widget _buildPetName(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Black labrador",
+    return GestureDetector(
+      onTap: () => context.pushNamed('pet_profile', params: {'id': pet.id!}),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            pet.species.text,
             style: Theme.of(context)
                 .textTheme
                 .titleLarge
-                ?.copyWith(fontWeight: FontWeight.bold, color: MAIN_GREEN)),
-        BasicTitle(text: "Fufík"),
-      ],
+                ?.copyWith(fontWeight: FontWeight.bold, color: MAIN_GREEN),
+          ),
+          BasicTitle(text: pet.name),
+          const Text(
+            'Click here to see the pet\'s profile',
+            style: TextStyle(fontSize: 13, color: Colors.grey),
+          )
+        ],
+      ),
     );
   }
 
