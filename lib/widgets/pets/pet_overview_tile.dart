@@ -17,7 +17,7 @@ class PetOverviewTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.pushNamed('pet_profile', extra: pet);
+        context.pushNamed('pet_profile', params: {"id": pet.id!});
       },
       child: Card(
         elevation: 4,

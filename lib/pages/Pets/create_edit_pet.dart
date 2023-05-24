@@ -132,7 +132,9 @@ class CreateEditPetState extends State<CreateEditPet> {
             validator: nameValidator,
           ),
           _genderDropdown(),
+          const SizedBox(height: 20),
           _speciesDropdown(),
+          const SizedBox(height: 20),
           PetSizeSelect(
             size: size,
             callback: (val) {
@@ -250,9 +252,9 @@ class CreateEditPetState extends State<CreateEditPet> {
       );
 
       if (context.mounted) {
-        widget.pet == null ? context.pop() : context.goNamed('home');
+        context.pop();
         setState(() {
-          _loading = true;
+          _loading = false;
         });
       }
     }

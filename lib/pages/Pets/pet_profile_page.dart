@@ -6,28 +6,37 @@ import 'package:pet_sitting/ioc_container.dart';
 import 'package:pet_sitting/services/date_service.dart';
 import 'package:pet_sitting/services/icon_service.dart';
 import 'package:pet_sitting/services/image_service.dart';
+import 'package:pet_sitting/services/pet_service.dart';
 import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/ads/ad_detail_small_card.dart';
 import 'package:pet_sitting/widgets/core/basic_title.dart';
 import 'package:pet_sitting/widgets/core/outlined_container.dart';
 import 'package:pet_sitting/widgets/core/widget_future_builder.dart';
+import 'package:pet_sitting/widgets/core/widget_stream_builder.dart';
 
 class PetProfilePage extends StatelessWidget {
-  PetProfilePage({super.key, required this.pet});
-
-  final Pet pet;
+  late Pet pet;
+  final String petId;
   final _iconService = get<IconService>();
   final _dateService = get<DateService>();
   final _imageService = get<ImageService>();
+
+  PetProfilePage({super.key, required this.petId});
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: WidgetFutureBuilder(
-          future: get<UserService>().currentUserIsOwnerOfPet(pet.id!),
-          onLoaded: (isOwner) => _buildContent(context, isOwner),
+          future: get<UserService>().currentUserIsOwnerOfPet(petId),
+          onLoaded: (isOwner) => WidgetStreamBuilder(
+            stream: get<PetService>().getPetById(petId),
+            onLoaded: (p) {
+              pet = p!;
+              return _buildContent(context, isOwner);
+            },
+          ),
         ),
       ),
     );
@@ -74,6 +83,7 @@ class PetProfilePage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               BasicTitle(text: pet.name),
               const SizedBox(height: 15),
