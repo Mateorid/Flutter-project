@@ -1,24 +1,9 @@
-- prerobit async operacie v register/login na pouzivanie handleAsyncOperation()
-- nastavit proper text field klavesnice
-- extrahovat konstatny nekam (Radius atd)
 - udelat autofill hints pri user editu? (city a email)
 - preteka error
 - ?? merge the auth & user service into one?
-- ?? umoznit vice mazlicku v inzeratu
-- lepsi a jednotne karty pro pety a ads
-
-- clickable ratings v ads details
 - clcickable pfp v ads details
 - text kdyz nejsou zadne ratings
-- unify previews
-- pet ID v create inzeratu
 - rozhodit zdrojaky podle casti user/pet/ad/atd.
 - krizek na tech info boxech nefunguje
-- unify and change add/edit pet/user/ad
-- create pet page species text je spatne
-- lepsi upload page - i pro peta
-formdropdown better
-
-CREATE inzeratu - check, aby from nebol neskor ako to atd. 
-- COMBINE LATEST
-- CONTAIN BOX
+- lepsi upload page
+- delete ad -> error ->go_to home
