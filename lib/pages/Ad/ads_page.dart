@@ -6,6 +6,7 @@ import 'package:pet_sitting/pages/page_template.dart';
 import 'package:pet_sitting/services/ad_service.dart';
 import 'package:pet_sitting/styles.dart';
 import 'package:pet_sitting/widgets/ads/ad_card.dart';
+import 'package:pet_sitting/widgets/core/widget_stream_builder.dart';
 
 class AdsPage extends StatelessWidget {
   AdsPage({Key? key}) : super(key: key);
@@ -15,70 +16,62 @@ class AdsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: _buildAddButton(context),
       body: PageTemplate(
         pageTitle: 'Ads',
-        body: StreamBuilder<List<Ad>>(
+        body: WidgetStreamBuilder(
           stream: _adService.adStream,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Center(child: Text(snapshot.error.toString()));
-            }
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            final ads = snapshot.data!;
-
+          onLoaded: (ads) {
             if (ads.isEmpty) {
               return const Center(child: Text('No ads yet.'));
             }
-            return Stack(
-              children: [
-                Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final ad = ads[index];
-                          return InkWell(
-                            onTap: () {
-                              context.pushNamed("ad_details",
-                                  params: {"id": ad.id ?? ""});
-                            },
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 16),
-                                AdCard(ad: ad),
-                              ],
-                            ),
-                          );
-                        },
-                        itemCount: ads.length,
-                      ),
-                    ),
-                  ],
-                ),
-                _buildAddButton(context),
-              ],
-            );
+            return _buildAds(ads);
           },
         ),
       ),
     );
   }
 
+  Widget _buildAds(List<Ad> ads) {
+    return Stack(
+      children: [
+        Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final ad = ads[index];
+                  return InkWell(
+                    onTap: () {
+                      context
+                          .pushNamed("ad_details", params: {"id": ad.id ?? ""});
+                    },
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 16),
+                        AdCard(ad: ad),
+                      ],
+                    ),
+                  );
+                },
+                itemCount: ads.length,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   Widget _buildAddButton(BuildContext context) {
-    return Positioned(
-      bottom: 16,
-      right: 16,
-      child: FloatingActionButton(
-        heroTag: null,
-        backgroundColor: MAIN_GREEN,
-        onPressed: () {
-          _onAddPressed(context);
-        },
-        child: const Icon(Icons.add),
-      ),
+    return FloatingActionButton(
+      heroTag: null,
+      backgroundColor: MAIN_GREEN,
+      onPressed: () {
+        _onAddPressed(context);
+      },
+      child: const Icon(Icons.add),
     );
   }
 
