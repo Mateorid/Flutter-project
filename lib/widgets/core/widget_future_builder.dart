@@ -22,7 +22,7 @@ class WidgetFutureBuilder<T> extends StatelessWidget {
               "Error: Something went wrong!",
               style: TextStyle(
                 color: ERROR_RED,
-                fontSize: 40,
+                fontSize: 30,
                 fontWeight: FontWeight.bold,
               ),
             ),

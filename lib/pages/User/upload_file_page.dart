@@ -95,7 +95,7 @@ class _UploadFilePageState extends State<UploadFilePage> {
         await widget._storageService.getDownloadUrl(partialUrl: path);
     if (!widget.onlyReturnUrl) {
       UserExtended updatedUser = widget.user.copyWith(imageUrl: fullPath);
-      widget._userService.updateUserX(updatedUser);
+      widget._userService.updateUser(updatedUser);
     }
     return fullPath;
   }

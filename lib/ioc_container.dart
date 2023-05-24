@@ -34,7 +34,7 @@ class IoCContainer {
     );
 
     get.registerSingleton<PetService>(
-      PetService(),
+      PetService(get<UserService>()),
     );
 
     get.registerSingleton<IconService>(

@@ -1,10 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pet_sitting/Models/User/user_extended.dart';
 import 'package:pet_sitting/services/auth_service.dart';
+import 'package:rxdart/rxdart.dart';
 
 class UserService {
-  final CollectionReference userCollection =
-      FirebaseFirestore.instance.collection("Users");
+  final _userCollection =
+      FirebaseFirestore.instance.collection("Users").withConverter(
+    fromFirestore: (snapshot, options) {
+      final json = snapshot.data() ?? {};
+      json['id'] = snapshot.id;
+      return UserExtended.fromJson(json);
+    },
+    toFirestore: (value, options) {
+      final json = value.toJson();
+      json.remove('id');
+      return json;
+    },
+  );
+
   final AuthService _authService;
 
   UserService(this._authService);
@@ -19,33 +32,29 @@ class UserService {
     return getUserById(id);
   }
 
+  Stream<UserExtended?> get currentUserStream {
+    return _authService.authStateChanges.flatMap(
+      (value) => getUserByIdStream(value!.uid),
+    );
+  }
+
   Future<UserExtended> getUserById(String uid) async {
     //todo change to stream
-    DocumentSnapshot userSnapshot = await userCollection.doc(uid).get();
-    return UserExtended.fromJson(userSnapshot.data() as Map<String, dynamic>);
+    final user = await _userCollection.doc(uid).get();
+    return user.data()!;
+  }
+
+  Stream<UserExtended?> getUserByIdStream(String uid) {
+    return _userCollection.doc(uid).snapshots().map((event) => event.data());
   }
 
   Future<void> createNewUser(String uid, String email) async {
     final user = UserExtended(uid: uid, email: email);
-    return await userCollection.doc(user.uid).set(user.toJson());
+    return await _userCollection.doc(user.uid).set(user);
   }
 
-  Future<void> updateUserX(UserExtended user) async {
-    return await userCollection.doc(user.uid).set(user.toJson());
-  }
-
-  Future<void> updateUser(
-      {required String id,
-      String? email,
-      String? phoneNumber,
-      String? name,
-      String? location}) async {
-    return await userCollection.doc(id).set({
-      'name': name ?? "",
-      'phone': phoneNumber ?? "",
-      'location': location ?? "",
-      'email': email ?? email
-    });
+  Future<void> updateUser(UserExtended user) async {
+    return await _userCollection.doc(user.uid).set(user);
   }
 
   Future<void> addPetToCurrentUser(String petId) async {
@@ -53,7 +62,7 @@ class UserService {
     if (userId == null) {
       throw Exception('Couldn\'t get current user!');
     }
-    return await userCollection.doc(userId).update({
+    return await _userCollection.doc(userId).update({
       'pets': FieldValue.arrayUnion([petId]),
     });
   }

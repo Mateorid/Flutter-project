@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pet_sitting/Models/Pet/pet.dart';
-import 'package:pet_sitting/Models/User/user_extended.dart';
 import 'package:pet_sitting/ioc_container.dart';
 import 'package:pet_sitting/pages/page_template.dart';
 import 'package:pet_sitting/services/auth_service.dart';
 import 'package:pet_sitting/services/pet_service.dart';
-import 'package:pet_sitting/services/user_service.dart';
 import 'package:pet_sitting/styles.dart';
-import 'package:pet_sitting/widgets/core/widget_future_builder.dart';
+import 'package:pet_sitting/widgets/core/widget_stream_builder.dart';
 import 'package:pet_sitting/widgets/pets/pet_overview_tile.dart';
 
 class PetsPage extends StatelessWidget {
@@ -16,7 +14,6 @@ class PetsPage extends StatelessWidget {
 
   final _petService = get<PetService>();
   final _authService = get<AuthService>();
-  final _userService = get<UserService>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,23 +30,10 @@ class PetsPage extends StatelessWidget {
     if (_authService.currentUserId == null) {
       return _buildNotLoggedInInfo();
     }
-    return WidgetFutureBuilder(
-        future: _userService.getUserById(_authService.currentUserId!),
-        onLoaded: _buildStreamBuilder);
-  }
 
-  Widget _buildStreamBuilder(UserExtended user) {
-    return StreamBuilder<List<Pet>>(
-      stream: _petService.petStreamFromIds(user.pets),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(child: Text(snapshot.error.toString()));
-        }
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        final pets = snapshot.data!;
+    return WidgetStreamBuilder(
+      stream: _petService.currentUserPetStream,
+      onLoaded: (pets) {
         if (pets.isEmpty) {
           return _buildNoPetsInfo();
         }
